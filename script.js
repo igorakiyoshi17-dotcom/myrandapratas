@@ -1,4 +1,4 @@
-const products = [
+let products = [
   {id:"AN023", name:"Anel Coração", category:"Anéis", price:49.90, available:true, type:"ring", featured:true},
   {id:"AN031", name:"Anel Solitário", category:"Anéis", price:59.90, available:true, type:"ring", featured:false},
   {id:"BR014", name:"Brinco Argola", category:"Brincos", price:39.90, available:true, type:"earring", featured:true},
@@ -12,6 +12,43 @@ const products = [
   {id:"CL032", name:"Colar Medalha", category:"Colares", price:74.90, available:true, type:"necklace", featured:false},
   {id:"PU019", name:"Pulseira Delicada", category:"Pulseiras", price:64.90, available:true, type:"bracelet", featured:false}
 ];
+
+const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
+const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
+
+async function carregarProdutosSupabase() {
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/produtos?select=*&order=id.asc`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!resposta.ok) {
+      throw new Error("Não foi possível carregar os produtos.");
+    }
+
+    const dados = await resposta.json();
+
+    if (dados.length > 0) {
+      products = dados.map(produto => ({
+        id: produto.codigo,
+        name: produto.nome,
+        category: produto.categoria,
+        price: Number(produto.preco),
+        available: produto.disponivel && produto.estoque > 0,
+        featured: produto.destaque,
+        image: produto.imagem_url,
+        type: "ring"
+      }));
+    }
+  } catch (erro) {
+    console.error("Erro ao carregar produtos do Supabase:", erro);
+  }
+}
 
 const categories = [
   {name:"Anéis", icon:"💍"}, {name:"Brincos", icon:"◌"}, {name:"Colares", icon:"✧"},
@@ -149,4 +186,12 @@ $("#confirmSelection").onclick=()=>{
 
 $("#backToCatalog").onclick=()=>{closeModal("#successModal");document.querySelector("#catalogo").scrollIntoView({behavior:"smooth"});};
 
-renderCategories(); renderFilters(); renderProducts(); updateSelectionUI();
+async function iniciarCatalogo() {
+  await carregarProdutosSupabase();
+  renderCategories();
+  renderFilters();
+  renderProducts();
+  updateSelectionUI();
+}
+
+iniciarCatalogo();
