@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo | Myranda Pratas</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #f7f1e8;
+      color: #3d2c25;
+      font-family: Arial, sans-serif;
+    }
+
+    .login {
+      width: 100%;
+      max-width: 420px;
+      background: #fffdf9;
+      border: 1px solid #e6d9ca;
+      border-radius: 24px;
+      padding: 42px 32px;
+      box-shadow: 0 18px 50px rgba(67, 43, 31, 0.12);
+    }
+
+    .marca {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .marca small {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-bottom: 6px;
+    }
+
+    .marca h1 {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      font-weight: normal;
+      letter-spacing: 3px;
+    }
+
+    .marca p {
+      margin-top: 10px;
+      color: #806f66;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 18px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d9cabc;
+      border-radius: 12px;
+      background: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #5a3a2e;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 15px;
+      border: 0;
+      border-radius: 999px;
+      background: #5a3a2e;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #3d261e;
+    }
+
+    .seguranca {
+      margin-top: 22px;
+      text-align: center;
+      color: #806f66;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="login">
+
+    <div class="marca">
+      <small>MYRANDA</small>
+      <h1>PRATAS</h1>
+      <p>Painel Administrativo</p>
+    </div>
+
+    <form id="loginForm">
+
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="Digite seu e-mail"
+        autocomplete="email"
+        required
+      >
+
+      <label for="senha">Senha</label>
+      <input
+        id="senha"
+        type="password"
+        placeholder="Digite sua senha"
+        autocomplete="current-password"
+        required
+      >
+
+      <button type="submit">
+        Entrar
+      </button>
+
+    </form>
+
+    <div class="seguranca">
+      🔒 Acesso restrito à administração da Myranda Pratas
+    </div>
+
+  </main>
+
+</body>
+</html>
