@@ -453,6 +453,19 @@ async function carregarProdutos() {
           ">
             ${produto.disponivel ? "DISPONÍVEL" : "INDISPONÍVEL"}
           </span>
+          <button
+  type="button"
+  class="btnEditarProduto"
+  data-id="${produto.id}"
+  style="
+    width:auto;
+    margin:10px 0 0;
+    padding:9px 18px;
+    font-size:13px;
+  "
+>
+  Editar
+</button>
         </div>
 
       </div>
