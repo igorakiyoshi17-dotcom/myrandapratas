@@ -462,7 +462,74 @@ async function carregarProdutos() {
     `;
   }
 }
-const formNovoProduto = document.getElementById("formNovoProduto");
+document.getElementById("novoProdutoForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const botaoSalvar = event.target.querySelector('button[type="submit"]');
+
+  const codigo = document.getElementById("produtoCodigo").value.trim();
+  const nome = document.getElementById("produtoNome").value.trim();
+  const preco = Number(document.getElementById("produtoPreco").value);
+  const categoria = document.getElementById("produtoCategoria").value;
+  const estoque = Number(document.getElementById("produtoEstoque").value);
+  const disponivel = document.getElementById("produtoDisponivel").checked;
+  const destaque = document.getElementById("produtoDestaque").checked;
+
+  botaoSalvar.disabled = true;
+  botaoSalvar.textContent = "Salvando...";
+
+  try {
+    const token = localStorage.getItem("myranda_access_token");
+
+    if (!token) {
+      throw new Error("Sua sessão expirou. Saia do painel e entre novamente.");
+    }
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/produtos`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          codigo: codigo,
+          nome: nome,
+          preco: preco,
+          categoria: categoria,
+          estoque: estoque,
+          disponivel: disponivel && estoque > 0,
+          destaque: destaque
+        })
+      }
+    );
+
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      console.error(dados);
+      throw new Error(dados.message || "Não foi possível cadastrar o produto.");
+    }
+
+    alert("Produto cadastrado com sucesso!");
+
+    event.target.reset();
+    document.getElementById("produtoDisponivel").checked = true;
+    formNovoProduto.style.display = "none";
+
+    await carregarProdutos();
+
+  } catch (erro) {
+    alert(erro.message);
+  } finally {
+    botaoSalvar.disabled = false;
+    botaoSalvar.textContent = "Salvar produto";
+  }
+});
+  const formNovoProduto = document.getElementById("formNovoProduto");
 
 document.getElementById("btnNovoProduto").addEventListener("click", () => {
   formNovoProduto.style.display = "block";
