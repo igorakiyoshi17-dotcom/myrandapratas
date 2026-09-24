@@ -147,6 +147,56 @@
     </div>
 
   </main>
+<script>
+  const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
 
+  const loginForm = document.getElementById("loginForm");
+  const botaoEntrar = loginForm.querySelector("button");
+
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+
+    botaoEntrar.disabled = true;
+    botaoEntrar.textContent = "Entrando...";
+
+    try {
+      const resposta = await fetch(
+        `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
+          body: JSON.stringify({
+            email: email,
+            password: senha
+          })
+        }
+      );
+
+      const dados = await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(dados.error_description || dados.msg || "E-mail ou senha incorretos.");
+      }
+
+      localStorage.setItem("myranda_access_token", dados.access_token);
+      localStorage.setItem("myranda_refresh_token", dados.refresh_token);
+
+      alert("Login realizado com sucesso!");
+
+    } catch (erro) {
+      alert(erro.message);
+    } finally {
+      botaoEntrar.disabled = false;
+      botaoEntrar.textContent = "Entrar";
+    }
+  });
+</script>
 </body>
 </html>
