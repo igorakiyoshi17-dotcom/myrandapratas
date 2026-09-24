@@ -363,7 +363,9 @@ document.getElementById("btnSair").addEventListener("click", () => {
 
   document.getElementById("senha").value = "";
 });
-async function carregarProdutos() {
+let produtosCarregados = [];
+let produtoEmEdicaoId = null;
+  async function carregarProdutos() {
   const lista = document.getElementById("listaProdutos");
 
   lista.innerHTML = "<p>Carregando produtos...</p>";
@@ -384,6 +386,7 @@ async function carregarProdutos() {
     }
 
     const produtos = await resposta.json();
+    produtosCarregados = produtos;
 
     if (produtos.length === 0) {
       lista.innerHTML = "<p>Nenhum produto cadastrado.</p>";
@@ -504,7 +507,9 @@ document.getElementById("novoProdutoForm").addEventListener("submit", async (eve
     if (!token) {
       throw new Error("Sua sessão expirou. Saia do painel e entre novamente.");
     }
-    let imagemUrl = null;
+   let imagemUrl = produtoEmEdicaoId
+  ? produtosCarregados.find(item => Number(item.id) === Number(produtoEmEdicaoId))?.imagem_url || null
+  : null;
 
 if (foto) {
   const extensao = foto.name.split(".").pop().toLowerCase();
@@ -533,9 +538,11 @@ if (foto) {
 }
 
     const resposta = await fetch(
-      `${SUPABASE_URL}/rest/v1/produtos`,
+     produtoEmEdicaoId
+  ? `${SUPABASE_URL}/rest/v1/produtos?id=eq.${produtoEmEdicaoId}`
+  : `${SUPABASE_URL}/rest/v1/produtos`,
       {
-        method: "POST",
+      method: produtoEmEdicaoId ? "PATCH" : "POST",
         headers: {
           "Content-Type": "application/json",
           "apikey": SUPABASE_KEY,
@@ -562,8 +569,10 @@ if (foto) {
       throw new Error(dados.message || "Não foi possível cadastrar o produto.");
     }
 
-    alert("Produto cadastrado com sucesso!");
+  alert(produtoEmEdicaoId ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
 
+  produtoEmEdicaoId = null;
+formNovoProduto.querySelector("h3").textContent = "Novo produto";
     event.target.reset();
     document.getElementById("produtoDisponivel").checked = true;
     formNovoProduto.style.display = "none";
@@ -578,13 +587,59 @@ if (foto) {
   }
 });
   const formNovoProduto = document.getElementById("formNovoProduto");
+  document.getElementById("listaProdutos").addEventListener("click", (event) => {
+  const botaoEditar = event.target.closest(".btnEditarProduto");
+
+  if (!botaoEditar) {
+    return;
+  }
+
+  const idProduto = Number(botaoEditar.dataset.id);
+
+  const produto = produtosCarregados.find(
+    item => Number(item.id) === idProduto
+  );
+
+  if (!produto) {
+    alert("Produto não encontrado.");
+    return;
+  }
+
+  produtoEmEdicaoId = produto.id;
+
+  document.getElementById("produtoCodigo").value = produto.codigo || "";
+  document.getElementById("produtoNome").value = produto.nome || "";
+  document.getElementById("produtoPreco").value = produto.preco || "";
+  document.getElementById("produtoCategoria").value = produto.categoria || "";
+  document.getElementById("produtoEstoque").value = produto.estoque ?? 0;
+  document.getElementById("produtoDisponivel").checked = produto.disponivel;
+  document.getElementById("produtoDestaque").checked = produto.destaque;
+
+  formNovoProduto.querySelector("h3").textContent = "Editar produto";
+  document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar alterações";
+
+  formNovoProduto.style.display = "block";
+  formNovoProduto.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
 
 document.getElementById("btnNovoProduto").addEventListener("click", () => {
+  produtoEmEdicaoId = null;
+document.getElementById("novoProdutoForm").reset();
+document.getElementById("produtoDisponivel").checked = true;
+formNovoProduto.querySelector("h3").textContent = "Novo produto";
+document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar produto";
   formNovoProduto.style.display = "block";
+  
   document.getElementById("produtoCodigo").focus();
 });
 
 document.getElementById("btnCancelarProduto").addEventListener("click", () => {
+  produtoEmEdicaoId = null;
+formNovoProduto.querySelector("h3").textContent = "Novo produto";
+document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar produto";
   formNovoProduto.style.display = "none";
   document.getElementById("novoProdutoForm").reset();
   document.getElementById("produtoDisponivel").checked = true;
