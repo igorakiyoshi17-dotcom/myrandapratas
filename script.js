@@ -103,7 +103,7 @@ function renderProducts(){
         ${p.featured ? '<span class="badge">DESTAQUE</span>' : ''}
         ${!p.available ? '<span class="badge off">INDISPONÍVEL</span>' : ''}
         <button class="heart-btn" aria-label="Favoritar">♡</button>
-        ${jewel(p.type)}
+       ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-photo">` : jewel(p.type)}
       </div>
       <div class="product-info">
         <h3 class="product-name">${p.name}</h3>
