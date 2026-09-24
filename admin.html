@@ -248,6 +248,12 @@
       <option value="Novidades">Novidades</option>
     </select>
 
+    <label for="produtoFoto">Foto do produto</label>
+<input
+  id="produtoFoto"
+  type="file"
+  accept="image/jpeg,image/png,image/webp"
+>
     <label for="produtoEstoque">Estoque</label>
     <input id="produtoEstoque" type="number" min="0" value="1" required>
 
@@ -471,6 +477,7 @@ document.getElementById("novoProdutoForm").addEventListener("submit", async (eve
   const nome = document.getElementById("produtoNome").value.trim();
   const preco = Number(document.getElementById("produtoPreco").value);
   const categoria = document.getElementById("produtoCategoria").value;
+  const foto = document.getElementById("produtoFoto").files[0];
   const estoque = Number(document.getElementById("produtoEstoque").value);
   const disponivel = document.getElementById("produtoDisponivel").checked;
   const destaque = document.getElementById("produtoDestaque").checked;
@@ -484,6 +491,33 @@ document.getElementById("novoProdutoForm").addEventListener("submit", async (eve
     if (!token) {
       throw new Error("Sua sessão expirou. Saia do painel e entre novamente.");
     }
+    let imagemUrl = null;
+
+if (foto) {
+  const extensao = foto.name.split(".").pop().toLowerCase();
+  const nomeArquivo = `${Date.now()}-${codigo}.${extensao}`;
+
+  const respostaUpload = await fetch(
+    `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": foto.type
+      },
+      body: foto
+    }
+  );
+
+  if (!respostaUpload.ok) {
+    const erroUpload = await respostaUpload.text();
+    console.error(erroUpload);
+    throw new Error("Não foi possível enviar a foto do produto.");
+  }
+
+  imagemUrl = `${SUPABASE_URL}/storage/v1/object/public/produtos/${nomeArquivo}`;
+}
 
     const resposta = await fetch(
       `${SUPABASE_URL}/rest/v1/produtos`,
@@ -502,7 +536,8 @@ document.getElementById("novoProdutoForm").addEventListener("submit", async (eve
           categoria: categoria,
           estoque: estoque,
           disponivel: disponivel && estoque > 0,
-          destaque: destaque
+          destaque: destaque,
+          imagem_url: imagemUrl
         })
       }
     );
