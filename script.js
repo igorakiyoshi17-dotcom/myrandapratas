@@ -185,6 +185,40 @@ $("#confirmSelection").onclick=()=>{
   closeModal("#selectionModal"); openModal("#successModal");
 };
 
+$("#sendWhatsApp").onclick=()=>{
+  const code = $("#selectionCode").textContent;
+
+  const items = selected
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
+
+  if (!items.length) {
+    showToast("Sua seleção está vazia.");
+    return;
+  }
+
+  const total = items.reduce((s,p) => s + p.price, 0);
+
+  const listaProdutos = items
+    .map(p => `• ${p.id} — ${p.name} — ${money(p.price)}`)
+    .join("\n");
+
+  const mensagem = `Olá! Quero finalizar minha seleção na Myrandapratas 🤎
+
+Código da seleção: ${code}
+
+${listaProdutos}
+
+Total: ${money(total)}
+
+Gostaria de finalizar minha compra.`;
+
+  const numeroWhatsApp = "5561991318964";
+  const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+  window.open(linkWhatsApp, "_blank");
+};
+
 $("#backToCatalog").onclick=()=>{closeModal("#successModal");document.querySelector("#catalogo").scrollIntoView({behavior:"smooth"});};
 
 async function iniciarCatalogo() {
