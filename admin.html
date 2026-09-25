@@ -258,10 +258,7 @@
     <input id="produtoEstoque" type="number" min="0" value="1" required>
 
     <div style="margin-top:20px;">
-      <label style="display:flex; align-items:center; gap:10px;">
-        <input id="produtoDisponivel" type="checkbox" checked style="width:auto;">
-        Produto disponível
-      </label>
+     
 
       <label style="display:flex; align-items:center; gap:10px;">
         <input id="produtoDestaque" type="checkbox" style="width:auto;">
@@ -509,7 +506,6 @@ document.getElementById("novoProdutoForm").addEventListener("submit", async (eve
   const categoria = document.getElementById("produtoCategoria").value;
   const foto = document.getElementById("produtoFoto").files[0];
   const estoque = Number(document.getElementById("produtoEstoque").value);
-  const disponivel = document.getElementById("produtoDisponivel").checked;
   const destaque = document.getElementById("produtoDestaque").checked;
 
   botaoSalvar.disabled = true;
@@ -569,7 +565,7 @@ if (foto) {
           preco: preco,
           categoria: categoria,
           estoque: estoque,
-          disponivel: disponivel && estoque > 0,
+disponivel: estoque > 0,    
           destaque: destaque,
           imagem_url: imagemUrl
         })
@@ -588,7 +584,6 @@ if (foto) {
   produtoEmEdicaoId = null;
 formNovoProduto.querySelector("h3").textContent = "Novo produto";
     event.target.reset();
-    document.getElementById("produtoDisponivel").checked = true;
     formNovoProduto.style.display = "none";
 
     await carregarProdutos();
@@ -626,7 +621,6 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
   document.getElementById("produtoPreco").value = produto.preco || "";
   document.getElementById("produtoCategoria").value = produto.categoria || "";
   document.getElementById("produtoEstoque").value = produto.estoque ?? 0;
-  document.getElementById("produtoDisponivel").checked = produto.disponivel;
   document.getElementById("produtoDestaque").checked = produto.destaque;
 
   formNovoProduto.querySelector("h3").textContent = "Editar produto";
@@ -735,7 +729,6 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
 document.getElementById("btnNovoProduto").addEventListener("click", () => {
   produtoEmEdicaoId = null;
 document.getElementById("novoProdutoForm").reset();
-document.getElementById("produtoDisponivel").checked = true;
 formNovoProduto.querySelector("h3").textContent = "Novo produto";
 document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar produto";
   formNovoProduto.style.display = "block";
@@ -749,7 +742,7 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
 document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar produto";
   formNovoProduto.style.display = "none";
   document.getElementById("novoProdutoForm").reset();
-  document.getElementById("produtoDisponivel").checked = true;
+
 });
 </script>
 </body>
