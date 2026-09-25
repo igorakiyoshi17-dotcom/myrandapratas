@@ -614,13 +614,28 @@ let produtoEmEdicaoId = null;
             flex-wrap:wrap;
           ">
             <strong>${selecao.codigo}</strong>
-
-            <span style="
-              font-size:12px;
-              font-weight:bold;
-            ">
-              ${(selecao.status || "aguardando").toUpperCase()}
-            </span>
+<span style="
+  font-size:12px;
+  font-weight:bold;
+  padding:5px 9px;
+  border-radius:999px;
+  background:${
+    (selecao.status || "aguardando") === "finalizada"
+      ? "#e4efe5"
+      : (selecao.status || "aguardando") === "cancelada"
+        ? "#f3dfdd"
+        : "#f2e8d5"
+  };
+  color:${
+    (selecao.status || "aguardando") === "finalizada"
+      ? "#48764f"
+      : (selecao.status || "aguardando") === "cancelada"
+        ? "#9b4b45"
+        : "#8a6837"
+  };
+">
+  ${(selecao.status || "aguardando").toUpperCase()}
+</span>
           </div>
 
           <div style="
