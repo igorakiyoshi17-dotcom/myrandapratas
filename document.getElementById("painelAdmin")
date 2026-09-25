@@ -291,7 +291,29 @@
 
   </div>
 
-</section>
+<div
+  id="areaSelecoes"
+  style="
+    margin-top:32px;
+    padding-top:24px;
+    border-top:1px solid #e6ddd7;
+  "
+>
+  <h2 style="margin-bottom:6px;">
+    Seleções recebidas
+  </h2>
+
+  <p style="color:#806f66; margin-top:0; margin-bottom:18px;">
+    Acompanhe as seleções enviadas pelas clientes.
+  </p>
+
+  <div id="listaSelecoes">
+    <p style="color:#806f66;">
+      Carregando seleções...
+    </p>
+  </div>
+</div>
+  </section>
 <script>
   const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
   const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
@@ -348,7 +370,9 @@ const painelAdmin = document.getElementById("painelAdmin");
 async function mostrarPainel() {
   telaLogin.style.display = "none";
   painelAdmin.style.display = "block";
+
   await carregarProdutos();
+  await carregarSelecoes();
 }
 
 document.getElementById("btnSair").addEventListener("click", () => {
@@ -522,7 +546,118 @@ let produtoEmEdicaoId = null;
     `;
   }
 }
-document.getElementById("novoProdutoForm").addEventListener("submit", async (event) => {
+
+  async function carregarSelecoes() {
+  const lista = document.getElementById("listaSelecoes");
+
+  lista.innerHTML = "<p>Carregando seleções...</p>";
+
+  const token = localStorage.getItem("myranda_access_token");
+
+  if (!token) {
+    lista.innerHTML = "<p>Sua sessão expirou. Entre novamente.</p>";
+    return;
+  }
+
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/selecoes?select=*&order=created_at.desc`,
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error("Erro ao carregar seleções:", erro);
+      throw new Error("Não foi possível carregar as seleções.");
+    }
+
+    const selecoes = await resposta.json();
+
+    if (selecoes.length === 0) {
+      lista.innerHTML = "<p>Nenhuma seleção recebida ainda.</p>";
+      return;
+    }
+
+    lista.innerHTML = selecoes.map(selecao => {
+      const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
+
+      const data = new Date(selecao.created_at).toLocaleString("pt-BR");
+
+      const listaItens = itens.map(item => `
+        <div style="
+          font-size:13px;
+          color:#806f66;
+          margin-top:4px;
+        ">
+          ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+        </div>
+      `).join("");
+
+      return `
+        <div style="
+          border:1px solid #e6d9ca;
+          border-radius:16px;
+          padding:16px;
+          margin-bottom:12px;
+        ">
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            flex-wrap:wrap;
+          ">
+            <strong>${selecao.codigo}</strong>
+
+            <span style="
+              font-size:12px;
+              font-weight:bold;
+            ">
+              ${(selecao.status || "aguardando").toUpperCase()}
+            </span>
+          </div>
+
+          <div style="
+            font-size:13px;
+            color:#806f66;
+            margin-top:6px;
+          ">
+            ${data}
+          </div>
+
+          <div style="margin-top:12px;">
+            ${listaItens}
+          </div>
+
+          <div style="
+            margin-top:14px;
+            font-weight:bold;
+          ">
+            ${selecao.quantidade} ${Number(selecao.quantidade) === 1 ? "peça" : "peças"}
+            • Total: R$ ${Number(selecao.total).toFixed(2).replace(".", ",")}
+          </div>
+
+        </div>
+      `;
+    }).join("");
+
+  } catch (erro) {
+    console.error(erro);
+
+    lista.innerHTML = `
+      <p style="color:#9b4b45;">
+        Erro ao carregar as seleções.
+      </p>
+    `;
+  }
+}
+  document.getElementById("novoProdutoForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const botaoSalvar = event.target.querySelector('button[type="submit"]');
