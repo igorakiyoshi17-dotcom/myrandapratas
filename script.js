@@ -34,8 +34,9 @@ async function carregarProdutosSupabase() {
     const dados = await resposta.json();
 
     if (dados.length > 0) {
-      products = dados.map(produto => ({
-        id: produto.codigo,
+products = dados
+  .filter(produto => produto.disponivel && Number(produto.estoque) > 0)
+  .map(produto => ({        id: produto.codigo,
         name: produto.nome,
         category: produto.categoria,
         price: Number(produto.preco),
