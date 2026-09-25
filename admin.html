@@ -685,6 +685,7 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
     const nomeArquivo = decodeURIComponent(
       produto.imagem_url.substring(posicao + marcador.length)
     );
+    console.log("Arquivo que será excluído:", nomeArquivo);
 
     const respostaImagem = await fetch(
       `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
@@ -696,6 +697,7 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
         }
       }
     );
+    console.log("Resposta ao excluir imagem:", respostaImagem.status, respostaImagem.statusText);
 
     if (!respostaImagem.ok) {
       const erroImagem = await respostaImagem.text();
