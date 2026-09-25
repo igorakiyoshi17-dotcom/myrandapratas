@@ -306,7 +306,51 @@
   <p style="color:#806f66; margin-top:0; margin-bottom:18px;">
     Acompanhe as seleções enviadas pelas clientes.
   </p>
+<div
+  id="filtrosSelecoes"
+  style="
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  "
+>
+  <button
+    type="button"
+    class="btnFiltroSelecao"
+    data-status="todas"
+    style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
+  >
+    Todas
+  </button>
 
+  <button
+    type="button"
+    class="btnFiltroSelecao"
+    data-status="aguardando"
+    style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
+  >
+    Aguardando
+  </button>
+
+  <button
+    type="button"
+    class="btnFiltroSelecao"
+    data-status="finalizada"
+    style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
+  >
+    Finalizadas
+  </button>
+
+  <button
+    type="button"
+    class="btnFiltroSelecao"
+    data-status="cancelada"
+    style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
+  >
+    Canceladas
+  </button>
+</div>
   <div id="listaSelecoes">
     <p style="color:#806f66;">
       Carregando seleções...
@@ -385,6 +429,7 @@ document.getElementById("btnSair").addEventListener("click", () => {
   document.getElementById("senha").value = "";
 });
 let produtosCarregados = [];
+  let selecoesCarregadas = [];
 let produtoEmEdicaoId = null;
   async function carregarProdutos() {
   const lista = document.getElementById("listaProdutos");
@@ -546,7 +591,142 @@ let produtoEmEdicaoId = null;
     `;
   }
 }
+  
+function aplicarFiltroSelecoes(status) {
+  const lista = document.getElementById("listaSelecoes");
 
+  const selecoesFiltradas =
+    status === "todas"
+      ? selecoesCarregadas
+      : selecoesCarregadas.filter(
+          selecao => (selecao.status || "aguardando") === status
+        );
+
+  if (selecoesFiltradas.length === 0) {
+    lista.innerHTML = "<p>Nenhuma seleção encontrada neste filtro.</p>";
+    return;
+  }
+
+  lista.innerHTML = selecoesFiltradas.map(selecao => {
+    const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
+
+    const data = new Date(selecao.created_at).toLocaleString("pt-BR");
+
+    const listaItens = itens.map(item => `
+      <div style="
+        font-size:13px;
+        color:#806f66;
+        margin-top:4px;
+      ">
+        ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+      </div>
+    `).join("");
+
+    return `
+      <div style="
+        border:1px solid #e6d9ca;
+        border-radius:16px;
+        padding:16px;
+        margin-bottom:12px;
+      ">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:12px;
+          flex-wrap:wrap;
+        ">
+          <strong>${selecao.codigo}</strong>
+
+          <span style="
+            font-size:12px;
+            font-weight:bold;
+            padding:5px 9px;
+            border-radius:999px;
+            background:${
+              (selecao.status || "aguardando") === "finalizada"
+                ? "#e4efe5"
+                : (selecao.status || "aguardando") === "cancelada"
+                  ? "#f3dfdd"
+                  : "#f2e8d5"
+            };
+            color:${
+              (selecao.status || "aguardando") === "finalizada"
+                ? "#48764f"
+                : (selecao.status || "aguardando") === "cancelada"
+                  ? "#9b4b45"
+                  : "#8a6837"
+            };
+          ">
+            ${(selecao.status || "aguardando").toUpperCase()}
+          </span>
+        </div>
+
+        <div style="
+          font-size:13px;
+          color:#806f66;
+          margin-top:6px;
+        ">
+          ${data}
+        </div>
+
+        <div style="margin-top:12px;">
+          ${listaItens}
+        </div>
+
+        <div style="
+          margin-top:14px;
+          font-weight:bold;
+        ">
+          ${selecao.quantidade} ${Number(selecao.quantidade) === 1 ? "peça" : "peças"}
+          • Total: R$ ${Number(selecao.total).toFixed(2).replace(".", ",")}
+        </div>
+
+        ${(selecao.status || "aguardando") === "aguardando" ? `
+          <div style="
+            margin-top:14px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+          ">
+            <button
+              type="button"
+              class="btnFinalizarSelecao"
+              data-id="${selecao.id}"
+              style="
+                width:auto;
+                margin:0;
+                padding:9px 14px;
+                font-size:13px;
+                background:#48764f;
+              "
+            >
+              Finalizar
+            </button>
+
+            <button
+              type="button"
+              class="btnCancelarSelecao"
+              data-id="${selecao.id}"
+              style="
+                width:auto;
+                margin:0;
+                padding:9px 14px;
+                font-size:13px;
+                background:#8b3f3f;
+              "
+            >
+              Cancelar
+            </button>
+          </div>
+        ` : ""}
+
+      </div>
+    `;
+  }).join("");
+}
+  
   async function carregarSelecoes() {
   const lista = document.getElementById("listaSelecoes");
 
@@ -577,14 +757,15 @@ let produtoEmEdicaoId = null;
     }
 
     const selecoes = await resposta.json();
+    selecoesCarregadas = selecoes;
 
     if (selecoes.length === 0) {
       lista.innerHTML = "<p>Nenhuma seleção recebida ainda.</p>";
       return;
     }
 
-    lista.innerHTML = selecoes.map(selecao => {
-      const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
+lista.innerHTML = selecoesCarregadas.map(selecao => {
+  const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
 
       const data = new Date(selecao.created_at).toLocaleString("pt-BR");
 
@@ -711,6 +892,18 @@ let produtoEmEdicaoId = null;
   }
 }
 
+  document.getElementById("filtrosSelecoes").addEventListener("click", (event) => {
+  const botao = event.target.closest(".btnFiltroSelecao");
+
+  if (!botao) {
+    return;
+  }
+
+  const status = botao.dataset.status;
+
+  aplicarFiltroSelecoes(status);
+});
+  
   document.getElementById("listaSelecoes").addEventListener("click", async (event) => {
   const botao = event.target.closest(
     ".btnFinalizarSelecao, .btnCancelarSelecao"
