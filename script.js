@@ -176,13 +176,62 @@ $("#showAll").onclick=()=>{activeCategory="Todos";renderFilters();renderProducts
 $("#closeSelection").onclick=()=>closeModal("#selectionModal");
 $("#selectionModal").addEventListener("click",e=>{if(e.target.id==="selectionModal")closeModal("#selectionModal")});
 
-$("#confirmSelection").onclick=()=>{
-  if(!selected.length){showToast("Adicione pelo menos uma peça.");return;}
+$("#confirmSelection").onclick=async()=>{
+  if(!selected.length){
+    showToast("Adicione pelo menos uma peça.");
+    return;
+  }
+
   const code = "#" + Math.random().toString(36).slice(2,7).toUpperCase();
-  $("#selectionCode").textContent=code;
-  const total=selected.reduce((s,id)=>s+products.find(p=>p.id===id).price,0);
-  $("#successSummary").innerHTML=`${selected.length} ${selected.length===1?"peça selecionada":"peças selecionadas"} • Total ${money(total)}<br>Guarde este código para consultar sua seleção.`;
-  closeModal("#selectionModal"); openModal("#successModal");
+
+  const items = selected
+    .map(id => products.find(p => p.id === id))
+    .filter(Boolean);
+
+  const total = items.reduce((s,p) => s + p.price, 0);
+
+  const itensParaSalvar = items.map(p => ({
+    codigo: p.id,
+    nome: p.name,
+    preco: p.price
+  }));
+
+  try {
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/selecoes`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          codigo: code,
+          itens: itensParaSalvar,
+          total: total,
+          quantidade: items.length
+        })
+      }
+    );
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error("Erro ao salvar seleção:", erro);
+      throw new Error("Não foi possível registrar sua seleção.");
+    }
+
+    $("#selectionCode").textContent = code;
+
+    $("#successSummary").innerHTML =
+      `${items.length} ${items.length===1?"peça selecionada":"peças selecionadas"} • Total ${money(total)}<br>Guarde este código para consultar sua seleção.`;
+
+    closeModal("#selectionModal");
+    openModal("#successModal");
+
+  } catch (erro) {
+    console.error(erro);
+    showToast("Não foi possível confirmar a seleção. Tente novamente.");
+  }
 };
 
 $("#sendWhatsApp").onclick=()=>{
