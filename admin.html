@@ -643,6 +643,42 @@ let produtoEmEdicaoId = null;
             • Total: R$ ${Number(selecao.total).toFixed(2).replace(".", ",")}
           </div>
 
+                 <div style="
+            margin-top:14px;
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+          ">
+            <button
+              type="button"
+              class="btnFinalizarSelecao"
+              data-id="${selecao.id}"
+              style="
+                width:auto;
+                margin:0;
+                padding:9px 14px;
+                font-size:13px;
+                background:#48764f;
+              "
+            >
+              Finalizar
+            </button>
+
+            <button
+              type="button"
+              class="btnCancelarSelecao"
+              data-id="${selecao.id}"
+              style="
+                width:auto;
+                margin:0;
+                padding:9px 14px;
+                font-size:13px;
+                background:#8b3f3f;
+              "
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       `;
     }).join("");
@@ -657,6 +693,72 @@ let produtoEmEdicaoId = null;
     `;
   }
 }
+
+  document.getElementById("listaSelecoes").addEventListener("click", async (event) => {
+  const botao = event.target.closest(
+    ".btnFinalizarSelecao, .btnCancelarSelecao"
+  );
+
+  if (!botao) {
+    return;
+  }
+
+  const idSelecao = Number(botao.dataset.id);
+
+  const novoStatus = botao.classList.contains("btnFinalizarSelecao")
+    ? "finalizada"
+    : "cancelada";
+
+  const confirmar = confirm(
+    novoStatus === "finalizada"
+      ? "Deseja marcar esta seleção como finalizada?"
+      : "Deseja marcar esta seleção como cancelada?"
+  );
+
+  if (!confirmar) {
+    return;
+  }
+
+  const token = localStorage.getItem("myranda_access_token");
+
+  if (!token) {
+    alert("Sua sessão expirou. Saia do painel e entre novamente.");
+    return;
+  }
+
+  try {
+    botao.disabled = true;
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/selecoes?id=eq.${idSelecao}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          status: novoStatus
+        })
+      }
+    );
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error("Erro ao atualizar seleção:", erro);
+      throw new Error("Não foi possível atualizar a seleção.");
+    }
+
+    await carregarSelecoes();
+
+  } catch (erro) {
+    alert(erro.message);
+    botao.disabled = false;
+  }
+});
+  
   document.getElementById("novoProdutoForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
