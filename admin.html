@@ -468,6 +468,33 @@ let produtoEmEdicaoId = null;
 </button>
 <button
   type="button"
+  class="btnDiminuirEstoque"
+  data-id="${produto.id}"
+  style="
+    width:auto;
+    margin:10px 0 0 8px;
+    padding:9px 13px;
+    font-size:13px;
+  "
+>
+  −1
+</button>
+
+<button
+  type="button"
+  class="btnAumentarEstoque"
+  data-id="${produto.id}"
+  style="
+    width:auto;
+    margin:10px 0 0 8px;
+    padding:9px 13px;
+    font-size:13px;
+  "
+>
+  +1
+</button>
+<button
+  type="button"
   class="btnExcluirProduto"
   data-id="${produto.id}"
   style="
@@ -633,6 +660,79 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
   });
 });
 
+  document.getElementById("listaProdutos").addEventListener("click", async (event) => {
+  const botaoEstoque = event.target.closest(
+    ".btnDiminuirEstoque, .btnAumentarEstoque"
+  );
+
+  if (!botaoEstoque) {
+    return;
+  }
+
+  const idProduto = Number(botaoEstoque.dataset.id);
+
+  const produto = produtosCarregados.find(
+    item => Number(item.id) === idProduto
+  );
+
+  if (!produto) {
+    alert("Produto não encontrado.");
+    return;
+  }
+
+  const estoqueAtual = Number(produto.estoque) || 0;
+  const diminuir = botaoEstoque.classList.contains("btnDiminuirEstoque");
+
+  const novoEstoque = diminuir
+    ? Math.max(0, estoqueAtual - 1)
+    : estoqueAtual + 1;
+
+  if (diminuir && estoqueAtual === 0) {
+    alert("O estoque deste produto já está zerado.");
+    return;
+  }
+
+  const token = localStorage.getItem("myranda_access_token");
+
+  if (!token) {
+    alert("Sua sessão expirou. Saia do painel e entre novamente.");
+    return;
+  }
+
+  try {
+    botaoEstoque.disabled = true;
+
+    const resposta = await fetch(
+      `${SUPABASE_URL}/rest/v1/produtos?id=eq.${idProduto}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          estoque: novoEstoque,
+          disponivel: novoEstoque > 0
+        })
+      }
+    );
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error(erro);
+      throw new Error("Não foi possível atualizar o estoque.");
+    }
+
+    await carregarProdutos();
+
+  } catch (erro) {
+    alert(erro.message);
+    botaoEstoque.disabled = false;
+  }
+});
+  
   document.getElementById("listaProdutos").addEventListener("click", async (event) => {
   const botaoExcluir = event.target.closest(".btnExcluirProduto");
 
