@@ -706,6 +706,8 @@ function aplicarFiltroSelecoes(status) {
 
         <div style="
           margin-top:14px;
+
+          
           font-weight:bold;
         ">
           ${selecao.quantidade} ${Number(selecao.quantidade) === 1 ? "peça" : "peças"}
@@ -959,10 +961,52 @@ botao.dataset.ativo = "true";
   }
 
   const idSelecao = Number(botao.dataset.id);
+    const selecaoAtual = selecoesCarregadas.find(
+  item => Number(item.id) === idSelecao
+);
+
+if (!selecaoAtual) {
+  alert("Seleção não encontrada.");
+  return;
+}
+
+if ((selecaoAtual.status || "aguardando") !== "aguardando") {
+  alert("Esta seleção já foi concluída e não pode ser alterada novamente.");
+  return;
+}
 
   const novoStatus = botao.classList.contains("btnFinalizarSelecao")
     ? "finalizada"
     : "cancelada";
+    if (novoStatus === "finalizada") {
+  const selecao = selecoesCarregadas.find(
+    item => Number(item.id) === idSelecao
+  );
+
+  if (!selecao) {
+    alert("Seleção não encontrada.");
+    return;
+  }
+
+  const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
+
+  const produtosSemEstoque = itens.filter(item => {
+    const produto = produtosCarregados.find(
+      produto => String(produto.codigo).toUpperCase() === String(item.codigo).toUpperCase()
+    );
+
+    return !produto || Number(produto.estoque) <= 0;
+  });
+
+  if (produtosSemEstoque.length > 0) {
+    const codigos = produtosSemEstoque
+      .map(item => item.codigo)
+      .join(", ");
+
+    alert(`Não é possível finalizar. Verifique o estoque de: ${codigos}`);
+    return;
+  }
+}
 
   const confirmar = confirm(
     novoStatus === "finalizada"
@@ -983,7 +1027,46 @@ botao.dataset.ativo = "true";
 
   try {
     botao.disabled = true;
+if (novoStatus === "finalizada") {
+  const selecao = selecoesCarregadas.find(
+    item => Number(item.id) === idSelecao
+  );
 
+  for (const item of selecao.itens) {
+    const produto = produtosCarregados.find(
+      produto =>
+        String(produto.codigo).toUpperCase() ===
+        String(item.codigo).toUpperCase()
+    );
+
+    const novoEstoque = Number(produto.estoque) - 1;
+
+    const respostaEstoque = await fetch(
+      `${SUPABASE_URL}/rest/v1/produtos?id=eq.${produto.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({
+          estoque: novoEstoque,
+          disponivel: novoEstoque > 0
+        })
+      }
+    );
+
+    if (!respostaEstoque.ok) {
+      const erro = await respostaEstoque.text();
+      console.error("Erro ao atualizar estoque:", erro);
+      throw new Error(
+        `Não foi possível baixar o estoque do produto ${item.codigo}.`
+      );
+    }
+  }
+}
     const resposta = await fetch(
       `${SUPABASE_URL}/rest/v1/selecoes?id=eq.${idSelecao}`,
       {
@@ -1006,8 +1089,9 @@ botao.dataset.ativo = "true";
       throw new Error("Não foi possível atualizar a seleção.");
     }
 
-    await carregarSelecoes();
-
+await carregarProdutos();
+await carregarSelecoes();
+    
   } catch (erro) {
     alert(erro.message);
     botao.disabled = false;
