@@ -856,6 +856,48 @@ function aplicarFiltroSelecoes(status) {
 
     const selecoes = await resposta.json();
     selecoesCarregadas = selecoes;
+    const agora = new Date();
+
+const vendasHoje = selecoes.filter(selecao => {
+  if (
+    (selecao.status || "aguardando") !== "finalizada" ||
+    !selecao.finalizada_em
+  ) {
+    return false;
+  }
+
+  const dataFinalizacao = new Date(selecao.finalizada_em);
+
+  return (
+    dataFinalizacao.getFullYear() === agora.getFullYear() &&
+    dataFinalizacao.getMonth() === agora.getMonth() &&
+    dataFinalizacao.getDate() === agora.getDate()
+  );
+});
+
+const quantidadeVendasHoje = vendasHoje.length;
+
+const pecasVendidasHoje = vendasHoje.reduce(
+  (total, selecao) => total + (Number(selecao.quantidade) || 0),
+  0
+);
+
+const faturamentoHoje = vendasHoje.reduce(
+  (total, selecao) => total + (Number(selecao.total) || 0),
+  0
+);
+
+document.getElementById("vendasHoje").textContent =
+  quantidadeVendasHoje;
+
+document.getElementById("pecasVendidasHoje").textContent =
+  pecasVendidasHoje;
+
+document.getElementById("faturamentoHoje").textContent =
+  faturamentoHoje.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
 
     if (selecoes.length === 0) {
       lista.innerHTML = "<p>Nenhuma seleção recebida ainda.</p>";
