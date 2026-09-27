@@ -130,7 +130,10 @@ const isSelected = (selected[p.id] || 0) > 0;
     </article>`;
   }).join("");
 
-document.querySelectorAll("[data-card-minus]").forEach(btn => {
+document.querySelectorAll("[data-add]").forEach(btn => {
+  btn.onclick = () => toggleProduct(btn.dataset.add);
+});
+  document.querySelectorAll("[data-card-minus]").forEach(btn => {
   btn.onclick = () => {
     const id = btn.dataset.cardMinus;
 
