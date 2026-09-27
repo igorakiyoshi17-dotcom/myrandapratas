@@ -112,14 +112,59 @@ const isSelected = (selected[p.id] || 0) > 0;
         <div class="product-meta">CÓDIGO ${p.id} • ${p.available ? "DISPONÍVEL" : "SEM ESTOQUE"}</div>
         <div class="product-bottom">
           <span class="price">${money(p.price)}</span>
-          <button class="add-btn ${isSelected?"added":""}" ${!p.available?"disabled":""} data-add="${p.id}">
-${isSelected ? `✓ ${selected[p.id]} na seleção` : "Adicionar"}
-</button>
+         
+          ${isSelected ? `
+  <div class="card-quantity-control">
+    <button type="button" data-card-minus="${p.id}">−</button>
+    <span>${selected[p.id]}</span>
+    <button type="button" data-card-plus="${p.id}">+</button>
+  </div>
+` : `
+  <button class="add-btn" ${!p.available ? "disabled" : ""} data-add="${p.id}">
+    Adicionar
+  </button>
+`}
+
         </div>
       </div>
     </article>`;
   }).join("");
-  document.querySelectorAll("[data-add]").forEach(btn=>btn.onclick=()=>toggleProduct(btn.dataset.add));
+
+document.querySelectorAll("[data-card-minus]").forEach(btn => {
+  btn.onclick = () => {
+    const id = btn.dataset.cardMinus;
+
+    if ((selected[id] || 0) > 1) {
+      selected[id]--;
+    } else {
+      delete selected[id];
+    }
+
+    renderProducts();
+    updateSelectionUI();
+  };
+});
+
+document.querySelectorAll("[data-card-plus]").forEach(btn => {
+  btn.onclick = () => {
+    const id = btn.dataset.cardPlus;
+    const produto = products.find(p => p.id === id);
+
+    if (!produto) return;
+
+    const estoqueDisponivel = Number(produto.stock || 0);
+
+    if ((selected[id] || 0) >= estoqueDisponivel) {
+      showToast(`Quantidade máxima disponível: ${estoqueDisponivel}`);
+      return;
+    }
+
+    selected[id] = (selected[id] || 0) + 1;
+
+    renderProducts();
+    updateSelectionUI();
+  };
+});
 }
 
 function toggleProduct(id){
