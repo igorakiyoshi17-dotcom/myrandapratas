@@ -36,3 +36,35 @@ button,a{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;colo
   object-fit:cover;
   object-position:center;
 }
+
+.card-quantity-control{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#f7f0e9;
+  border:1px solid #e6d9ca;
+  border-radius:999px;
+  padding:4px;
+}
+
+.card-quantity-control button{
+  width:30px;
+  height:30px;
+  border:none;
+  border-radius:50%;
+  background:#fff;
+  color:#4b3329;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.card-quantity-control span{
+  min-width:20px;
+  text-align:center;
+  font-size:14px;
+  font-weight:700;
+  color:#4b3329;
+}
