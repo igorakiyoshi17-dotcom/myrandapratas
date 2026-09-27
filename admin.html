@@ -351,6 +351,23 @@
     Canceladas
   </button>
 </div>
+  <div style="margin-bottom:18px;">
+  <input
+    type="text"
+    id="buscaSelecao"
+    placeholder="Buscar pelo código da seleção..."
+    autocomplete="off"
+    style="
+      width:100%;
+      box-sizing:border-box;
+      padding:12px 14px;
+      border:1px solid #e6d9ca;
+      border-radius:12px;
+      font-size:14px;
+      outline:none;
+    "
+  >
+</div>
   <div id="listaSelecoes">
     <p style="color:#806f66;">
       Carregando seleções...
@@ -594,13 +611,25 @@ let produtoEmEdicaoId = null;
   
 function aplicarFiltroSelecoes(status) {
   const lista = document.getElementById("listaSelecoes");
+  const busca = document.getElementById("buscaSelecao").value
+  .trim()
+  .replace("#", "")
+  .toUpperCase();
 
-  const selecoesFiltradas =
-    status === "todas"
-      ? selecoesCarregadas
-      : selecoesCarregadas.filter(
-          selecao => (selecao.status || "aguardando") === status
-        );
+ const selecoesFiltradas = selecoesCarregadas.filter(selecao => {
+  const correspondeStatus =
+    status === "todas" ||
+    (selecao.status || "aguardando") === status;
+
+  const codigo = String(selecao.codigo || "")
+    .replace("#", "")
+    .toUpperCase();
+
+  const correspondeBusca =
+    busca === "" || codigo.includes(busca);
+
+  return correspondeStatus && correspondeBusca;
+});
 
   if (selecoesFiltradas.length === 0) {
     lista.innerHTML = "<p>Nenhuma seleção encontrada neste filtro.</p>";
@@ -900,6 +929,22 @@ lista.innerHTML = selecoesCarregadas.map(selecao => {
   }
 
   const status = botao.dataset.status;
+    document.querySelectorAll(".btnFiltroSelecao").forEach(btn => {
+  btn.dataset.ativo = "false";
+});
+
+botao.dataset.ativo = "true";
+
+  aplicarFiltroSelecoes(status);
+});
+  document.getElementById("buscaSelecao").addEventListener("input", () => {
+  const botaoAtivo = document.querySelector(
+    '.btnFiltroSelecao[data-ativo="true"]'
+  );
+
+  const status = botaoAtivo
+    ? botaoAtivo.dataset.status
+    : "todas";
 
   aplicarFiltroSelecoes(status);
 });
