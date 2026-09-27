@@ -1077,9 +1077,13 @@ if (novoStatus === "finalizada") {
           "Authorization": `Bearer ${token}`,
           "Prefer": "return=representation"
         },
-        body: JSON.stringify({
-          status: novoStatus
-        })
+     body: JSON.stringify({
+  status: novoStatus,
+  finalizada_em:
+    novoStatus === "finalizada"
+      ? new Date().toISOString()
+      : null
+})
       }
     );
 
