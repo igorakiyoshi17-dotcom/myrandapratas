@@ -40,6 +40,7 @@ products = dados
         name: produto.nome,
         category: produto.categoria,
         price: Number(produto.preco),
+                    stock: Number(produto.estoque),
         available: produto.disponivel && produto.estoque > 0,
         featured: produto.destaque,
         image: produto.imagem_url,
@@ -56,7 +57,7 @@ const categories = [
   {name:"Pulseiras", icon:"⌁"}, {name:"Conjuntos", icon:"🎁"}, {name:"Novidades", icon:"✦"}
 ];
 
-let selected = [];
+let selected = {};
 let activeCategory = "Todos";
 
 const money = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
@@ -98,7 +99,7 @@ function visibleProducts(){
 function renderProducts(){
   const list = visibleProducts();
   $("#productGrid").innerHTML = list.map(p => {
-    const isSelected = selected.includes(p.id);
+const isSelected = (selected[p.id] || 0) > 0;
     return `<article class="product-card">
       <div class="product-image">
         ${p.featured ? '<span class="badge">DESTAQUE</span>' : ''}
@@ -112,8 +113,8 @@ function renderProducts(){
         <div class="product-bottom">
           <span class="price">${money(p.price)}</span>
           <button class="add-btn ${isSelected?"added":""}" ${!p.available?"disabled":""} data-add="${p.id}">
-            ${isSelected ? "✓ Adicionada" : "Adicionar"}
-          </button>
+${isSelected ? `✓ ${selected[p.id]} na seleção` : "Adicionar"}
+</button>
         </div>
       </div>
     </article>`;
@@ -124,26 +125,51 @@ function renderProducts(){
 function toggleProduct(id){
   const p = products.find(x=>x.id===id);
   if(!p || !p.available) return;
-  if(selected.includes(id)){
-    selected = selected.filter(x=>x!==id);
+if((selected[id] || 0) > 0){
+  delete selected[id];
     showToast("Peça removida da seleção");
   }else{
-    selected.push(id);
+    selected[id] = 1;
     showToast(`${p.name} adicionada à seleção`);
   }
   renderProducts(); updateSelectionUI();
 }
 
 function updateSelectionUI(){
-  const items = selected.map(id=>products.find(p=>p.id===id)).filter(Boolean);
-  const total = items.reduce((s,p)=>s+p.price,0);
-  const count = items.length;
-  $("#topCount").textContent=count;
-  $("#bottomCount").textContent=count;
-  $("#selectionBarCount").textContent=`${count} ${count===1?"peça":"peças"}`;
-  $("#selectionBarTotal").textContent=money(total);
-  $("#modalTotal").textContent=money(total);
-  $("#selectionBar").hidden = count===0;
+  const items = Object.entries(selected)
+    .map(([id, quantidade]) => {
+      const produto = products.find(p => p.id === id);
+
+      if (!produto) return null;
+
+      return {
+        ...produto,
+        quantidade
+      };
+    })
+    .filter(Boolean);
+
+  const count = items.reduce(
+    (total, item) => total + item.quantidade,
+    0
+  );
+
+  const total = items.reduce(
+    (s, item) => s + (item.price * item.quantidade),
+    0
+  );
+
+  $("#topCount").textContent = count;
+  $("#bottomCount").textContent = count;
+
+  $("#selectionBarCount").textContent =
+    `${count} ${count === 1 ? "peça" : "peças"}`;
+
+  $("#selectionBarTotal").textContent = money(total);
+  $("#modalTotal").textContent = money(total);
+
+  $("#selectionBar").hidden = count === 0;
+
   renderSelectionList(items);
 }
 
@@ -156,10 +182,53 @@ function renderSelectionList(items){
     <div class="selected-item">
       <div class="selected-thumb">${jewel(p.type,true)}</div>
       <div class="selected-details"><strong>${p.name}</strong><span>${p.id} • ${p.category}</span></div>
-      <span class="selected-price">${money(p.price)}</span>
+      <div class="quantity-control">
+  <button type="button" data-minus="${p.id}">−</button>
+
+  <span>${p.quantidade}</span>
+
+  <button type="button" data-plus="${p.id}">+</button>
+</div>
+
+<span class="selected-price">${money(p.price * p.quantidade)}</span>
       <button class="remove-btn" data-remove="${p.id}" aria-label="Remover">×</button>
     </div>`).join("");
   document.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>toggleProduct(b.dataset.remove));
+  document.querySelectorAll("[data-minus]").forEach(btn => {
+  btn.onclick = () => {
+    const id = btn.dataset.minus;
+
+    if ((selected[id] || 0) > 1) {
+      selected[id]--;
+    } else {
+      delete selected[id];
+    }
+
+    renderProducts();
+    updateSelectionUI();
+  };
+});
+
+document.querySelectorAll("[data-plus]").forEach(btn => {
+  btn.onclick = () => {
+    const id = btn.dataset.plus;
+    const produto = products.find(p => p.id === id);
+
+    if (!produto) return;
+
+    const estoqueDisponivel = Number(produto.stock || produto.estoque || 0);
+
+    if ((selected[id] || 0) >= estoqueDisponivel) {
+      showToast(`Quantidade máxima disponível: ${estoqueDisponivel}`);
+      return;
+    }
+
+    selected[id] = (selected[id] || 0) + 1;
+
+    renderProducts();
+    updateSelectionUI();
+  };
+});
 }
 
 function openModal(id){$(id).classList.add("open");$(id).setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
@@ -177,23 +246,36 @@ $("#closeSelection").onclick=()=>closeModal("#selectionModal");
 $("#selectionModal").addEventListener("click",e=>{if(e.target.id==="selectionModal")closeModal("#selectionModal")});
 
 $("#confirmSelection").onclick=async()=>{
-  if(!selected.length){
+  if(Object.keys(selected).length === 0){
     showToast("Adicione pelo menos uma peça.");
     return;
   }
 
   const code = "#" + Math.random().toString(36).slice(2,7).toUpperCase();
 
-  const items = selected
-    .map(id => products.find(p => p.id === id))
-    .filter(Boolean);
+const items = Object.entries(selected)
+  .map(([id, quantidade]) => {
+    const produto = products.find(p => p.id === id);
 
-  const total = items.reduce((s,p) => s + p.price, 0);
+    if (!produto) return null;
+
+    return {
+      ...produto,
+      quantidade
+    };
+  })
+  .filter(Boolean);
+
+  const total = items.reduce(
+  (s, p) => s + (p.price * p.quantidade),
+  0
+);
 
   const itensParaSalvar = items.map(p => ({
     codigo: p.id,
     nome: p.name,
-    preco: p.price
+    preco: p.price,
+    quantidade: p.quantidade
   }));
 
   try {
@@ -209,7 +291,10 @@ $("#confirmSelection").onclick=async()=>{
           codigo: code,
           itens: itensParaSalvar,
           total: total,
-          quantidade: items.length
+          quantidade: items.reduce(
+  (total, item) => total + item.quantidade,
+  0
+)
         })
       }
     );
@@ -222,8 +307,15 @@ $("#confirmSelection").onclick=async()=>{
 
     $("#selectionCode").textContent = code;
 
-    $("#successSummary").innerHTML =
-      `${items.length} ${items.length===1?"peça selecionada":"peças selecionadas"} • Total ${money(total)}<br>Guarde este código para consultar sua seleção.`;
+    
+    const quantidadeTotal = items.reduce(
+  (total, item) => total + item.quantidade,
+  0
+);
+
+$("#successSummary").innerHTML =
+  `${quantidadeTotal} ${quantidadeTotal === 1 ? "peça selecionada" : "peças selecionadas"} • Total ${money(total)}<br>Guarde este código para consultar sua seleção.`;
+    
 
     closeModal("#selectionModal");
     openModal("#successModal");
@@ -237,20 +329,34 @@ $("#confirmSelection").onclick=async()=>{
 $("#sendWhatsApp").onclick=()=>{
   const code = $("#selectionCode").textContent;
 
-  const items = selected
-    .map(id => products.find(p => p.id === id))
-    .filter(Boolean);
+  const items = Object.entries(selected)
+  .map(([id, quantidade]) => {
+    const produto = products.find(p => p.id === id);
+
+    if (!produto) return null;
+
+    return {
+      ...produto,
+      quantidade
+    };
+  })
+  .filter(Boolean);
 
   if (!items.length) {
     showToast("Sua seleção está vazia.");
     return;
   }
 
-  const total = items.reduce((s,p) => s + p.price, 0);
+  const total = items.reduce(
+  (s, p) => s + (p.price * p.quantidade),
+  0
+);
 
   const listaProdutos = items
-    .map(p => `• ${p.id} — ${p.name} — ${money(p.price)}`)
-    .join("\n");
+  .map(p =>
+    `• ${p.quantidade}x ${p.id} — ${p.name} — ${money(p.price)} cada — ${money(p.price * p.quantidade)}`
+  )
+  .join("\n");
 
   const mensagem = `Olá! Quero finalizar minha seleção na Myrandapratas 🤎
 
