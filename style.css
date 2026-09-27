@@ -40,21 +40,23 @@ button,a{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;colo
 .card-quantity-control{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:3px;
   background:#f7f0e9;
   border:1px solid #e6d9ca;
   border-radius:999px;
-  padding:4px;
+  padding:3px;
 }
 
 .card-quantity-control button{
-  width:30px;
-  height:30px;
+  width:25px;
+  height:25px;
+  padding:0;
   border:none;
   border-radius:50%;
   background:#fff;
   color:#4b3329;
-  font-size:18px;
+  font-size:15px;
+  line-height:1;
   cursor:pointer;
   display:flex;
   align-items:center;
@@ -62,9 +64,9 @@ button,a{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;colo
 }
 
 .card-quantity-control span{
-  min-width:20px;
+  min-width:15px;
   text-align:center;
-  font-size:14px;
+  font-size:13px;
   font-weight:700;
   color:#4b3329;
 }
