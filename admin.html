@@ -714,7 +714,9 @@ function aplicarFiltroSelecoes(status) {
         color:#806f66;
         margin-top:4px;
       ">
-        ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+       
+        ${Number(item.quantidade) || 1}x ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+        
       </div>
     `).join("");
 
@@ -915,7 +917,9 @@ lista.innerHTML = selecoesCarregadas.map(selecao => {
           color:#806f66;
           margin-top:4px;
         ">
-          ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+         
+          ${Number(item.quantidade) || 1}x ${item.codigo} • ${item.nome} • R$ ${Number(item.preco).toFixed(2).replace(".", ",")}
+          
         </div>
       `).join("");
 
@@ -1099,12 +1103,18 @@ if ((selecaoAtual.status || "aguardando") !== "aguardando") {
 
   const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
 
-  const produtosSemEstoque = itens.filter(item => {
-    const produto = produtosCarregados.find(
-      produto => String(produto.codigo).toUpperCase() === String(item.codigo).toUpperCase()
-    );
+ 
+      const produtosSemEstoque = itens.filter(item => {
+  const produto = produtosCarregados.find(
+    produto =>
+      String(produto.codigo).toUpperCase() ===
+      String(item.codigo).toUpperCase()
+  );
 
-    return !produto || Number(produto.estoque) <= 0;
+  const quantidadeItem = Number(item.quantidade) || 1;
+
+  return !produto || Number(produto.estoque) < quantidadeItem;
+        
   });
 
   if (produtosSemEstoque.length > 0) {
@@ -1148,7 +1158,11 @@ if (novoStatus === "finalizada") {
         String(item.codigo).toUpperCase()
     );
 
-    const novoEstoque = Number(produto.estoque) - 1;
+  
+    const quantidadeItem = Number(item.quantidade) || 1;
+
+const novoEstoque = Number(produto.estoque) - quantidadeItem;
+    
 
     const respostaEstoque = await fetch(
       `${SUPABASE_URL}/rest/v1/produtos?id=eq.${produto.id}`,
