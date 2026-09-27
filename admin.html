@@ -299,9 +299,76 @@
     border-top:1px solid #e6ddd7;
   "
 >
+
+  <div style="margin-bottom:28px;">
   <h2 style="margin-bottom:6px;">
-    Seleções recebidas
+    Resumo de vendas
   </h2>
+
+  <p style="color:#806f66; margin-top:0; margin-bottom:18px;">
+    Acompanhe o desempenho das vendas de hoje.
+  </p>
+
+  <div style="
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px;
+  ">
+    <div style="
+      border:1px solid #e6d9ca;
+      border-radius:16px;
+      padding:16px;
+      background:#fffaf5;
+    ">
+      <div style="font-size:12px; color:#806f66;">
+        Vendas de hoje
+      </div>
+      <strong
+        id="vendasHoje"
+        style="display:block; font-size:24px; margin-top:6px;"
+      >
+        0
+      </strong>
+    </div>
+
+    <div style="
+      border:1px solid #e6d9ca;
+      border-radius:16px;
+      padding:16px;
+      background:#fffaf5;
+    ">
+      <div style="font-size:12px; color:#806f66;">
+        Peças vendidas
+      </div>
+      <strong
+        id="pecasVendidasHoje"
+        style="display:block; font-size:24px; margin-top:6px;"
+      >
+        0
+      </strong>
+    </div>
+
+    <div style="
+      border:1px solid #e6d9ca;
+      border-radius:16px;
+      padding:16px;
+      background:#fffaf5;
+    ">
+      <div style="font-size:12px; color:#806f66;">
+        Faturamento de hoje
+      </div>
+      <strong
+        id="faturamentoHoje"
+        style="display:block; font-size:24px; margin-top:6px;"
+      >
+        R$ 0,00
+      </strong>
+    </div>
+  </div>
+</div>
+  <h2 style="margin-bottom:6px;">
+  Seleções recebidas
+</h2>
 
   <p style="color:#806f66; margin-top:0; margin-bottom:18px;">
     Acompanhe as seleções enviadas pelas clientes.
