@@ -145,3 +145,114 @@ button,a{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;colo
   background: #651D32;
   border-color: #651D32;
 }
+
+
+/* MYRANDA PRATAS — VERMELHO INTENSO */
+
+:root {
+  --coffee: #B0002A;
+  --coffee-dark: #79001D;
+  --cream: #F8F3F3;
+  --cream-2: #F0E2E5;
+  --paper: #FFFCFC;
+  --gold: #B0002A;
+  --gold-light: #D96A83;
+  --text: #32151D;
+  --muted: #80666D;
+  --line: #E7D4DA;
+  --white: #FFFFFF;
+  --shadow: 0 18px 50px rgba(121, 0, 29, .18);
+}
+
+/* Banner mais intenso */
+.hero {
+  background:
+    radial-gradient(
+      circle at 78% 42%,
+      #F0D5DC 0,
+      #F4E4E8 23%,
+      transparent 49%
+    ),
+    linear-gradient(125deg, #FFF8F8, #EBD0D8);
+}
+
+/* Títulos e detalhes */
+.hero h1 em {
+  color: #B0002A;
+}
+
+.eyebrow {
+  color: #B0002A;
+}
+
+.text-btn {
+  color: #B0002A;
+  border-color: #B0002A;
+}
+
+/* Botões principais */
+.primary-btn {
+  background: #B0002A;
+  box-shadow: 0 10px 25px rgba(176, 0, 42, .22);
+}
+
+.primary-btn:hover {
+  background: #79001D;
+}
+
+/* Categorias e filtros */
+.category-card:hover,
+.category-card.selected {
+  border-color: #B0002A;
+}
+
+.filter.active {
+  background: #B0002A;
+  border-color: #B0002A;
+}
+
+/* Preços e seleção */
+.price,
+.product-name,
+.modal-header h2,
+.success-modal h2 {
+  color: #79001D;
+}
+
+.selection-bar {
+  background: #79001D;
+}
+
+.top-count,
+.nav-selection b {
+  background: #B0002A;
+}
+
+/* Contornos das joias ilustrativas */
+.ring {
+  border-color: rgba(176, 0, 42, .72);
+  border-right-color: transparent;
+}
+
+.jewel-art {
+  border-color: rgba(176, 0, 42, .68);
+}
+
+.jewel-earring {
+  border-color: rgba(176, 0, 42, .68);
+  border-top-color: transparent;
+}
+
+.jewel-necklace {
+  border-color: rgba(176, 0, 42, .68);
+  border-bottom-color: transparent;
+}
+
+.jewel-bracelet {
+  border-color: rgba(176, 0, 42, .55);
+}
+
+::selection {
+  background: #B0002A;
+  color: #FFFFFF;
+}
