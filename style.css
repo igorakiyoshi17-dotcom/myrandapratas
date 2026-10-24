@@ -594,3 +594,75 @@ button,a{font-family:inherit}
  .selected-item{gap:8px;flex-wrap:wrap}
 }
 @media(max-width:380px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-image{height:160px}.hero-myranda h1{font-size:51px}.bottom-nav{gap:10px}.section-heading h2{font-size:31px}}
+
+/* MYRANDA PRATAS — identidade editorial vinho, creme e prata */
+:root{--wine:#2b0d0c;--wine-deep:#1b0808;--wine-mid:#4a1b1a;--cream:#f5eee8;--cream-card:#e9dfd7;--silver:#c7c8ca;--ink:#211413;--muted:#81716c}
+body{background:var(--cream);color:var(--ink);font-family:'Manrope',sans-serif}
+.app-shell{background:var(--cream);max-width:1440px}
+.topbar{height:94px;background:var(--wine-deep);color:#f7eee8;border-bottom:1px solid rgba(255,255,255,.16);padding:0 clamp(22px,7.3vw,100px)}
+.brand-mini{color:#f7eee8;text-align:center;gap:5px}
+.brand-mini span{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,3vw,34px);font-weight:400;letter-spacing:.34em}
+.brand-mini strong{font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.52em;font-weight:500}
+.selection-top{color:#f7eee8;background:transparent;border:0}
+.selection-top .bag-icon{font-size:28px}
+.top-count{background:var(--cream);color:var(--wine)}
+.hero.hero-myranda{position:relative;width:100%;min-height:570px;margin:0;padding:70px clamp(28px,7.6vw,100px);border-radius:0;box-shadow:none;overflow:hidden;align-items:center;background-color:var(--wine-deep);background-image:linear-gradient(90deg,rgba(27,8,8,.98) 0%,rgba(43,13,12,.91) 28%,rgba(43,13,12,.28) 58%,rgba(27,8,8,.12) 100%),url('hero-myranda.jpg');background-size:cover;background-position:center 38%;color:#fff8f2}
+.hero-myranda:before{content:none}
+.hero-myranda:after{content:'✧';position:absolute;right:7%;top:48%;font-size:34px;letter-spacing:0;color:#e6d5ca;opacity:.9}
+.hero-myranda .hero-content{position:relative;z-index:2;max-width:430px;padding:0}
+.hero-myranda .eyebrow{font-family:'Manrope',sans-serif;color:#f0dfd6;font-size:11px;font-weight:500;letter-spacing:.34em}
+.hero-myranda h1{font-family:'Cormorant Garamond',Georgia,serif;color:#fff8f2;font-size:clamp(58px,7vw,88px);font-weight:400;line-height:.88;letter-spacing:-.045em;margin:28px 0 28px}
+.hero-myranda h1 em{font-weight:400}
+.hero-myranda .hero-copy{color:#eadbd3;font-size:15px;line-height:1.7;max-width:310px}
+.hero-myranda .hero-btn{margin-top:22px;background:transparent;border:1px solid #fff5ed;color:#fff8f2;border-radius:99px;padding:16px 27px;min-width:220px;font-size:14px;font-weight:400;justify-content:center}
+.hero-myranda .hero-btn:hover{background:#fff8f2;color:var(--wine)}
+.hero-myranda .hero-signature,.hero-myranda .hero-jewel-new,.hero-myranda .hero-watermark{display:none}
+.section{padding:52px clamp(22px,7.2vw,100px) 12px;background:var(--cream)}
+.section-heading{border:0;margin-bottom:22px;padding-bottom:0;align-items:end}
+.section-heading .eyebrow{font-family:'Manrope',sans-serif;font-size:10px;letter-spacing:.38em;color:#4b3430;font-weight:500}
+.section-heading h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(36px,4.3vw,52px);font-weight:400;letter-spacing:-.035em;color:#241210;line-height:1;margin-top:6px}
+.text-btn{font-size:13px;color:var(--wine);font-weight:500}
+.category-grid{gap:14px}
+.category-card{min-height:132px;border:0;border-radius:12px;background:linear-gradient(145deg,#381312,#1c0808);padding:20px 14px;align-items:center;justify-content:center;text-align:center;gap:15px;box-shadow:none}
+.category-card:nth-child(even){background:linear-gradient(145deg,#e2d6cc,#d2c3b8)}
+.category-card:after{content:none}
+.category-card span:last-child{font-family:'Manrope',sans-serif;font-size:13px;font-weight:500;color:#fff6ef;letter-spacing:0}
+.category-card:nth-child(even) span:last-child{color:#241210}
+.category-card .category-icon{font-size:25px;color:inherit}
+.category-card:hover,.category-card.selected{transform:translateY(-3px);border-color:transparent;box-shadow:0 8px 22px rgba(43,13,12,.13);background:var(--wine-mid)}
+.category-card:hover span:last-child,.category-card.selected span:last-child{color:#fff8f2}
+.filter-row{gap:9px}
+.filter{border:1px solid #d9cbc2;border-radius:99px;color:#5d4943;background:transparent}
+.filter.active{background:var(--wine);border-color:var(--wine);color:#fff8f2}
+.product-grid{gap:20px}
+.product-card{background:transparent;border:1px solid #ded1c8;border-radius:12px;overflow:hidden;box-shadow:none}
+.product-image{background:#e8ded6;border-radius:10px 10px 0 0}
+.product-info{padding:15px 14px 17px}
+.product-name{font-family:'Manrope',sans-serif;font-size:14px;font-weight:500;letter-spacing:0;color:#2b1b18}
+.product-meta{font-size:8px;letter-spacing:.18em;color:#85756f}
+.price{font-family:'Manrope',sans-serif;font-size:14px;color:#281310;font-weight:600}
+.add-btn{border-radius:99px;background:var(--wine);color:#fff8f2}
+.add-btn:hover,.add-btn.added{background:#5b2521;color:#fff8f2}
+.card-quantity-control{border-radius:99px;background:#f4ece6;border-color:#d8c9bf}
+.card-quantity-control button{border-radius:50%;background:var(--wine);color:white}
+.selection-bar{background:linear-gradient(100deg,#210909,#3c1412);border:1px solid rgba(255,255,255,.18);border-radius:22px 22px 0 0;box-shadow:none;padding:14px 24px}
+.selection-bar span{color:#eadbd3;font-size:12px;letter-spacing:.02em;text-transform:none}
+.selection-bar strong{font-family:'Manrope',sans-serif;font-size:14px}
+.selection-bar .primary-btn{background:transparent;color:#fff8f2;border:1px solid #9b7068;border-radius:99px}
+.bottom-nav{background:rgba(34,10,9,.98);border-top:1px solid rgba(255,255,255,.2);gap:clamp(20px,12vw,150px)}
+.nav-item{color:#d8c6bd}.nav-item.active{color:#fff8f2}.nav-selection b{background:#f4e9e0;color:var(--wine)}
+.modal-backdrop{background:rgba(23,7,6,.72)}
+.selection-modal{background:var(--cream);border-radius:22px 22px 0 0}
+.close-btn{background:var(--wine);border-radius:50%}
+.modal-header h2,.success-modal h2{font-family:'Cormorant Garamond',Georgia,serif;color:var(--wine);font-weight:400;letter-spacing:-.03em}
+.selected-item{background:#fffaf6;border:1px solid #e1d4cb;border-radius:12px}
+.selected-thumb{background:#e8ded6;border-radius:8px}
+.selected-price,.total-line strong{color:var(--wine)}
+.remove-btn{color:#7d3430}
+.confirm-btn{background:var(--wine);color:#fff8f2;border-radius:99px}
+.success-modal{background:var(--cream);border:1px solid #fff;border-radius:20px;box-shadow:0 20px 60px rgba(20,5,5,.25)}
+.success-mark{background:var(--wine);color:#fff8f2;border-radius:50%}
+.selection-code{font-family:'Manrope',sans-serif;color:var(--wine)}
+.toast{background:var(--wine-deep);border-left:4px solid #9b625a;border-radius:8px}
+@media(max-width:850px){.hero.hero-myranda{min-height:560px;width:100%;padding:55px 6%;background-position:58% center}.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.section{padding-left:24px;padding-right:24px}}
+@media(max-width:560px){.topbar{height:76px;padding:0 20px}.brand-mini span{font-size:24px;letter-spacing:.25em}.hero.hero-myranda{min-height:610px;padding:42px 25px;align-items:flex-start;background-image:linear-gradient(90deg,rgba(27,8,8,.94) 0%,rgba(43,13,12,.78) 48%,rgba(27,8,8,.2) 100%),url('hero-myranda.jpg');background-position:57% center}.hero-myranda .hero-content{padding-top:45px}.hero-myranda h1{font-size:clamp(54px,14vw,72px);line-height:.88;margin:24px 0}.hero-myranda .hero-copy{font-size:13px;max-width:250px}.hero-myranda .hero-btn{font-size:13px;padding:14px 24px}.hero-myranda:after{right:8%;top:auto;bottom:14%;font-size:28px}.section{padding:42px 16px 8px}.section-heading h2{font-size:38px}.category-grid{gap:8px}.category-card{min-height:108px;padding:14px 8px;border-radius:10px}.category-card span:last-child{font-size:11px}.product-grid{gap:10px}.product-image{height:190px}.product-info{padding:12px 10px 14px}.product-name{font-size:13px}.product-bottom{gap:6px;flex-wrap:wrap}.price{font-size:13px}.bottom-nav{height:70px;gap:20px}.nav-item{min-width:72px}.selection-bar{bottom:76px;width:calc(100% - 20px);padding:11px 13px;border-radius:16px}.selection-bar .primary-btn{font-size:10px;padding:11px}.selection-modal{padding:26px 15px 18px}}
