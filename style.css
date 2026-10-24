@@ -1150,3 +1150,29 @@ body:has(.hero-myranda) {
     font-size: clamp(42px, 11vw, 58px);
   }
 }
+
+/* CORREÇÃO FINAL DOS BOTÕES */
+.primary-btn,
+.confirm-btn,
+.success-modal .primary-btn {
+  background: #3b2119 !important;
+  color: #fff8f2 !important;
+}
+
+.selection-bar .primary-btn {
+  background: #fff8f2 !important;
+  color: #3b2119 !important;
+}
+
+/* CATEGORIAS SEM EMOJIS */
+.category-card {
+  min-height: 72px;
+  padding: 14px 10px;
+  gap: 0;
+}
+
+.category-card span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #3b2119;
+}
