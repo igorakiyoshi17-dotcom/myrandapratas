@@ -256,3 +256,175 @@ button,a{font:inherit}button{cursor:pointer;border:0}a{text-decoration:none;colo
   background: #B0002A;
   color: #FFFFFF;
 }
+
+/* BANNER MYRANDA PRATAS */
+.hero-myranda {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(125deg, #B0002A 0%, #8B001F 55%, #5E0018 100%);
+  color: #fff;
+  border-radius: 24px;
+  min-height: 390px;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.hero-myranda .hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+}
+
+.hero-myranda .eyebrow {
+  color: #F5DCE2;
+  letter-spacing: 3px;
+  font-size: 11px;
+}
+
+.hero-myranda h1 {
+  color: #fff;
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.08;
+  margin: 18px 0;
+}
+
+.hero-myranda h1 em {
+  color: #F0C9D3;
+  font-style: italic;
+}
+
+.hero-myranda .hero-copy {
+  color: #FFF0F3;
+  line-height: 1.8;
+  max-width: 390px;
+}
+
+.hero-myranda .hero-btn {
+  background: #fff;
+  color: #8B001F;
+  margin-top: 18px;
+}
+
+.hero-myranda .hero-btn:hover {
+  background: #F5DCE2;
+}
+
+.hero-myranda .hero-signature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  color: #F5DCE2;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.hero-myranda .hero-signature span {
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: #D9D9D9;
+}
+
+.hero-myranda .hero-jewel-new {
+  position: absolute;
+  z-index: 1;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 240px;
+  height: 240px;
+  display: grid;
+  place-items: center;
+}
+
+.hero-myranda .ring {
+  width: 115px;
+  height: 115px;
+  border: 7px solid #E5E5E5;
+  border-radius: 50%;
+  box-shadow: 0 0 25px #F5DCE255, inset 0 0 12px #FFFFFF55;
+  transform: rotate(-25deg);
+}
+
+.hero-myranda .jewel-orbit {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border: 1px solid #FFFFFF55;
+  border-radius: 50%;
+}
+
+.hero-myranda .jewel-orbit-two {
+  width: 220px;
+  height: 220px;
+  border-color: #F0C9D355;
+}
+
+.hero-myranda .spark {
+  position: absolute;
+  color: #fff;
+  font-size: 28px;
+}
+
+.hero-myranda .spark-a {
+  top: 25px;
+  right: 38px;
+}
+
+.hero-myranda .spark-b {
+  bottom: 30px;
+  left: 35px;
+  color: #F0C9D3;
+}
+
+.hero-myranda .hero-number {
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  color: #FFFFFFAA;
+  font-size: 12px;
+  letter-spacing: 5px;
+}
+
+.hero-myranda .hero-watermark {
+  position: absolute;
+  right: 4%;
+  bottom: -100px;
+  z-index: 0;
+  color: #FFFFFF0A;
+  font-size: 360px;
+  font-family: Georgia, serif;
+  line-height: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 650px) {
+  .hero-myranda {
+    min-height: 520px;
+    padding: 32px 24px;
+    align-items: flex-start;
+  }
+
+  .hero-myranda .hero-content {
+    max-width: 100%;
+  }
+
+  .hero-myranda h1 {
+    font-size: 42px;
+  }
+
+  .hero-myranda .hero-jewel-new {
+    top: auto;
+    bottom: 15px;
+    right: 20px;
+    transform: scale(.68);
+    transform-origin: bottom right;
+  }
+
+  .hero-myranda .hero-signature {
+    font-size: 8px;
+  }
+}
