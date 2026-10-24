@@ -830,3 +830,23 @@ body {
 img {
   max-width: 100%;
 }
+
+/* CORREÇÃO DE LARGURA DO BANNER MYRANDA */
+.hero.hero-myranda {
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+}
+
+/* Impede que os elementos internos alarguem a página */
+.hero-myranda .hero-content {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Evita faixas laterais causadas pelo contêiner principal */
+body:has(.hero-myranda) {
+  overflow-x: hidden;
+}
