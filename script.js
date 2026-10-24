@@ -37,6 +37,7 @@ async function carregarProdutosSupabase() {
 products = dados
   .filter(produto => produto.disponivel && Number(produto.estoque) > 0)
   .map(produto => ({        id: produto.codigo,
+        dbId: Number(produto.id),
         name: produto.nome,
         category: produto.categoria,
         price: Number(produto.preco),
@@ -104,76 +105,416 @@ else if(activeCategory !== "Todos") list = list.filter(p=>p.category===activeCat
 function renderProducts(){
   const list = visibleProducts();
   $("#productGrid").innerHTML = list.map(p => {
-const isSelected = (selected[p.id] || 0) > 0;
-    return `<article class="product-card">
-      <div class="product-image">
+    const isSelected = (selected[p.id] || 0) > 0;
+    return `<article class="product-card" data-product-id="${p.id}">
+      <div class="product-image" data-open-product="${p.id}">
         ${p.featured ? '<span class="badge">DESTAQUE</span>' : ''}
         ${!p.available ? '<span class="badge off">INDISPONÍVEL</span>' : ''}
-        <button class="heart-btn" aria-label="Favoritar">♡</button>
-       ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-photo">` : jewel(p.type)}
+        <button type="button" class="heart-btn ${isFavorite(p.id) ? "is-favorite" : ""}" data-favorite="${p.id}" aria-label="${isFavorite(p.id) ? "Remover dos favoritos" : "Adicionar aos favoritos"}" aria-pressed="${isFavorite(p.id)}">${isFavorite(p.id) ? "♥" : "♡"}</button>
+        ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-photo">` : jewel(p.type)}
+        ${p.image ? `<button type="button" class="photo-zoom-btn" data-zoom="${p.id}" aria-label="Ampliar foto de ${p.name}">⌕</button>` : ""}
       </div>
       <div class="product-info">
-        <h3 class="product-name">${p.name}</h3>
+        <h3 class="product-name" data-open-product="${p.id}">${p.name}</h3>
         <div class="product-meta">CÓDIGO ${p.id} • ${p.available ? "DISPONÍVEL" : "SEM ESTOQUE"}</div>
         <div class="product-bottom">
           <span class="price">${money(p.price)}</span>
-         
           ${isSelected ? `
-  <div class="card-quantity-control">
-    <button type="button" data-card-minus="${p.id}">−</button>
-    <span>${selected[p.id]}</span>
-    <button type="button" data-card-plus="${p.id}">+</button>
-  </div>
-` : `
-  <button class="add-btn" ${!p.available ? "disabled" : ""} data-add="${p.id}">
-    Adicionar
-  </button>
-`}
-
+            <div class="card-quantity-control">
+              <button type="button" data-card-minus="${p.id}">−</button>
+              <span>${selected[p.id]}</span>
+              <button type="button" data-card-plus="${p.id}">+</button>
+            </div>
+          ` : `
+            <button class="add-btn" ${!p.available ? "disabled" : ""} data-add="${p.id}">Adicionar</button>
+          `}
         </div>
       </div>
     </article>`;
   }).join("");
 
-document.querySelectorAll("[data-add]").forEach(btn => {
-  btn.onclick = () => toggleProduct(btn.dataset.add);
-});
+  document.querySelectorAll("[data-favorite]").forEach(btn => {
+    btn.onclick = (event) => {
+      event.stopPropagation();
+      toggleFavorite(btn.dataset.favorite);
+    };
+  });
+
+  document.querySelectorAll("[data-zoom]").forEach(btn => {
+    btn.onclick = (event) => {
+      event.stopPropagation();
+      openPhotoZoom(btn.dataset.zoom);
+    };
+  });
+
+  document.querySelectorAll("[data-open-product]").forEach(el => {
+    el.onclick = (event) => {
+      if (event.target.closest(".heart-btn") || event.target.closest(".photo-zoom-btn")) return;
+      const produto = products.find(p => String(p.id) === String(el.dataset.openProduct));
+      if (produto) openProductDetails(produto);
+    };
+  });
+
+  document.querySelectorAll("[data-add]").forEach(btn => {
+    btn.onclick = () => toggleProduct(btn.dataset.add);
+  });
+
   document.querySelectorAll("[data-card-minus]").forEach(btn => {
-  btn.onclick = () => {
-    const id = btn.dataset.cardMinus;
+    btn.onclick = () => {
+      const id = btn.dataset.cardMinus;
+      if ((selected[id] || 0) > 1) selected[id]--;
+      else delete selected[id];
+      renderProducts();
+      updateSelectionUI();
+    };
+  });
 
-    if ((selected[id] || 0) > 1) {
-      selected[id]--;
-    } else {
-      delete selected[id];
-    }
+  document.querySelectorAll("[data-card-plus]").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.cardPlus;
+      const produto = products.find(p => p.id === id);
+      if (!produto) return;
+      const estoqueDisponivel = Number(produto.stock || 0);
+      if ((selected[id] || 0) >= estoqueDisponivel) {
+        showToast(`Quantidade máxima disponível: ${estoqueDisponivel}`);
+        return;
+      }
+      selected[id] = (selected[id] || 0) + 1;
+      renderProducts();
+      updateSelectionUI();
+    };
+  });
+}
 
-    renderProducts();
-    updateSelectionUI();
+
+const FAVORITES_STORAGE_KEY = "myranda-pratas-favoritos-v1";
+let favorites = new Set();
+
+try {
+  const saved = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || "[]");
+  if (Array.isArray(saved)) favorites = new Set(saved.map(String));
+} catch (e) {
+  console.warn("Favoritos locais indisponíveis:", e);
+}
+
+function isFavorite(id) {
+  return favorites.has(String(id));
+}
+
+function persistFavorites() {
+  try {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify([...favorites]));
+  } catch (e) {
+    console.warn("Não foi possível salvar favoritos neste navegador.", e);
+  }
+}
+
+function updateFavoritesUI() {
+  const count = favorites.size;
+  const bottom = document.getElementById("favoriteCountBottom");
+  if (bottom) bottom.textContent = count;
+  renderFavoritesList();
+}
+
+function toggleFavorite(id) {
+  const product = products.find(p => String(p.id) === String(id));
+  if (!product) return;
+
+  const key = String(id);
+
+  if (favorites.has(key)) {
+    favorites.delete(key);
+    showToast("Removida dos favoritos");
+  } else {
+    favorites.add(key);
+    showToast("Salva nos favoritos");
+  }
+
+  persistFavorites();
+  renderProducts();
+  updateFavoritesUI();
+}
+
+function renderFavoritesList() {
+  const container = document.getElementById("favoritesList");
+  if (!container) return;
+
+  const items = products.filter(p => isFavorite(p.id));
+
+  if (!items.length) {
+    container.innerHTML = '<p class="favorites-empty">Você ainda não salvou nenhuma joia. Toque no coração de uma peça para encontrá-la aqui.</p>';
+    return;
+  }
+
+  container.innerHTML = items.map(p => `
+    <article class="favorite-item">
+      <div class="favorite-thumb">${p.image ? `<img src="${p.image}" alt="${p.name}">` : jewel(p.type)}</div>
+      <div class="favorite-info">
+        <strong>${p.name}</strong>
+        <small>Código ${p.id}</small>
+        <span>${money(p.price)}</span>
+      </div>
+      <div class="favorite-actions">
+        <button type="button" data-fav-add="${p.id}" class="add-btn">Adicionar</button>
+        <button type="button" data-fav-remove="${p.id}" class="remove-favorite" aria-label="Remover favorito">♥</button>
+      </div>
+    </article>
+  `).join("");
+
+  container.querySelectorAll("[data-fav-remove]").forEach(btn => {
+    btn.onclick = () => toggleFavorite(btn.dataset.favRemove);
+  });
+
+  container.querySelectorAll("[data-fav-add]").forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.favAdd;
+      const p = products.find(p => String(p.id) === String(id));
+      if (!p || !p.available || (selected[id] || 0) >= Number(p.stock || 0)) {
+        showToast("Quantidade máxima disponível.");
+        return;
+      }
+      selected[id] = (selected[id] || 0) + 1;
+      renderProducts();
+      updateSelectionUI();
+      showToast("Joia adicionada à seleção!");
+    };
+  });
+}
+
+function openFavorites() {
+  updateFavoritesUI();
+  openModal("#favoritesModal");
+}
+
+function openPhotoZoom(id) {
+  const product = products.find(p => String(p.id) === String(id));
+  if (!product || !product.image) return;
+
+  const modal = document.getElementById("photoZoomModal");
+  const image = document.getElementById("zoomedProductImage");
+
+  image.src = product.image;
+  image.alt = `Foto ampliada de ${product.name}`;
+  document.getElementById("zoomedProductName").textContent = product.name;
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closePhotoZoom() {
+  const modal = document.getElementById("photoZoomModal");
+  if (!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+
+  const img = document.getElementById("zoomedProductImage");
+  if (img) img.removeAttribute("src");
+
+  document.body.style.overflow = document.querySelector(".modal-backdrop.open") ? "hidden" : "";
+}
+
+async function shareProduct(id) {
+  const product = products.find(p => String(p.id) === String(id));
+  if (!product) return;
+
+  const url = new URL(window.location.origin + window.location.pathname);
+  url.searchParams.set("joia", product.id);
+
+  const data = {
+    title: `${product.name} | Myranda Pratas`,
+    text: `Veja esta joia em Prata 925: ${product.name}`,
+    url: url.href
   };
-});
 
-document.querySelectorAll("[data-card-plus]").forEach(btn => {
-  btn.onclick = () => {
-    const id = btn.dataset.cardPlus;
-    const produto = products.find(p => p.id === id);
-
-    if (!produto) return;
-
-    const estoqueDisponivel = Number(produto.stock || 0);
-
-    if ((selected[id] || 0) >= estoqueDisponivel) {
-      showToast(`Quantidade máxima disponível: ${estoqueDisponivel}`);
+  try {
+    if (navigator.share) {
+      await navigator.share(data);
       return;
     }
 
-    selected[id] = (selected[id] || 0) + 1;
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(url.href);
+      showToast("Link da joia copiado!");
+      return;
+    }
 
-    renderProducts();
-    updateSelectionUI();
-  };
-});
+    window.prompt("Copie o link desta joia:", url.href);
+  } catch (err) {
+    if (err.name !== "AbortError") showToast("Não foi possível compartilhar agora.");
+  }
 }
+
+function openProductDetails(produto) {
+  const catalogo = document.querySelector("#catalogo");
+  const detalhes = document.querySelector("#productDetails");
+  const conteudo = document.querySelector("#productDetailsContent");
+
+  if (!catalogo || !detalhes || !conteudo) return;
+
+  const relacionados = products
+    .filter(p =>
+      String(p.id) !== String(produto.id) &&
+      p.available &&
+      Number(p.stock || 0) > 0
+    )
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 4);
+
+  conteudo.innerHTML = `
+    <div class="product-detail-card">
+      <div class="product-detail-image" ${produto.image ? `data-detail-zoom="${produto.id}" role="button" tabindex="0"` : ""}>
+        ${produto.image ? `<img src="${produto.image}" alt="${produto.name}">` : jewel(produto.type)}
+      </div>
+
+      <div class="product-detail-info">
+        <span class="eyebrow">MYRANDA PRATAS · PRATA 925</span>
+        <h2>${produto.name}</h2>
+        <p>CÓDIGO ${produto.id}</p>
+        <h3>${money(produto.price)}</h3>
+        <p>${produto.available ? "Disponível" : "Indisponível"}</p>
+
+        <button type="button" id="shareProductDetails" class="detail-secondary">↗ Compartilhar esta joia</button>
+        <button type="button" id="favoriteProductDetails" class="detail-secondary ${isFavorite(produto.id) ? "is-favorite" : ""}">
+          ${isFavorite(produto.id) ? "♥ Remover dos favoritos" : "♡ Salvar nos favoritos"}
+        </button>
+
+        <button type="button" class="primary-btn" id="addProductDetails" ${!produto.available ? "disabled" : ""}>
+          Adicionar à minha seleção
+        </button>
+      </div>
+    </div>
+
+    <section class="related-products">
+      <div class="related-products-heading">
+        <span class="eyebrow">DESCUBRA MAIS</span>
+        <h2>Você também pode gostar</h2>
+        <p>Outras joias para completar sua seleção.</p>
+      </div>
+      <div id="relatedProductsGrid" class="product-grid"></div>
+    </section>
+  `;
+
+  const grid = document.querySelector("#relatedProductsGrid");
+
+  if (grid) {
+    grid.innerHTML = relacionados.map(p => `
+      <article class="product-card">
+        <div class="product-image" data-related-product="${p.id}">
+          <button type="button" class="heart-btn ${isFavorite(p.id) ? "is-favorite" : ""}" data-favorite-related="${p.id}">
+            ${isFavorite(p.id) ? "♥" : "♡"}
+          </button>
+          ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-photo">` : jewel(p.type)}
+        </div>
+        <div class="product-info">
+          <h3 class="product-name" data-related-product="${p.id}">${p.name}</h3>
+          <div class="product-meta">CÓDIGO ${p.id}</div>
+          <div class="product-bottom">
+            <span class="price">${money(p.price)}</span>
+            <button type="button" class="add-btn" data-related-add="${p.id}">Adicionar</button>
+          </div>
+        </div>
+      </article>
+    `).join("");
+
+    grid.querySelectorAll("[data-favorite-related]").forEach(btn => {
+      btn.onclick = event => {
+        event.stopPropagation();
+        toggleFavorite(btn.dataset.favoriteRelated);
+        openProductDetails(produto);
+      };
+    });
+
+    grid.querySelectorAll("[data-related-product]").forEach(el => {
+      el.onclick = event => {
+        if (event.target.closest(".heart-btn")) return;
+        const outra = products.find(p => String(p.id) === String(el.dataset.relatedProduct));
+        if (outra) openProductDetails(outra);
+      };
+    });
+
+    grid.querySelectorAll("[data-related-add]").forEach(btn => {
+      btn.onclick = () => {
+        const id = btn.dataset.relatedAdd;
+        const joia = products.find(p => String(p.id) === String(id));
+        if (!joia) return;
+
+        const atual = Number(selected[id] || 0);
+        const estoque = Number(joia.stock || 0);
+
+        if (!joia.available || atual >= estoque) {
+          showToast("Quantidade máxima disponível para esta joia.");
+          return;
+        }
+
+        selected[id] = atual + 1;
+        renderProducts();
+        updateSelectionUI();
+        showToast("Joia adicionada à sua seleção!");
+      };
+    });
+  }
+
+  const detailShare = document.querySelector("#shareProductDetails");
+  if (detailShare) detailShare.onclick = () => shareProduct(produto.id);
+
+  const detailZoom = document.querySelector("[data-detail-zoom]");
+  if (detailZoom) {
+    detailZoom.onclick = () => openPhotoZoom(produto.id);
+    detailZoom.onkeydown = event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openPhotoZoom(produto.id);
+      }
+    };
+  }
+
+  const detailFavorite = document.querySelector("#favoriteProductDetails");
+  if (detailFavorite) {
+    detailFavorite.onclick = () => {
+      toggleFavorite(produto.id);
+      openProductDetails(produto);
+    };
+  }
+
+  const addButton = document.querySelector("#addProductDetails");
+  if (addButton) {
+    addButton.onclick = () => {
+      const atual = Number(selected[produto.id] || 0);
+      const estoque = Number(produto.stock || 0);
+
+      if (!produto.available || atual >= estoque) {
+        showToast("Quantidade máxima disponível para esta joia.");
+        return;
+      }
+
+      selected[produto.id] = atual + 1;
+      renderProducts();
+      updateSelectionUI();
+      showToast("Joia adicionada à sua seleção!");
+    };
+  }
+
+  catalogo.hidden = true;
+  detalhes.hidden = false;
+
+  detalhes.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function voltarAoCatalogo() {
+  const detalhes = document.querySelector("#productDetails");
+  const catalogo = document.querySelector("#catalogo");
+
+  if (!detalhes || !catalogo) return;
+
+  detalhes.hidden = true;
+  catalogo.hidden = false;
+
+  requestAnimationFrame(() => {
+    catalogo.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+
 
 function toggleProduct(id){
   const p = products.find(x=>x.id===id);
@@ -298,6 +639,42 @@ $("#showAll").onclick=()=>{activeCategory="Todos";renderFilters();renderProducts
 $("#closeSelection").onclick=()=>closeModal("#selectionModal");
 $("#selectionModal").addEventListener("click",e=>{if(e.target.id==="selectionModal")closeModal("#selectionModal")});
 
+
+const favoritesTop = document.getElementById("openFavoritesTop");
+if (favoritesTop) favoritesTop.onclick = openFavorites;
+
+const favoritesBottom = document.getElementById("openFavoritesBottom");
+if (favoritesBottom) favoritesBottom.onclick = openFavorites;
+
+const closeFavoritesBtn = document.getElementById("closeFavorites");
+if (closeFavoritesBtn) closeFavoritesBtn.onclick = () => closeModal("#favoritesModal");
+
+const favoritesModal = document.getElementById("favoritesModal");
+if (favoritesModal) {
+  favoritesModal.addEventListener("click", event => {
+    if (event.target.id === "favoritesModal") closeModal("#favoritesModal");
+  });
+}
+
+const backDetails = document.getElementById("backToCatalogDetails");
+if (backDetails) backDetails.addEventListener("click", voltarAoCatalogo);
+
+const closeZoomBtn = document.getElementById("closePhotoZoom");
+if (closeZoomBtn) closeZoomBtn.onclick = closePhotoZoom;
+
+const photoZoomModal = document.getElementById("photoZoomModal");
+if (photoZoomModal) {
+  photoZoomModal.onclick = e => {
+    if (e.target.id === "photoZoomModal") closePhotoZoom();
+  };
+}
+
+document.addEventListener("keydown", e => {
+  const modal = document.getElementById("photoZoomModal");
+  if (e.key === "Escape" && modal && modal.classList.contains("open")) closePhotoZoom();
+});
+
+
 $("#confirmSelection").onclick=async()=>{
   if(Object.keys(selected).length === 0){
     showToast("Adicione pelo menos uma peça.");
@@ -383,46 +760,51 @@ $("#sendWhatsApp").onclick=()=>{
   const code = $("#selectionCode").textContent;
 
   const items = Object.entries(selected)
-  .map(([id, quantidade]) => {
-    const produto = products.find(p => p.id === id);
-
-    if (!produto) return null;
-
-    return {
-      ...produto,
-      quantidade
-    };
-  })
-  .filter(Boolean);
+    .map(([id, quantidade]) => {
+      const produto = products.find(p => p.id === id);
+      if (!produto) return null;
+      return { ...produto, quantidade };
+    })
+    .filter(Boolean);
 
   if (!items.length) {
     showToast("Sua seleção está vazia.");
     return;
   }
 
-  const total = items.reduce(
-  (s, p) => s + (p.price * p.quantidade),
-  0
-);
+  const total = items.reduce((s, p) => s + (p.price * p.quantidade), 0);
 
   const listaProdutos = items
-  .map(p =>
-    `• ${p.quantidade}x ${p.id} — ${p.name} — ${money(p.price)} cada — ${money(p.price * p.quantidade)}`
-  )
-  .join("\n");
+    .map(p => `
+*${p.name}*
+Código: ${p.id}
+Quantidade: ${p.quantidade}
+Valor unitário: ${money(p.price)}
+Subtotal: ${money(p.price * p.quantidade)}
+    `.trim())
+    .join("
 
-  const mensagem = `Olá! Quero finalizar minha seleção na Myrandapratas 🤎
+");
 
-Código da seleção: ${code}
+  const mensagem = `Olá! Gostaria de finalizar meu pedido na Myranda Pratas.
+
+*MINHA SELEÇÃO*
+Código do pedido: ${code}
+
+*JOIAS ESCOLHIDAS*
 
 ${listaProdutos}
 
-Total: ${money(total)}
+TOTAL: ${money(total)}
 
-Gostaria de finalizar minha compra.`;
+Gostaria de confirmar a disponibilidade e combinar o pagamento e a entrega.`;
 
   const numeroWhatsApp = "5561991318964";
-  const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const linkWhatsApp = isMobile
+    ? `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`
+    : `https://web.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
 
   window.open(linkWhatsApp, "_blank");
 };
@@ -435,6 +817,13 @@ async function iniciarCatalogo() {
   renderFilters();
   renderProducts();
   updateSelectionUI();
+  updateFavoritesUI();
+
+  const requestedCode = new URLSearchParams(window.location.search).get("joia");
+  if (requestedCode) {
+    const product = products.find(p => String(p.id) === String(requestedCode));
+    if (product) openProductDetails(product);
+  }
 }
 
 iniciarCatalogo();

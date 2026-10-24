@@ -23,6 +23,7 @@
         <span>MYRANDA</span>
         <strong>PRATAS</strong>
       </a>
+      <button class="selection-top favorites-top" id="openFavoritesTop" aria-label="Abrir favoritos">♥</button>
       <button class="selection-top" id="openSelectionTop" aria-label="Abrir minha seleção">
         <span class="bag-icon">♡</span>
         <span class="top-count" id="topCount">0</span>
@@ -83,6 +84,13 @@
         <div class="filter-row" id="filterRow"></div>
         <div class="product-grid" id="productGrid"></div>
       </section>
+
+      <section id="productDetails" class="product-details" hidden>
+        <button type="button" id="backToCatalogDetails" class="text-btn">
+          ← Voltar ao catálogo
+        </button>
+        <div id="productDetailsContent"></div>
+      </section>
     </main>
 
     <div class="selection-bar" id="selectionBar" hidden>
@@ -96,10 +104,24 @@
     <nav class="bottom-nav" aria-label="Navegação">
       <a href="#inicio" class="nav-item active"><span>⌂</span><small>Início</small></a>
       <a href="#categorias" class="nav-item"><span>⌑</span><small>Categorias</small></a>
+      <button class="nav-item nav-favorites" id="openFavoritesBottom" type="button"><span>♡<b id="favoriteCountBottom">0</b></span><small>Favoritos</small></button>
       <button class="nav-item nav-selection" id="openSelectionBottom">
         <span>♡<b id="bottomCount">0</b></span><small>Minha seleção</small>
       </button>
     </nav>
+  </div>
+
+
+  <div class="modal-backdrop" id="favoritesModal" aria-hidden="true">
+    <section class="selection-modal favorites-modal" role="dialog" aria-modal="true" aria-labelledby="favoritesTitle">
+      <button type="button" class="close-btn" id="closeFavorites" aria-label="Fechar favoritos">×</button>
+      <div class="modal-header">
+        <span class="eyebrow">SUAS PEÇAS PREFERIDAS</span>
+        <h2 id="favoritesTitle">Meus favoritos</h2>
+        <p>Salve suas joias favoritas e escolha quando quiser.</p>
+      </div>
+      <div class="favorites-grid" id="favoritesList"></div>
+    </section>
   </div>
 
   <div class="modal-backdrop" id="selectionModal" aria-hidden="true">
@@ -131,6 +153,15 @@
   Enviar seleção pelo WhatsApp <span>→</span>
 </button>
       <button class="primary-btn" id="backToCatalog">Continuar navegando <span>→</span></button>
+    </section>
+  </div>
+
+
+  <div class="modal-backdrop photo-zoom-modal" id="photoZoomModal" aria-hidden="true">
+    <section class="photo-zoom-content" role="dialog" aria-modal="true" aria-label="Foto ampliada da joia">
+      <button type="button" class="photo-zoom-close" id="closePhotoZoom" aria-label="Fechar foto ampliada">×</button>
+      <img id="zoomedProductImage" alt="" />
+      <p id="zoomedProductName"></p>
     </section>
   </div>
 
