@@ -598,7 +598,11 @@ button,a{font-family:inherit}
 /* MYRANDA PRATAS — identidade editorial vinho, creme e prata */
 :root{--wine:#2b0d0c;--wine-deep:#1b0808;--wine-mid:#4a1b1a;--cream:#f5eee8;--cream-card:#e9dfd7;--silver:#c7c8ca;--ink:#211413;--muted:#81716c}
 body{background:var(--cream);color:var(--ink);font-family:'Manrope',sans-serif}
-.app-shell{background:var(--cream);max-width:1440px}
+.app-shell{
+  background:var(--cream);
+  width:100%;
+  max-width:none;
+}
 .topbar{height:94px;background:var(--wine-deep);color:#f7eee8;border-bottom:1px solid rgba(255,255,255,.16);padding:0 clamp(22px,7.3vw,100px)}
 .brand-mini{color:#f7eee8;text-align:center;gap:5px}
 .brand-mini span{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,3vw,34px);font-weight:400;letter-spacing:.34em}
