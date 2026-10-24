@@ -666,3 +666,167 @@ body{background:var(--cream);color:var(--ink);font-family:'Manrope',sans-serif}
 .toast{background:var(--wine-deep);border-left:4px solid #9b625a;border-radius:8px}
 @media(max-width:850px){.hero.hero-myranda{min-height:560px;width:100%;padding:55px 6%;background-position:58% center}.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.section{padding-left:24px;padding-right:24px}}
 @media(max-width:560px){.topbar{height:76px;padding:0 20px}.brand-mini span{font-size:24px;letter-spacing:.25em}.hero.hero-myranda{min-height:610px;padding:42px 25px;align-items:flex-start;background-image:linear-gradient(90deg,rgba(27,8,8,.94) 0%,rgba(43,13,12,.78) 48%,rgba(27,8,8,.2) 100%),url('hero-myranda.jpg');background-position:57% center}.hero-myranda .hero-content{padding-top:45px}.hero-myranda h1{font-size:clamp(54px,14vw,72px);line-height:.88;margin:24px 0}.hero-myranda .hero-copy{font-size:13px;max-width:250px}.hero-myranda .hero-btn{font-size:13px;padding:14px 24px}.hero-myranda:after{right:8%;top:auto;bottom:14%;font-size:28px}.section{padding:42px 16px 8px}.section-heading h2{font-size:38px}.category-grid{gap:8px}.category-card{min-height:108px;padding:14px 8px;border-radius:10px}.category-card span:last-child{font-size:11px}.product-grid{gap:10px}.product-image{height:190px}.product-info{padding:12px 10px 14px}.product-name{font-size:13px}.product-bottom{gap:6px;flex-wrap:wrap}.price{font-size:13px}.bottom-nav{height:70px;gap:20px}.nav-item{min-width:72px}.selection-bar{bottom:76px;width:calc(100% - 20px);padding:11px 13px;border-radius:16px}.selection-bar .primary-btn{font-size:10px;padding:11px}.selection-modal{padding:26px 15px 18px}}
+
+/* MYRANDA — BANNER EDITORIAL VINHO */
+.hero-myranda {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  max-width: none;
+  min-height: 520px;
+  padding: 76px clamp(28px, 7vw, 100px);
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+  color: #f8eee8;
+  background: #260d0c;
+}
+
+.hero-myranda .hero-image,
+.hero-myranda .hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-myranda .hero-image {
+  z-index: -2;
+  background-image: url("./hero-myranda.jpg");
+  background-size: cover;
+  background-position: center 38%;
+  transform: scale(1.01);
+}
+
+.hero-myranda .hero-overlay {
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(29, 8, 8, .98) 0%,
+    rgba(49, 17, 17, .88) 28%,
+    rgba(65, 28, 28, .38) 57%,
+    rgba(25, 8, 8, .10) 100%
+  );
+}
+
+.hero-myranda .hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 540px);
+  max-width: 540px;
+}
+
+.hero-myranda .eyebrow {
+  color: #f1ded4;
+  background: transparent;
+  letter-spacing: 4px;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.hero-myranda h1 {
+  color: #fff6ef;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(48px, 5.2vw, 76px);
+  line-height: 1.02;
+  font-weight: 400;
+  margin: 24px 0;
+}
+
+.hero-myranda h1 em {
+  color: #f2ded5;
+  font-style: italic;
+}
+
+.hero-myranda .hero-copy {
+  max-width: 380px;
+  color: #f7ebe5;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.hero-myranda .hero-btn {
+  margin-top: 22px;
+  padding: 16px 28px;
+  border: 1px solid #f5e8df;
+  border-radius: 40px;
+  color: #fff7f1;
+  background: rgba(38, 13, 12, .48);
+  box-shadow: none;
+}
+
+.hero-myranda .hero-btn:hover {
+  background: #f5e8df;
+  color: #321413;
+}
+
+.hero-myranda .hero-signature {
+  color: #e7cfc4;
+  margin-top: 28px;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.hero-myranda .hero-signature span {
+  background: #e7cfc4;
+}
+
+.hero-myranda .hero-jewel-new,
+.hero-myranda .hero-watermark {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .hero-myranda {
+    min-height: 570px;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero-myranda {
+    min-height: 560px;
+    padding: 56px 24px 40px;
+    align-items: center;
+  }
+
+  .hero-myranda .hero-image {
+    background-position: 60% center;
+  }
+
+  .hero-myranda .hero-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(29, 8, 8, .94),
+      rgba(40, 12, 12, .72) 58%,
+      rgba(29, 8, 8, .28)
+    );
+  }
+
+  .hero-myranda h1 {
+    font-size: clamp(44px, 11vw, 58px);
+  }
+
+  .hero-myranda .hero-signature {
+    font-size: 8px;
+  }
+}
+
+/* LARGURA DA PÁGINA */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#inicio,
+.hero-myranda {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+}
