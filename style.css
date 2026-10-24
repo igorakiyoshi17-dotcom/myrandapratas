@@ -1238,3 +1238,12 @@ body:has(.hero-myranda) {
     padding: 40px 16px 25px;
   }
 }
+.myranda-footer {
+  padding-bottom: 110px;
+}
+
+.footer-contacts a {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
