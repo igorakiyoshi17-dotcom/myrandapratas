@@ -112,6 +112,33 @@
       line-height: 1.5;
     }
   </style>
+
+<style>
+/* MYRANDA PRATAS — painel alinhado à identidade Scarlet / Chrome */
+:root{--mp-red:#D7193F;--mp-ink:#171719;--mp-paper:#F3F2EF;--mp-line:#D9D9DE}
+body{background:var(--mp-paper)!important;color:#202024!important;font-family:'Manrope',Arial,sans-serif!important;align-items:flex-start!important}
+body:before{content:'MYRANDA / 925';position:fixed;right:24px;bottom:12px;font-size:10px;font-weight:800;letter-spacing:.18em;color:#171719;opacity:.35;pointer-events:none}
+.login,#painelAdmin>div{background:#fff!important;border:1px solid var(--mp-line)!important;border-radius:3px!important;box-shadow:8px 8px 0 var(--mp-ink)!important}
+.login{border-top:6px solid var(--mp-red)!important}
+.marca small{font-weight:800!important;letter-spacing:.28em!important;color:var(--mp-red)!important}
+.marca h1{font-family:'Space Grotesk',Arial,sans-serif!important;font-weight:700!important;letter-spacing:-.07em!important;color:var(--mp-ink)!important}
+.marca p{color:#6C6C73!important}
+label{color:#29292f!important;font-weight:800!important}
+input,select{border:1px solid #d0d0d5!important;border-radius:2px!important;background:#fafafa!important;color:#171719!important}
+input:focus,select:focus{border-color:var(--mp-red)!important;box-shadow:0 0 0 3px #D7193F18!important}
+button{border-radius:2px!important;background:var(--mp-red)!important;color:#fff!important;box-shadow:none!important;font-family:'Manrope',Arial,sans-serif!important;letter-spacing:.02em!important}
+button:hover{background:var(--mp-ink)!important}
+#formNovoProduto{background:#f3f2ef!important;border:1px solid var(--mp-line)!important;border-radius:3px!important}
+#listaProdutos>div{border-radius:2px!important;border-color:var(--mp-line)!important;background:#fff!important}
+#areaSelecoes{border-top-color:var(--mp-line)!important}
+#areaSelecoes [style*="background:#fffaf5"],#areaSelecoes [style*="background: #fffaf5"]{background:#f3f2ef!important;border-radius:2px!important;border-color:var(--mp-line)!important}
+#areaSelecoes [style*="border-radius:16px"]{border-radius:2px!important}
+#areaSelecoes [style*="border-radius:12px"]{border-radius:2px!important}
+#painelAdmin h2,#painelAdmin h3{font-family:'Space Grotesk',Arial,sans-serif!important;letter-spacing:-.045em!important;color:#171719!important}
+#painelAdmin p[style*="color:#806f66"],.seguranca{color:#6C6C73!important}
+@media(max-width:600px){body{padding:14px!important}.login{padding:32px 22px!important}#painelAdmin>div{padding:18px!important}}
+</style>
+
 </head>
 
 <body>
