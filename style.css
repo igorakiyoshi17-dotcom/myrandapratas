@@ -998,3 +998,151 @@ body:has(.hero-myranda) {
     font-size: clamp(42px, 11vw, 58px);
   }
 }
+
+/* MYRANDA PRATAS — BANNER VINHO E CHOCOLATE */
+.hero.hero-myranda {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  max-width: none;
+  min-height: 560px;
+  margin: 0;
+  padding: 64px clamp(24px, 7vw, 110px);
+  box-sizing: border-box;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  color: #f5e9df;
+  background: #28130f;
+}
+
+.hero-myranda .hero-image,
+.hero-myranda .hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-myranda .hero-image {
+  z-index: -2;
+  background-image: url("./hero-myranda.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-myranda .hero-overlay {
+  z-index: -1;
+  background: linear-gradient(
+    90deg,
+    rgba(35, 15, 11, .97) 0%,
+    rgba(50, 24, 18, .90) 32%,
+    rgba(61, 34, 26, .52) 58%,
+    rgba(35, 15, 11, .12) 100%
+  );
+}
+
+.hero-myranda .hero-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  min-width: 0;
+}
+
+.hero-myranda .eyebrow {
+  color: #d8b9a5;
+  background: transparent;
+  font-size: 10px;
+  letter-spacing: 4px;
+  line-height: 1.8;
+}
+
+.hero-myranda h1 {
+  margin: 24px 0;
+  color: #f8eee5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(44px, 5.5vw, 76px);
+  font-weight: 400;
+  line-height: 1.02;
+}
+
+.hero-myranda h1 em {
+  color: #d9b9a6;
+  font-style: italic;
+}
+
+.hero-myranda .hero-copy {
+  max-width: 400px;
+  color: #f1dfd3;
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.hero-myranda .hero-btn {
+  margin-top: 22px;
+  padding: 15px 28px;
+  border: 1px solid #d8b9a5;
+  border-radius: 40px;
+  background: #3b2119;
+  color: #f8eee5;
+  box-shadow: none;
+}
+
+.hero-myranda .hero-btn:hover {
+  background: #d8b9a5;
+  color: #28130f;
+}
+
+.hero-myranda .hero-signature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  color: #d8b9a5;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+
+.hero-myranda .hero-signature span {
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: #d8b9a5;
+}
+
+.hero-myranda .hero-jewel-new,
+.hero-myranda .hero-watermark {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .hero.hero-myranda {
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 650px) {
+  .hero.hero-myranda {
+    min-height: 540px;
+    padding: 48px 24px;
+  }
+
+  .hero-myranda .hero-image {
+    background-position: 60% center;
+  }
+
+  .hero-myranda .hero-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(35, 15, 11, .95),
+      rgba(50, 24, 18, .78) 65%,
+      rgba(35, 15, 11, .38)
+    );
+  }
+
+  .hero-myranda h1 {
+    font-size: clamp(42px, 11vw, 58px);
+  }
+}
