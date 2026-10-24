@@ -53,9 +53,14 @@ products = dados
 }
 
 const categories = [
-  {name:"Anéis", icon:"💍"}, {name:"Brincos", icon:"◌"}, {name:"Colares", icon:"✧"},
-  {name:"Pulseiras", icon:"⌁"}, {name:"Conjuntos", icon:"🎁"}, {name:"Novidades", icon:"✦"}
+  {name:"Anéis"},
+  {name:"Brincos"},
+  {name:"Colares"},
+  {name:"Pulseiras"},
+  {name:"Conjuntos"},
+  {name:"Novidades"}
 ];
+
 
 let selected = {};
 let activeCategory = "Todos";
@@ -70,8 +75,8 @@ function jewel(type, small=false){
 function renderCategories(){
   $("#categoryGrid").innerHTML = categories.map(c =>
     `<button class="category-card" data-category="${c.name}">
-      <span class="category-icon">${c.icon}</span><span>${c.name}</span>
-    </button>`).join("");
+<span>${c.name}</span>
+</button>`).join("");
   document.querySelectorAll(".category-card").forEach(btn => btn.onclick = () => {
     activeCategory = btn.dataset.category;
     if(activeCategory === "Novidades") activeCategory = "Novidades";
@@ -91,8 +96,8 @@ function renderFilters(){
 
 function visibleProducts(){
   let list = [...products];
-  if(activeCategory === "Novidades") list = list.filter(p=>["CJ006","CL032","BR035"].includes(p.id));
-  else if(activeCategory !== "Todos") list = list.filter(p=>p.category===activeCategory);
+if(activeCategory === "Novidades") list = list.filter(p => p.featured);
+else if(activeCategory !== "Todos") list = list.filter(p=>p.category===activeCategory);
   return list;
 }
 
