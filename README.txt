@@ -1,13 +1,13 @@
-MYRANDA PRATAS — CARDS PREMIUM MOBILE
+MYRANDA PRATAS — PÁGINA DA JOIA NO CELULAR
 
 Substitua somente style.css.
 
 Ajustes:
-- Cards mais premium e delicados.
-- Fotos maiores.
-- Nome da joia com tipografia serifada.
-- Preço e código melhor hierarquizados.
-- Coração menor e mais elegante.
-- Feedback de toque no celular.
-- Bordas e sombras mais suaves.
+- Foto maior e mais elegante.
+- Nome e preço com melhor hierarquia.
+- Status de disponibilidade em pill discreta.
+- Compartilhar e favoritar mais delicados.
+- Adicionar à seleção mais destacado.
+- Voltar ao catálogo menor.
+- Produtos relacionados mais organizados.
 - Nenhuma lógica foi alterada.

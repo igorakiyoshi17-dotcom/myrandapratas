@@ -1978,119 +1978,196 @@ body:has(.hero-myranda) {
 
 
 /* =========================================================
-   MYRANDA PRATAS — MOBILE PRODUCT CARDS PREMIUM
-   Refinamento visual dos cards do catálogo
+   MYRANDA PRATAS — PRODUCT DETAIL MOBILE PREMIUM
+   Refinamento somente da página individual da joia
    ========================================================= */
 @media (max-width: 600px) {
 
-  .product-grid {
-    gap: 12px !important;
+  .product-details {
+    padding: 14px 14px 112px !important;
   }
 
-  .product-card {
-    background: #fffaf7 !important;
-    border: 1px solid #eadbd3 !important;
-    border-radius: 18px !important;
-    box-shadow: 0 8px 24px rgba(74, 43, 34, .06) !important;
-    overflow: hidden !important;
-    transition: transform .18s ease, box-shadow .18s ease !important;
+  #backToCatalogDetails {
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 38px !important;
+    padding: 8px 13px !important;
+    margin: 0 0 14px !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    border: 1px solid #cdb8ae !important;
+    color: #4a2b22 !important;
+    font-size: 9px !important;
+    letter-spacing: .08em !important;
+    box-shadow: none !important;
   }
 
-  .product-card:active {
-    transform: scale(.985);
-    box-shadow: 0 5px 16px rgba(74, 43, 34, .08) !important;
-  }
-
-  .product-image {
-    height: 225px !important;
-    background: #f5ece7 !important;
-    position: relative !important;
-  }
-
-  .product-image img {
-    object-fit: cover !important;
-    object-position: center !important;
-  }
-
-  .heart-btn {
-    width: 34px !important;
-    height: 34px !important;
-    border-radius: 50% !important;
-    background: rgba(255, 250, 247, .96) !important;
-    border: 1px solid rgba(229, 213, 205, .95) !important;
-    box-shadow: 0 4px 12px rgba(74, 43, 34, .08) !important;
-    font-size: 17px !important;
-    line-height: 1 !important;
-  }
-
-  .heart-btn.is-favorite,
-  .heart-btn.active {
+  #backToCatalogDetails:active {
     background: #4a2b22 !important;
     color: #fffaf7 !important;
-    border-color: #4a2b22 !important;
   }
 
-  .product-info {
-    padding: 13px 12px 14px !important;
+  .product-detail-card {
+    gap: 18px !important;
   }
 
-  .product-name {
-    font-family: "Cormorant Garamond", Georgia, serif !important;
-    font-size: 21px !important;
-    line-height: 1.02 !important;
-    font-weight: 600 !important;
-    color: #2d1712 !important;
-    min-height: auto !important;
-    margin-bottom: 5px !important;
+  .product-detail-image {
+    background: #f4ebe6 !important;
+    border: 1px solid #eadbd3 !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 28px rgba(74,43,34,.07) !important;
   }
 
-  .product-code {
-    font-size: 8px !important;
-    letter-spacing: .12em !important;
+  .product-detail-image img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1.04 !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+  }
+
+  .product-detail-info {
+    padding: 2px 2px 0 !important;
+  }
+
+  .product-detail-info .product-code,
+  .product-detail-info .detail-code {
+    font-size: 9px !important;
+    letter-spacing: .14em !important;
     text-transform: uppercase !important;
     color: #9a7d70 !important;
   }
 
-  .product-bottom {
-    margin-top: 11px !important;
-    padding-top: 10px !important;
-    border-top: 1px solid #eee1db !important;
+  .product-detail-info h2 {
+    font-family: "Cormorant Garamond", Georgia, serif !important;
+    font-size: 40px !important;
+    line-height: .95 !important;
+    font-weight: 600 !important;
+    color: #2d1712 !important;
+    margin: 7px 0 10px !important;
   }
 
-  .price {
-    font-size: 15px !important;
+  .product-detail-info .detail-price,
+  .product-detail-info .price {
+    font-size: 19px !important;
     font-weight: 700 !important;
     color: #4a2b22 !important;
   }
 
-  .stock-status,
-  .availability {
-    font-size: 8px !important;
+  .product-detail-info .availability,
+  .product-detail-info .stock-status {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 26px !important;
+    padding: 5px 9px !important;
+    border-radius: 999px !important;
+    background: #eef5ef !important;
+    color: #4f7757 !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
     letter-spacing: .08em !important;
     text-transform: uppercase !important;
+    margin-top: 8px !important;
   }
 
-  .product-card .primary-btn,
-  .product-card .add-btn,
-  .product-card button[data-add] {
-    min-height: 38px !important;
-    border-radius: 999px !important;
-    padding: 8px 12px !important;
-    font-size: 9px !important;
-    letter-spacing: .04em !important;
+  .product-detail-actions,
+  .detail-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+    margin-top: 16px !important;
+  }
+
+  .detail-secondary,
+  .product-detail-actions .secondary-btn,
+  .detail-actions .secondary-btn {
+    min-height: 42px !important;
+    border-radius: 12px !important;
+    background: #fffaf7 !important;
+    color: #4a2b22 !important;
+    border: 1px solid #d8c5bc !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    box-shadow: none !important;
+  }
+
+  .detail-secondary:active,
+  .product-detail-actions .secondary-btn:active,
+  .detail-actions .secondary-btn:active {
+    background: #efe2db !important;
+  }
+
+  .product-detail-info .primary-btn,
+  .product-detail-info .add-btn,
+  #addProductToSelection {
+    width: 100% !important;
+    min-height: 50px !important;
+    margin-top: 11px !important;
+    border-radius: 14px !important;
+    background: #4a2b22 !important;
+    color: #fffaf7 !important;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 8px 20px rgba(74,43,34,.14) !important;
+  }
+
+  .product-detail-info .primary-btn:active,
+  .product-detail-info .add-btn:active,
+  #addProductToSelection:active {
+    transform: scale(.99);
+    background: #2d1712 !important;
+  }
+
+  .related-products {
+    margin-top: 36px !important;
+    padding-top: 24px !important;
+    border-top: 1px solid #eadbd3 !important;
+  }
+
+  .related-products-heading {
+    margin-bottom: 14px !important;
+  }
+
+  .related-products-heading h2 {
+    font-family: "Cormorant Garamond", Georgia, serif !important;
+    font-size: 31px !important;
+    line-height: 1 !important;
+    color: #2d1712 !important;
+  }
+
+  .related-products .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .related-products .product-card {
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    background: #fffaf7 !important;
+  }
+
+  .related-products .product-image {
+    height: 175px !important;
+  }
+
+  .related-products .product-name {
+    font-size: 16px !important;
+    line-height: 1.05 !important;
   }
 }
 
 @media (max-width: 390px) {
-  .product-image {
-    height: 200px !important;
+  .product-detail-info h2 {
+    font-size: 36px !important;
   }
 
-  .product-name {
-    font-size: 19px !important;
-  }
-
-  .product-info {
-    padding: 12px 10px 13px !important;
+  .related-products .product-image {
+    height: 160px !important;
   }
 }
