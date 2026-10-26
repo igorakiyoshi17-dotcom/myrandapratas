@@ -218,6 +218,107 @@ body.admin-logado{background:#f8f1ec!important}
 }
 </style>
 
+
+<style>
+/* MYRANDA ADMIN — acabamento final */
+.admin-stock-low{
+  border-color:#d7b8aa!important;
+  box-shadow:0 7px 22px rgba(93,48,40,.10)!important;
+}
+.admin-stock-zero{
+  border-color:#d6a4a4!important;
+  background:#fff8f7!important;
+}
+.admin-stock-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  margin-top:7px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#f4e5dc;
+  color:#784638;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.03em;
+}
+.admin-stock-badge.zero{
+  background:#f5dddd;
+  color:#904747;
+}
+.admin-selection-gallery{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:12px 0 4px;
+}
+.admin-selection-thumb{
+  width:54px;
+  height:54px;
+  border-radius:12px;
+  object-fit:cover;
+  border:1px solid var(--mimo-line);
+  background:#f5e9e3;
+}
+.admin-selection-thumb-empty{
+  width:54px;
+  height:54px;
+  border-radius:12px;
+  border:1px solid var(--mimo-line);
+  background:#f5e9e3;
+  display:grid;
+  place-items:center;
+  color:#9a7d70;
+  font-size:9px;
+  text-align:center;
+  padding:5px;
+}
+.admin-selection-more{
+  min-width:38px;
+  height:38px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:#efe2db;
+  color:#4a2b22;
+  font-size:11px;
+  font-weight:800;
+}
+.admin-stat.alerta{
+  background:#fff7f3;
+  border-color:#dfc6bb;
+}
+.admin-stat.alerta strong{
+  color:#7d4739!important;
+}
+.admin-tip{
+  margin-top:16px;
+  padding:14px 16px;
+  background:#f3e7e1;
+  border:1px solid var(--mimo-line);
+  border-radius:16px;
+  color:#6d5147;
+  font-size:12px;
+  line-height:1.5;
+}
+.admin-quick-actions{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+}
+@media(max-width:520px){
+  .admin-quick-actions{
+    grid-template-columns:1fr!important;
+  }
+  .admin-quick-actions button{
+    min-height:48px!important;
+  }
+  .admin-selection-thumb,
+  .admin-selection-thumb-empty{
+    width:48px;
+    height:48px;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -1767,5 +1868,159 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
 })();
 
 </script>
+
+<script>
+/* Acabamentos visuais da Myranda — não altera as operações do Supabase */
+(function acabamentoMyrandaAdmin(){
+  const escapar=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  function produtoPorId(id){
+    return (typeof produtosCarregados!=='undefined' ? produtosCarregados : [])
+      .find(p=>String(p.id)===String(id));
+  }
+
+  function produtoPorCodigo(codigo){
+    const alvo=String(codigo||'').trim().toUpperCase();
+    return (typeof produtosCarregados!=='undefined' ? produtosCarregados : [])
+      .find(p=>String(p.codigo||'').trim().toUpperCase()===alvo);
+  }
+
+  function decorarProdutos(){
+    const lista=document.getElementById('listaProdutos');
+    if(!lista) return;
+
+    Array.from(lista.children).forEach(card=>{
+      if(card.tagName!=='DIV') return;
+      const botao=card.querySelector('[data-id]');
+      if(!botao) return;
+      const produto=produtoPorId(botao.dataset.id);
+      if(!produto) return;
+
+      card.classList.remove('admin-stock-low','admin-stock-zero');
+      card.querySelectorAll('.admin-stock-badge').forEach(el=>el.remove());
+
+      const estoque=Number(produto.estoque)||0;
+      if(estoque<=2){
+        card.classList.add(estoque===0?'admin-stock-zero':'admin-stock-low');
+        const info=card.firstElementChild?.lastElementChild;
+        if(info){
+          const badge=document.createElement('div');
+          badge.className='admin-stock-badge'+(estoque===0?' zero':'');
+          badge.textContent=estoque===0?'⚠ Sem estoque':`⚠ Estoque baixo: ${estoque}`;
+          info.appendChild(badge);
+        }
+      }
+    });
+  }
+
+  function decorarSelecoes(){
+    const lista=document.getElementById('listaSelecoes');
+    if(!lista) return;
+    const selecoes=typeof selecoesCarregadas!=='undefined'?selecoesCarregadas:[];
+
+    lista.querySelectorAll('[data-selecao-id]').forEach(card=>{
+      card.querySelectorAll('.admin-selection-gallery').forEach(el=>el.remove());
+      const selecao=selecoes.find(s=>String(s.id)===String(card.dataset.selecaoId));
+      if(!selecao) return;
+
+      const itens=Array.isArray(selecao.itens)?selecao.itens:[];
+      if(!itens.length) return;
+
+      const galeria=document.createElement('div');
+      galeria.className='admin-selection-gallery';
+
+      itens.slice(0,3).forEach(item=>{
+        const produto=produtoPorCodigo(item.codigo);
+        if(produto?.imagem_url){
+          const img=document.createElement('img');
+          img.className='admin-selection-thumb';
+          img.src=produto.imagem_url;
+          img.alt=item.nome||produto.nome||'Joia';
+          img.loading='lazy';
+          img.onerror=()=>img.replaceWith(Object.assign(document.createElement('div'),{
+            className:'admin-selection-thumb-empty',
+            textContent:'Sem foto'
+          }));
+          galeria.appendChild(img);
+        }else{
+          const vazio=document.createElement('div');
+          vazio.className='admin-selection-thumb-empty';
+          vazio.textContent='Sem foto';
+          galeria.appendChild(vazio);
+        }
+      });
+
+      if(itens.length>3){
+        const mais=document.createElement('div');
+        mais.className='admin-selection-more';
+        mais.textContent=`+${itens.length-3}`;
+        galeria.appendChild(mais);
+      }
+
+      const primeiroBloco=card.firstElementChild;
+      if(primeiroBloco && primeiroBloco.nextSibling){
+        primeiroBloco.insertAdjacentElement('afterend',galeria);
+      }else{
+        card.prepend(galeria);
+      }
+    });
+  }
+
+  function melhorarInicio(){
+    const stats=document.querySelector('#adminInicio .admin-stats');
+    if(stats && !document.getElementById('inicioEstoqueBaixo')){
+      const card=document.createElement('div');
+      card.className='admin-stat alerta';
+      card.innerHTML='<span class="admin-stat-icon">⚠️</span><small>Produtos com estoque baixo</small><strong id="inicioEstoqueBaixo">0</strong>';
+      stats.appendChild(card);
+    }
+
+    const quick=document.querySelector('#adminInicio .admin-quick-actions');
+    if(quick && !document.getElementById('atalhoSelecoes')){
+      const btn=document.createElement('button');
+      btn.type='button';
+      btn.id='atalhoSelecoes';
+      btn.textContent='▤ Ver seleções';
+      quick.appendChild(btn);
+      btn.addEventListener('click',()=>document.querySelector('[data-admin-tab="adminSelecoes"]')?.click());
+    }
+
+    const bloco=document.querySelector('#adminInicio .admin-quick');
+    if(bloco && !document.querySelector('#adminInicio .admin-tip')){
+      const dica=document.createElement('div');
+      dica.className='admin-tip';
+      dica.innerHTML='<strong>Dica:</strong> produtos com 2 unidades ou menos ficam destacados automaticamente para facilitar a reposição.';
+      bloco.after(dica);
+    }
+  }
+
+  function atualizarAcabamento(){
+    melhorarInicio();
+    decorarProdutos();
+    decorarSelecoes();
+
+    const baixo=(typeof produtosCarregados!=='undefined'?produtosCarregados:[])
+      .filter(p=>(Number(p.estoque)||0)<=2).length;
+    const alvo=document.getElementById('inicioEstoqueBaixo');
+    if(alvo) alvo.textContent=baixo;
+  }
+
+  melhorarInicio();
+
+  const lp=document.getElementById('listaProdutos');
+  const ls=document.getElementById('listaSelecoes');
+  if(lp) new MutationObserver(()=>setTimeout(atualizarAcabamento,0)).observe(lp,{childList:true,subtree:false});
+  if(ls) new MutationObserver(()=>setTimeout(atualizarAcabamento,0)).observe(ls,{childList:true,subtree:false});
+
+  document.addEventListener('click',e=>{
+    if(e.target.closest('.btnAumentarEstoque,.btnDiminuirEstoque,.btnFinalizarSelecao,.btnCancelarSelecao')){
+      setTimeout(atualizarAcabamento,600);
+    }
+  });
+
+  setTimeout(atualizarAcabamento,200);
+})();
+</script>
+
 </body>
 </html>
