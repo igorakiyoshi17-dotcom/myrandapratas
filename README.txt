@@ -1,16 +1,16 @@
-MYRANDA PRATAS — FOTOS NAS SELEÇÕES
+MYRANDA PRATAS — MOBILE POLISH
 
-Substitua no GitHub:
-- admin.html
-- script.js
+Substitua somente style.css no GitHub.
 
-Correções:
-- Novas seleções passam a salvar imagem_url de cada joia.
-- Relatório do admin tenta foto nesta ordem:
-  1. imagem salva na própria seleção
-  2. produto com mesmo código
-  3. produto com mesmo nome
-- Miniaturas da lista de seleções usam o mesmo fallback.
-- Isso também recupera a foto de muitas seleções antigas mesmo se o código do produto mudou.
+Melhorias:
+- Hero mais compacto no celular.
+- Categorias em rolagem horizontal.
+- Filtros com rolagem horizontal.
+- Produtos em 2 colunas mais limpas.
+- Imagens maiores e cards mais legíveis.
+- Página individual da joia mais confortável.
+- Produtos relacionados melhor dimensionados.
+- Barra inferior ajustada para telas pequenas.
+- Rodapé e modais refinados.
 
-Não altere index.html ou style.css.
+Nenhuma lógica JavaScript foi alterada.

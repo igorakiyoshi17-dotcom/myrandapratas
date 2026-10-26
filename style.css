@@ -1676,3 +1676,302 @@ body:has(.hero-myranda) {
   object-fit: cover !important;
   object-position: center !important;
 }
+
+
+/* =========================================================
+   MYRANDA PRATAS — MOBILE POLISH
+   Mantém a identidade e melhora somente a experiência no celular
+   ========================================================= */
+@media (max-width: 600px) {
+
+  /* HERO — mais compacto e com leitura melhor */
+  .hero.hero-myranda {
+    min-height: 500px !important;
+    padding: 34px 20px 42px !important;
+    background-position: 60% center !important;
+  }
+
+  .hero-myranda .hero-content {
+    padding-top: 26px !important;
+    max-width: 88% !important;
+  }
+
+  .hero-myranda .eyebrow {
+    font-size: 9px !important;
+    letter-spacing: .24em !important;
+  }
+
+  .hero-myranda h1 {
+    font-size: clamp(46px, 13vw, 62px) !important;
+    line-height: .9 !important;
+    margin: 18px 0 !important;
+  }
+
+  .hero-myranda .hero-copy {
+    max-width: 230px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+  }
+
+  .hero-myranda .hero-btn {
+    padding: 13px 20px !important;
+    font-size: 11px !important;
+  }
+
+  /* SEÇÕES */
+  .section {
+    padding: 34px 14px 6px !important;
+  }
+
+  .section-heading {
+    margin-bottom: 16px !important;
+  }
+
+  .section-heading h2,
+  .catalog-heading h2 {
+    font-size: 34px !important;
+    line-height: 1 !important;
+  }
+
+  /* CATEGORIAS — rolagem horizontal em vez de ocupar a tela toda */
+  .category-grid {
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x proximity;
+    padding: 2px 1px 8px !important;
+    margin-right: -14px !important;
+    scrollbar-width: none;
+  }
+
+  .category-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-card,
+  .category-card:nth-child(even) {
+    flex: 0 0 112px !important;
+    min-height: 64px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    scroll-snap-align: start;
+  }
+
+  .category-card span,
+  .category-card:nth-child(even) span {
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* CABEÇALHO DO CATÁLOGO */
+  .catalog-heading {
+    align-items: flex-end !important;
+    gap: 12px !important;
+    margin-bottom: 14px !important;
+  }
+
+  #showAll,
+  .catalog-heading .text-btn {
+    padding: 9px 13px !important;
+    font-size: 9px !important;
+    white-space: nowrap;
+  }
+
+  /* FILTROS — rolagem horizontal */
+  .filters,
+  .catalog-filters {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 6px !important;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar,
+  .catalog-filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filters button,
+  .catalog-filters button {
+    flex: 0 0 auto !important;
+    white-space: nowrap;
+  }
+
+  /* PRODUTOS — 2 colunas mais limpas */
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .product-card {
+    border-radius: 14px !important;
+    overflow: hidden !important;
+  }
+
+  .product-image {
+    height: 210px !important;
+    border-radius: 0 !important;
+  }
+
+  .product-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .heart-btn {
+    width: 32px !important;
+    height: 32px !important;
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  .product-info {
+    padding: 11px 10px 13px !important;
+  }
+
+  .product-name {
+    font-size: 14px !important;
+    line-height: 1.15 !important;
+    min-height: 32px;
+  }
+
+  .product-code {
+    font-size: 8px !important;
+  }
+
+  .product-bottom {
+    margin-top: 8px !important;
+    align-items: center !important;
+  }
+
+  .price {
+    font-size: 14px !important;
+  }
+
+  /* DETALHE DA JOIA */
+  .product-details {
+    padding: 16px 14px 110px !important;
+  }
+
+  #backToCatalogDetails {
+    margin-bottom: 14px !important;
+  }
+
+  .product-detail-card {
+    gap: 16px !important;
+  }
+
+  .product-detail-image {
+    border-radius: 16px !important;
+  }
+
+  .product-detail-image img {
+    width: 100% !important;
+    max-height: none !important;
+    aspect-ratio: 1 / 1.05;
+    object-fit: cover !important;
+  }
+
+  .product-detail-info h2 {
+    font-size: 36px !important;
+    margin: 6px 0 10px !important;
+  }
+
+  .product-detail-info h3 {
+    font-size: 24px !important;
+    margin-top: 18px !important;
+  }
+
+  .detail-secondary {
+    min-height: 44px !important;
+    border-radius: 12px !important;
+  }
+
+  .product-detail-info .primary-btn {
+    min-height: 46px !important;
+    border-radius: 12px !important;
+  }
+
+  /* RELACIONADOS */
+  .related-products {
+    margin-top: 34px !important;
+    padding-top: 22px !important;
+  }
+
+  .related-products-heading h2 {
+    font-size: 30px !important;
+  }
+
+  .related-products .product-grid {
+    gap: 9px !important;
+  }
+
+  .related-products .product-image {
+    height: 170px !important;
+  }
+
+  .related-products .product-name {
+    font-size: 15px !important;
+  }
+
+  /* MODAIS */
+  .selection-modal,
+  .success-modal,
+  .favorites-modal {
+    padding: 20px 12px 14px !important;
+  }
+
+  .modal-card,
+  .selection-modal-content,
+  .favorites-modal-content {
+    border-radius: 22px !important;
+  }
+
+  /* BARRA INFERIOR */
+  .bottom-nav {
+    height: 68px !important;
+    padding-bottom: max(7px, env(safe-area-inset-bottom)) !important;
+    gap: 4px !important;
+  }
+
+  .nav-item {
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    font-size: 8px !important;
+  }
+
+  .nav-item span:first-child {
+    font-size: 17px !important;
+  }
+
+  .selection-bar {
+    bottom: 76px !important;
+  }
+
+  /* RODAPÉ */
+  .myranda-footer {
+    padding: 34px 16px 100px !important;
+  }
+}
+
+/* Celulares menores */
+@media (max-width: 390px) {
+  .product-image {
+    height: 185px !important;
+  }
+
+  .hero.hero-myranda {
+    min-height: 470px !important;
+  }
+
+  .category-card,
+  .category-card:nth-child(even) {
+    flex-basis: 104px !important;
+  }
+
+  .section-heading h2,
+  .catalog-heading h2 {
+    font-size: 31px !important;
+  }
+}
