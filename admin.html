@@ -5,17 +5,12 @@
  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel Administrativo | Myranda Pratas</title>
-
+  
 <link rel="manifest" href="manifest-admin.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Myranda Admin">
-<link rel="apple-touch-icon" href="/icon-512.png">
-
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-title" content="Myranda Admin">
+  <link rel="apple-touch-icon" href="/icon-512.png">
 
 <style>
   
@@ -116,345 +111,137 @@
       font-size: 12px;
       line-height: 1.5;
     }
-  </style>
+  
+/* MYRANDA ADMIN 2026 — experiência mobile-first */
+:root{--mimo-ink:#2d1712;--mimo-coffee:#4a2b22;--mimo-muted:#88736a;--mimo-paper:#fffaf7;--mimo-line:#e5d5cd}
+body.admin-logado{display:block;padding:0;background:#f8f1ec;min-height:100dvh}
+#painelAdmin{max-width:1180px!important;margin:0 auto;padding:18px 16px 105px;width:100%!important}
+#painelAdmin>div:first-child{padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#painelAdmin>div:first-child>div:first-child{padding:18px 16px;margin-bottom:16px!important;border-radius:20px;background:#fffdfa;border:1px solid var(--mimo-line)}
+#painelAdmin h2,#painelAdmin h3{color:var(--mimo-ink)}
+#painelAdmin button{transition:background .2s,transform .2s}
+#painelAdmin button:active{transform:scale(.98)}
+#painelAdmin button:focus-visible,#painelAdmin input:focus-visible{outline:2px solid #8f6558;outline-offset:2px}
+#painelAdmin input,#painelAdmin select{min-height:46px;font-size:16px!important}
+#painelAdmin #btnSair{background:#efe2db;color:#4a2b22}
+#adminInicio,#adminProdutos,#adminSelecoes{display:none}
+#adminInicio.admin-active,#adminProdutos.admin-active,#adminSelecoes.admin-active{display:block}
+.admin-title{font:600 34px Georgia,serif;color:#2d1712;margin:5px 0 8px}
+.admin-subtitle{color:#88736a;font-size:13px;line-height:1.5;margin-bottom:20px}
+.admin-eyebrow{font-size:10px;letter-spacing:2px;color:#6f4237;font-weight:700}
+.admin-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:20px}
+.admin-stat{background:#fffdfa;border:1px solid var(--mimo-line);border-radius:18px;padding:17px 14px;min-width:0}
+.admin-stat .admin-stat-icon{font-size:21px;display:block;margin-bottom:12px}
+.admin-stat small{display:block;color:#88736a;font-size:12px;line-height:1.3}
+.admin-stat strong{display:block;color:#2d1712;font-size:clamp(19px,5vw,26px);margin-top:8px;overflow-wrap:anywhere}
+.admin-quick{background:#fffdfa;border:1px solid var(--mimo-line);border-radius:20px;padding:18px;margin-top:16px}
+.admin-quick h3{font-size:17px;margin-bottom:15px}
+.admin-quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.admin-quick-actions button{margin:0;padding:15px 8px;min-height:54px;border-radius:13px}
+.admin-quick-actions button:nth-child(2){background:#efe2db;color:#4a2b22}
+.admin-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:#fffdfa;border-top:1px solid var(--mimo-line);display:grid;grid-template-columns:repeat(3,1fr);padding:8px max(10px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));box-shadow:0 -5px 20px #4b302610}
+.admin-nav button{margin:0!important;background:transparent!important;color:#88736a!important;padding:8px 4px!important;border-radius:12px!important;font-size:12px!important;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:50px}
+.admin-nav button span{font-size:21px}
+.admin-nav button[aria-current="page"]{background:#efe2db!important;color:#4a2b22!important}
+.admin-product-tools{display:flex;gap:10px;margin-bottom:14px;align-items:center}
+.admin-product-tools input{background:#fffdfa}
+#adminProdutos>div:first-child{margin-bottom:14px!important}
+#listaProdutos>div{background:#fffdfa;border-color:var(--mimo-line)!important;border-radius:20px!important;box-shadow:0 4px 16px #4b302608}
+#listaProdutos>div>div:first-child{flex:1 1 100%;min-width:0;align-items:center!important}
+#listaProdutos>div>div:first-child>div:last-child{min-width:0;overflow-wrap:anywhere;line-height:1.5}
+#listaProdutos>div>div:first-child img,#listaProdutos>div>div:first-child>div:first-child:not(:last-child){width:88px!important;height:88px!important;flex-shrink:0;object-fit:contain!important;background:#f4e8e2}
+#listaProdutos>div>div:last-child{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;border-top:1px solid var(--mimo-line);padding-top:12px}
+#listaProdutos>div>div:last-child>span{flex-basis:100%;font-size:11px!important}
+#listaProdutos .btnEditarProduto,#listaProdutos .btnDiminuirEstoque,#listaProdutos .btnAumentarEstoque,#listaProdutos .btnExcluirProduto{margin:0!important;min-height:42px;border-radius:12px!important;padding:10px 13px!important}
+#listaProdutos .btnEditarProduto{flex:1 1 auto}
+#listaProdutos .btnDiminuirEstoque,#listaProdutos .btnAumentarEstoque{background:#efe2db;color:#4a2b22;min-width:48px}
+#listaProdutos .btnExcluirProduto{background:#f8e7e7!important;color:#a34f50!important}
+#formNovoProduto{scroll-margin-top:20px;background:#fffdfa!important;border-radius:20px!important}
+#formNovoProduto button{min-width:0}
+.admin-photo-preview{display:none;margin-top:12px;width:128px;height:128px;object-fit:contain;border-radius:14px;border:1px solid var(--mimo-line);background:#fff}
+#adminSelecoes #areaSelecoes{margin:0!important;padding:0!important;border:0!important}
+#adminSelecoes #areaSelecoes>div:first-child{display:none}
+#filtrosSelecoes{flex-wrap:nowrap!important;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+#filtrosSelecoes button{flex-shrink:0;border-radius:999px!important;background:#fffdfa;color:#4a2b22;border:1px solid var(--mimo-line);min-height:42px}
+#filtrosSelecoes button[data-ativo="true"]{background:#754333!important;color:white!important}
+#listaSelecoes>div{background:#fffdfa;border-color:var(--mimo-line)!important;border-radius:20px!important;padding:18px!important;box-shadow:0 4px 16px #4b302608}
+#listaSelecoes .btnFinalizarSelecao,#listaSelecoes .btnCancelarSelecao{min-height:44px;border-radius:12px!important;flex:1}
+@media(min-width:720px){.admin-stats{grid-template-columns:repeat(4,1fr)}.admin-nav{max-width:480px;left:50%;transform:translateX(-50%);border:1px solid var(--mimo-line);border-radius:20px 20px 0 0}#listaProdutos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#listaProdutos>div{margin:0!important}#listaSelecoes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}#listaSelecoes>div{margin:0!important}}
+@media(max-width:420px){#painelAdmin{padding:12px 12px 105px}#painelAdmin>div:first-child>div:first-child{padding:15px!important}#formNovoProduto{padding:16px!important}.admin-stat{padding:14px 12px}#listaProdutos>div{padding:13px!important}#listaProdutos>div>div:first-child img{width:76px!important;height:76px!important}}
 
+
+/* Relatório de seleção */
+#listaSelecoes>div{cursor:pointer;transition:transform .15s,box-shadow .15s}
+#listaSelecoes>div:active{transform:scale(.99)}
+.mimo-report-overlay{position:fixed;inset:0;z-index:9999;background:#281b17aa;display:flex;align-items:flex-end;justify-content:center;padding:0}
+.mimo-report{background:#fbf6f0;color:#2d1712;width:100%;max-width:640px;max-height:94dvh;overflow:auto;border-radius:26px 26px 0 0;padding:22px 20px calc(26px + env(safe-area-inset-bottom));box-shadow:0 0 50px #0003}
+.mimo-report-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.mimo-report-kicker{font-size:11px;letter-spacing:2px;color:#9a7d70;font-weight:700}
+.mimo-report h2{font-family:Georgia,serif;font-size:27px;margin:6px 0}
+.mimo-report-date{color:#907b70;font-size:13px}
+.mimo-report-close{width:42px;height:42px;margin:0;border-radius:50%;padding:0;flex-shrink:0;font-size:24px}
+.mimo-report-status{display:inline-block;background:#eee1d4;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:bold;margin:0 0 16px}
+.mimo-report-item{display:flex;gap:14px;align-items:center;background:#fff;border:1px solid #ebdcd2;border-radius:16px;padding:12px;margin-bottom:10px}
+.mimo-report-item img,.mimo-report-noimage{width:90px;height:90px;border-radius:12px;object-fit:cover;flex-shrink:0;background:#f3e9e0}
+.mimo-report-noimage{display:grid;place-items:center;color:#9b8275;font-size:12px;text-align:center}
+.mimo-report-item-info{min-width:0;flex:1}
+.mimo-report-item-info strong{display:block;font-size:14px;line-height:1.35;overflow-wrap:anywhere}
+.mimo-report-item-info small{display:block;color:#8d786d;margin:6px 0}
+.mimo-report-item-info b{font-size:15px}
+.mimo-report-total{background:#efe1d7;border-radius:16px;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px}
+.mimo-report-total strong{font-size:20px}
+body.mimo-modal-open{overflow:hidden}
+@media(min-width:700px){.mimo-report-overlay{align-items:center;padding:20px}.mimo-report{border-radius:24px;max-height:90dvh}}
+</style>
 
 <style>
-/* MYRANDA PRATAS — ADMIN no estilo delicado da Mimo, com identidade Myranda */
+/* MYRANDA — refinamento visual sem alterar a lógica do admin */
 :root{
-  --mp-coffee:#4a2b22;
-  --mp-coffee-dark:#2d1712;
-  --mp-wine:#5d3028;
-  --mp-cream:#f8f1ec;
-  --mp-cream-2:#efe2db;
-  --mp-paper:#fffaf7;
-  --mp-text:#3b2924;
-  --mp-muted:#88736a;
-  --mp-line:#e5d5cd;
-  --mp-success:#4f7757;
-  --mp-danger:#8b4545;
-  --mp-warning:#916d38;
-  --mp-shadow:0 18px 50px rgba(60,32,24,.10);
+  --myranda-wine:#5d3028;
+  --myranda-coffee:#4a2b22;
+  --myranda-dark:#2d1712;
+  --myranda-cream:#f8f1ec;
+  --myranda-paper:#fffaf7;
+  --myranda-line:#e5d5cd;
 }
 
-html{
-  background:var(--mp-cream);
-}
-
-body{
+body.admin-logado{
   background:
-    radial-gradient(circle at 12% 0%, rgba(93,48,40,.08), transparent 34%),
-    linear-gradient(180deg,#fbf6f2 0%,var(--mp-cream) 100%) !important;
-  color:var(--mp-text)!important;
-  font-family:"DM Sans",Arial,sans-serif!important;
-  align-items:flex-start!important;
-  padding:28px!important;
+    radial-gradient(circle at 10% 0%, rgba(93,48,40,.07), transparent 34%),
+    var(--myranda-cream) !important;
 }
 
-body:before{
-  content:"MYRANDA PRATAS · 925";
-  position:fixed;
-  right:24px;
-  bottom:14px;
-  font-size:9px;
-  font-weight:700;
-  letter-spacing:.22em;
-  color:var(--mp-coffee);
-  opacity:.28;
-  pointer-events:none;
-}
-
-.login{
-  margin:8vh auto 0!important;
-  max-width:440px!important;
-  background:rgba(255,250,247,.96)!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:26px!important;
-  box-shadow:var(--mp-shadow)!important;
-  padding:44px 34px!important;
-}
-
-.marca{
-  margin-bottom:32px!important;
-}
-
-.marca small{
-  color:var(--mp-wine)!important;
-  font-size:10px!important;
-  font-weight:700!important;
-  letter-spacing:.34em!important;
-}
-
-.marca h1{
-  font-family:"Cormorant Garamond",serif!important;
-  font-size:46px!important;
-  font-weight:600!important;
-  letter-spacing:.03em!important;
-  color:var(--mp-coffee-dark)!important;
-  line-height:.95!important;
-}
-
-.marca p{
-  color:var(--mp-muted)!important;
-  font-size:13px!important;
-}
-
-label{
-  color:var(--mp-text)!important;
-  font-size:12px!important;
-  font-weight:600!important;
-}
-
-input,
-select{
-  border:1px solid var(--mp-line)!important;
-  border-radius:12px!important;
-  background:#fff!important;
-  color:var(--mp-text)!important;
-  font-family:"DM Sans",sans-serif!important;
-  box-shadow:none!important;
-}
-
-input:focus,
-select:focus{
-  border-color:#b99a8d!important;
-  box-shadow:0 0 0 3px rgba(93,48,40,.08)!important;
-}
-
-button{
-  border-radius:999px!important;
-  background:var(--mp-coffee)!important;
-  color:#fff9f5!important;
-  box-shadow:none!important;
-  font-family:"DM Sans",Arial,sans-serif!important;
-  letter-spacing:.01em!important;
-  transition:.2s ease!important;
-}
-
-button:hover{
-  background:var(--mp-coffee-dark)!important;
-  transform:translateY(-1px);
-}
-
-button:disabled{
-  opacity:.55!important;
-  cursor:not-allowed!important;
-  transform:none!important;
-}
-
-.seguranca{
-  color:var(--mp-muted)!important;
-}
-
-#painelAdmin{
-  margin:0 auto!important;
-  width:100%!important;
-  max-width:1180px!important;
-}
-
-#painelAdmin>div{
-  background:rgba(255,250,247,.97)!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:28px!important;
-  box-shadow:var(--mp-shadow)!important;
-  padding:34px!important;
-}
-
-#painelAdmin small{
-  color:var(--mp-wine)!important;
-  font-weight:700!important;
-}
-
+.marca h1,
+.admin-title,
 #painelAdmin h2,
 #painelAdmin h3{
-  font-family:"Cormorant Garamond",serif!important;
-  color:var(--mp-coffee-dark)!important;
-  letter-spacing:0!important;
+  color:var(--myranda-dark)!important;
 }
 
-#painelAdmin h2{
-  font-size:34px!important;
-  font-weight:600!important;
-}
-
-#painelAdmin h3{
-  font-size:25px!important;
-  font-weight:600!important;
-}
-
-#painelAdmin p[style*="color:#806f66"],
-#painelAdmin p[style*="color: #806f66"]{
-  color:var(--mp-muted)!important;
-}
-
-#formNovoProduto{
-  background:#f8f0eb!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:20px!important;
-  padding:24px!important;
-}
-
-#formNovoProduto select{
-  margin-top:7px!important;
-}
-
-#listaProdutos>div{
-  background:#fff!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:18px!important;
-  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
-  padding:16px!important;
-}
-
-#listaProdutos img{
-  border-radius:14px!important;
-  border:1px solid var(--mp-line)!important;
-}
-
-#listaProdutos strong{
-  color:var(--mp-coffee-dark)!important;
-}
-
-#listaProdutos [style*="color:#806f66"],
-#listaProdutos [style*="color: #806f66"]{
-  color:var(--mp-muted)!important;
-}
-
-/* Produtos: botões de ação */
-.btnEditarProduto{
-  background:#7b5547!important;
-}
-
-.btnDiminuirEstoque,
-.btnAumentarEstoque{
-  min-width:44px!important;
-  background:#eadbd4!important;
-  color:var(--mp-coffee-dark)!important;
-}
-
-.btnExcluirProduto{
-  background:var(--mp-danger)!important;
-}
-
-#areaSelecoes{
-  border-top:1px solid var(--mp-line)!important;
-}
-
-#areaSelecoes>div:first-child > div{
-  gap:14px!important;
-}
-
-/* Cards do resumo */
-#areaSelecoes [style*="background:#fffaf5"],
-#areaSelecoes [style*="background: #fffaf5"]{
-  background:#fff!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:18px!important;
-  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
-}
-
-#vendasHoje,
-#pecasVendidasHoje,
-#faturamentoHoje{
-  color:var(--mp-coffee-dark)!important;
-  font-family:"Cormorant Garamond",serif!important;
-  font-size:30px!important;
-}
-
-/* Filtros de seleções */
-.btnFiltroSelecao{
+#listaProdutos .btnDiminuirEstoque,
+#listaProdutos .btnAumentarEstoque{
   background:#efe2db!important;
-  color:var(--mp-coffee)!important;
-  border:1px solid var(--mp-line)!important;
+  color:var(--myranda-coffee)!important;
+  border:1px solid #ddc8be!important;
+  font-weight:800!important;
+}
+
+#listaProdutos .btnDiminuirEstoque:hover,
+#listaProdutos .btnAumentarEstoque:hover{
+  background:var(--myranda-coffee)!important;
+  color:#fffaf7!important;
+}
+
+.admin-nav button[aria-current="page"]{
+  background:#efe2db!important;
+  color:var(--myranda-coffee)!important;
 }
 
 .btnFiltroSelecao[data-ativo="true"]{
-  background:var(--mp-coffee)!important;
+  background:var(--myranda-coffee)!important;
   color:#fff!important;
-  border-color:var(--mp-coffee)!important;
-}
-
-#buscaSelecao{
-  background:#fff!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:999px!important;
-}
-
-/* Cards das seleções recebidas */
-#listaSelecoes>div{
-  background:#fff!important;
-  border:1px solid var(--mp-line)!important;
-  border-radius:18px!important;
-  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
-}
-
-#listaSelecoes [style*="color:#806f66"],
-#listaSelecoes [style*="color: #806f66"]{
-  color:var(--mp-muted)!important;
-}
-
-.btnFinalizarSelecao{
-  background:var(--mp-success)!important;
-}
-
-.btnCancelarSelecao{
-  background:var(--mp-danger)!important;
-}
-
-#btnCancelarProduto{
-  background:#8b746a!important;
-}
-
-#btnSair{
-  background:transparent!important;
-  color:var(--mp-coffee)!important;
-  border:1px solid #bfa79c!important;
-}
-
-#btnSair:hover{
-  background:var(--mp-coffee)!important;
-  color:#fff!important;
-}
-
-@media(max-width:760px){
-  body{
-    padding:12px!important;
-  }
-
-  .login{
-    margin:4vh auto 0!important;
-    padding:34px 22px!important;
-    border-radius:22px!important;
-  }
-
-  #painelAdmin>div{
-    padding:20px!important;
-    border-radius:22px!important;
-  }
-
-  #painelAdmin h2{
-    font-size:29px!important;
-  }
-
-  #formNovoProduto{
-    padding:18px!important;
-  }
-
-  #listaProdutos>div{
-    align-items:flex-start!important;
-  }
-
-  #listaProdutos>div>div:last-child{
-    width:100%!important;
-  }
-
-  #listaProdutos button{
-    margin-left:0!important;
-    margin-right:6px!important;
-  }
 }
 </style>
-
 
 </head>
 
@@ -462,11 +249,11 @@ button:disabled{
 
 <main class="login" id="telaLogin">
 
-    <div class="marca">
-      <small>MYRANDA</small>
-      <h1>PRATAS</h1>
-      <p>Painel Administrativo</p>
-    </div>
+  <div class="marca">
+  <small>MYRANDA</small>
+  <h1>PRATAS</h1>
+  <p>Painel Administrativo</p>
+</div>
 
     <form id="loginForm">
 
@@ -494,9 +281,9 @@ button:disabled{
 
     </form>
 
-    <div class="seguranca">
-      🔒 Acesso restrito à administração da Myranda Pratas
-    </div>
+<div class="seguranca">
+  🔒 Acesso restrito à administração da Myranda Pratas
+</div>
 
   </main><section id="painelAdmin" style="display:none; width:100%; max-width:1000px;">
 
@@ -517,15 +304,15 @@ button:disabled{
       flex-wrap:wrap;
     ">
 
-      <div>
-        <small style="letter-spacing:3px;">MYRANDA PRATAS</small>
-        <h2 style="font-family:Georgia,serif; margin-top:6px;">
-          Painel Administrativo
-        </h2>
-        <p style="color:#806f66; margin-top:6px;">
-          Gerencie os produtos do catálogo
-        </p>
-      </div>
+     <div>
+  <small style="letter-spacing:3px;">MYRANDA PRATAS</small>
+  <h2 style="font-family:Georgia,serif; margin-top:6px;">
+    Painel Administrativo
+  </h2>
+  <p style="color:#806f66; margin-top:6px;">
+    Gerencie os produtos do catálogo
+  </p>
+</div>
 
       <button
         id="btnSair"
@@ -582,7 +369,7 @@ button:disabled{
     <input id="produtoPreco" type="number" step="0.01" min="0" placeholder="49.90" required>
 
     <label for="produtoCategoria">Categoria</label>
-    <select id="produtoCategoria" required style="
+ <select id="produtoCategoria" required style="
       width:100%;
       padding:14px;
       border:1px solid #d9cabc;
@@ -592,14 +379,12 @@ button:disabled{
       margin-top:7px;
     ">
       <option value="">Selecione uma categoria</option>
-      <option value="Aneis">Anéis</option>
+      <option value="Anéis">Anéis</option>
       <option value="Brincos">Brincos</option>
       <option value="Colares">Colares</option>
       <option value="Pulseiras">Pulseiras</option>
       <option value="Conjuntos">Conjuntos</option>
-      <option value="Novidades">Novidades</option>
     </select>
-
     <label for="produtoFoto">Foto do produto</label>
 <input
   id="produtoFoto"
@@ -738,7 +523,6 @@ button:disabled{
     type="button"
     class="btnFiltroSelecao"
     data-status="todas"
-    data-ativo="true"
     style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
   >
     Todas
@@ -796,9 +580,10 @@ button:disabled{
 </div>
   </section>
 <script>
-  const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
 
+  const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
+const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
+  
   const loginForm = document.getElementById("loginForm");
   const botaoEntrar = loginForm.querySelector("button");
 
@@ -833,8 +618,8 @@ button:disabled{
         throw new Error(dados.error_description || dados.msg || "E-mail ou senha incorretos.");
       }
 
-      localStorage.setItem("myranda_access_token", dados.access_token);
-      localStorage.setItem("myranda_refresh_token", dados.refresh_token);
+ localStorage.setItem("myranda_access_token", dados.access_token);
+localStorage.setItem("myranda_refresh_token", dados.refresh_token);
 
       mostrarPainel();
 
@@ -851,6 +636,7 @@ const painelAdmin = document.getElementById("painelAdmin");
 async function mostrarPainel() {
   telaLogin.style.display = "none";
   painelAdmin.style.display = "block";
+  document.body.classList.add("admin-logado");
 
   await carregarProdutos();
   await carregarSelecoes();
@@ -861,6 +647,7 @@ document.getElementById("btnSair").addEventListener("click", () => {
   localStorage.removeItem("myranda_refresh_token");
 
   painelAdmin.style.display = "none";
+   document.body.classList.remove("admin-logado");
   telaLogin.style.display = "block";
 
   document.getElementById("senha").value = "";
@@ -875,11 +662,11 @@ let produtoEmEdicaoId = null;
 
   try {
     const resposta = await fetch(
-      `${SUPABASE_URL}/rest/v1/produtos?select=*&order=id.asc`,
+      `${SUPABASE_URL}/rest/v1/produtos?select=*&order=estoque.asc,id.asc`,
       {
         headers: {
           "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${localStorage.getItem("myranda_access_token")}`
+   "Authorization": `Bearer ${localStorage.getItem("myranda_access_token")}`
         }
       }
     );
@@ -889,6 +676,8 @@ let produtoEmEdicaoId = null;
     }
 
     const produtos = await resposta.json();
+    // Menor estoque primeiro; em empate, manter ordem pelo ID.
+    produtos.sort((a, b) => (Number(a.estoque) || 0) - (Number(b.estoque) || 0) || Number(a.id) - Number(b.id));
     produtosCarregados = produtos;
 
     if (produtos.length === 0) {
@@ -1029,6 +818,7 @@ let produtoEmEdicaoId = null;
   }
 }
   
+function escaparIdSelecao(id){return String(id??"").replace(/[^a-zA-Z0-9_-]/g,"");}
 function aplicarFiltroSelecoes(status) {
   const lista = document.getElementById("listaSelecoes");
   const busca = document.getElementById("buscaSelecao").value
@@ -1074,7 +864,7 @@ function aplicarFiltroSelecoes(status) {
     `).join("");
 
     return `
-      <div style="
+      <div data-selecao-id="${escaparIdSelecao(selecao.id)}" style="
         border:1px solid #e6d9ca;
         border-radius:16px;
         padding:16px;
@@ -1185,7 +975,7 @@ function aplicarFiltroSelecoes(status) {
 
   lista.innerHTML = "<p>Carregando seleções...</p>";
 
-  const token = localStorage.getItem("myranda_access_token");
+const token = localStorage.getItem("myranda_access_token");
 
   if (!token) {
     lista.innerHTML = "<p>Sua sessão expirou. Entre novamente.</p>";
@@ -1277,7 +1067,7 @@ lista.innerHTML = selecoesCarregadas.map(selecao => {
       `).join("");
 
       return `
-        <div style="
+        <div data-selecao-id="${escaparIdSelecao(selecao.id)}" style="
           border:1px solid #e6d9ca;
           border-radius:16px;
           padding:16px;
@@ -1490,7 +1280,7 @@ if ((selecaoAtual.status || "aguardando") !== "aguardando") {
     return;
   }
 
-  const token = localStorage.getItem("myranda_access_token");
+const token = localStorage.getItem("myranda_access_token");
 
   if (!token) {
     alert("Sua sessão expirou. Saia do painel e entre novamente.");
@@ -1541,6 +1331,16 @@ const novoEstoque = Number(produto.estoque) - quantidadeItem;
         `Não foi possível baixar o estoque do produto ${item.codigo}.`
       );
     }
+
+    const produtosAtualizados = await respostaEstoque.json();
+
+console.log("Produto atualizado:", produtosAtualizados);
+
+if (produtosAtualizados.length === 0) {
+  throw new Error(
+    `O produto ${item.codigo} não foi encontrado para atualização do estoque.`
+  );
+}
   }
 }
     const resposta = await fetch(
@@ -1595,7 +1395,7 @@ await carregarSelecoes();
   botaoSalvar.textContent = "Salvando...";
 
   try {
-    const token = localStorage.getItem("myranda_access_token");
+const token = localStorage.getItem("myranda_access_token");
 
     if (!token) {
       throw new Error("Sua sessão expirou. Saia do painel e entre novamente.");
@@ -1748,7 +1548,7 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
     return;
   }
 
-  const token = localStorage.getItem("myranda_access_token");
+const token = localStorage.getItem("myranda_access_token");
 
   if (!token) {
     alert("Sua sessão expirou. Saia do painel e entre novamente.");
@@ -1777,8 +1577,14 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
 
     if (!resposta.ok) {
       const erro = await resposta.text();
-      console.error(erro);
+      console.error("Erro ao atualizar estoque:", erro);
       throw new Error("Não foi possível atualizar o estoque.");
+    }
+
+    const produtosAtualizados = await resposta.json();
+
+    if (!Array.isArray(produtosAtualizados) || produtosAtualizados.length === 0) {
+      throw new Error("O produto não foi encontrado para atualização do estoque.");
     }
 
     await carregarProdutos();
@@ -1815,7 +1621,7 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
     return;
   }
 
-  const token = localStorage.getItem("myranda_access_token");
+const token = localStorage.getItem("myranda_access_token");
 
   if (!token) {
     alert("Sua sessão expirou. Saia do painel e entre novamente.");
@@ -1900,6 +1706,91 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   document.getElementById("novoProdutoForm").reset();
 
 });
+
+/* Navegação e apresentação do admin — mantém as operações Supabase existentes */
+(function iniciarNovoAdmin(){
+ const painel=document.getElementById('painelAdmin');
+ const cabecalho=painel.firstElementChild.firstElementChild;
+ const secaoProdutos=cabecalho.nextElementSibling;
+ const form=document.getElementById('formNovoProduto');
+ const lista=document.getElementById('listaProdutos');
+ const areaSelecoes=document.getElementById('areaSelecoes');
+ const resumo=areaSelecoes.firstElementChild;
+ const inicio=document.createElement('div');inicio.id='adminInicio';
+ inicio.innerHTML=`<small class="admin-eyebrow">MYRANDA PRATAS • ADMIN</small><h2 class="admin-title">Sua loja, em detalhes ♡</h2><p class="admin-subtitle">Tudo o que você precisa acompanhar hoje.</p><div class="admin-stats"><div class="admin-stat"><span class="admin-stat-icon">🛍️</span><small>Vendas de hoje</small><strong id="inicioVendas">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">💰</span><small>Faturamento de hoje</small><strong id="inicioFaturamento">R$ 0,00</strong></div><div class="admin-stat"><span class="admin-stat-icon">💎</span><small>Peças em estoque</small><strong id="inicioEstoque">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">📋</span><small>Seleções pendentes</small><strong id="inicioPendentes">0</strong></div></div><div class="admin-quick"><h3>Acesso rápido</h3><div class="admin-quick-actions"><button type="button" id="atalhoNovo">＋ Nova joia</button><button type="button" id="atalhoProdutos">◈ Ver produtos</button></div></div>`;
+ const produtos=document.createElement('div');produtos.id='adminProdutos';
+ produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div>';
+ produtos.append(secaoProdutos,form,lista);
+ const selecoes=document.createElement('div');selecoes.id='adminSelecoes';
+ selecoes.innerHTML='<small class="admin-eyebrow">PEDIDOS</small><h2 class="admin-title">Seleções recebidas</h2><p class="admin-subtitle">Acompanhe os pedidos das clientes.</p>';
+ selecoes.append(areaSelecoes);
+ cabecalho.after(inicio,produtos,selecoes);
+ const nav=document.createElement('nav');nav.className='admin-nav';nav.setAttribute('aria-label','Navegação do painel');
+ nav.innerHTML='<button type="button" data-admin-tab="adminInicio"><span>⌂</span>Início</button><button type="button" data-admin-tab="adminProdutos"><span>◇</span>Produtos</button><button type="button" data-admin-tab="adminSelecoes"><span>▤</span>Seleções</button>';
+ painel.append(nav);
+ function aba(id){[inicio,produtos,selecoes].forEach(el=>el.classList.toggle('admin-active',el.id===id));nav.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.adminTab===id?'page':'false'));window.scrollTo({top:0,behavior:'instant'});}
+ nav.addEventListener('click',e=>{const b=e.target.closest('[data-admin-tab]');if(b)aba(b.dataset.adminTab)});
+ document.getElementById('atalhoProdutos').addEventListener('click',()=>aba('adminProdutos'));
+ document.getElementById('atalhoNovo').addEventListener('click',()=>{aba('adminProdutos');document.getElementById('btnNovoProduto').click();form.scrollIntoView({behavior:'smooth',block:'start'})});
+ document.getElementById('btnNovoProduto').addEventListener('click',()=>{aba('adminProdutos');setTimeout(()=>form.scrollIntoView({behavior:'smooth',block:'start'}),60)});
+ const busca=document.getElementById('buscaProdutos');
+ function filtrar(){const q=busca.value.trim().toLocaleLowerCase('pt-BR');Array.from(lista.children).forEach(card=>{if(card.tagName==='DIV')card.style.display=card.textContent.toLocaleLowerCase('pt-BR').includes(q)?'':'none'})}
+ busca.addEventListener('input',filtrar);
+ const obs=new MutationObserver(()=>{filtrar();atualizarResumo()});obs.observe(lista,{childList:true});
+ const obsSel=new MutationObserver(atualizarResumo);obsSel.observe(document.getElementById('listaSelecoes'),{childList:true});
+ function atualizarResumo(){
+  const prod=typeof produtosCarregados!=='undefined'?produtosCarregados:[];
+  const sels=typeof selecoesCarregadas!=='undefined'?selecoesCarregadas:[];
+  document.getElementById('inicioEstoque').textContent=prod.reduce((n,p)=>n+(Number(p.estoque)||0),0);
+  document.getElementById('inicioPendentes').textContent=sels.filter(s=>(s.status||'aguardando')==='aguardando').length;
+  document.getElementById('inicioVendas').textContent=document.getElementById('vendasHoje').textContent;
+  document.getElementById('inicioFaturamento').textContent=document.getElementById('faturamentoHoje').textContent;
+ }
+ const foto=document.getElementById('produtoFoto');const preview=document.createElement('img');preview.className='admin-photo-preview';preview.alt='Prévia da foto escolhida';foto.after(preview);let urlPreview=null;
+ foto.addEventListener('change',()=>{if(urlPreview)URL.revokeObjectURL(urlPreview);const f=foto.files&&foto.files[0];urlPreview=f?URL.createObjectURL(f):null;preview.style.display=f?'block':'none';if(f)preview.src=urlPreview;else preview.removeAttribute('src')});
+ document.getElementById('btnCancelarProduto').addEventListener('click',()=>{preview.style.display='none'});
+ document.getElementById('novoProdutoForm').addEventListener('reset',()=>{preview.style.display='none'});
+ document.getElementById('listaProdutos').addEventListener('click',e=>{if(e.target.closest('.btnEditarProduto')){aba('adminProdutos');setTimeout(()=>form.scrollIntoView({behavior:'smooth',block:'start'}),80)}});
+ document.getElementById('btnSair').addEventListener('click',()=>aba('adminInicio'));
+ aba('adminInicio');
+})();
+
+
+/* Relatório detalhado ao tocar em uma seleção */
+(function configurarRelatorioSelecoes(){
+ const lista=document.getElementById('listaSelecoes');
+ const escapar=(valor)=>String(valor??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const dinheiro=(n)=>Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+ let overlay=null;
+ function fechar(){if(overlay){overlay.remove();overlay=null;document.body.classList.remove('mimo-modal-open')}}
+ function abrir(selecao){
+  fechar();
+  const itens=Array.isArray(selecao.itens)?selecao.itens:[];
+  const produtos=typeof produtosCarregados!=='undefined'?produtosCarregados:[];
+  const data=selecao.created_at?new Date(selecao.created_at).toLocaleString('pt-BR'):'Data não informada';
+  const status=selecao.status||'aguardando';
+  const linhas=itens.map(item=>{
+    const produto=produtos.find(p=>String(p.codigo||'').trim().toUpperCase()===String(item.codigo||'').trim().toUpperCase());
+    const foto=produto?.imagem_url||'';
+    const imagem=foto&&/^https:\/\//i.test(foto)?`<img src="${escapar(foto)}" alt="${escapar(item.nome||'Joia')}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'mimo-report-noimage',textContent:'Foto indisponível'}))">`:'<div class="mimo-report-noimage">Sem foto</div>';
+    const quantidade=Number(item.quantidade)||1;
+    return `<div class="mimo-report-item">${imagem}<div class="mimo-report-item-info"><strong>${escapar(item.nome||produto?.nome||'Produto')}</strong><small>${escapar(item.codigo||'')} • ${quantidade} ${quantidade===1?'unidade':'unidades'}</small><b>${dinheiro(item.preco)} / un.</b></div></div>`;
+  }).join('');
+  overlay=document.createElement('div');overlay.className='mimo-report-overlay';
+  overlay.innerHTML=`<section class="mimo-report" role="dialog" aria-modal="true" aria-label="Relatório da seleção ${escapar(selecao.codigo)}"><div class="mimo-report-head"><div><span class="mimo-report-kicker">RELATÓRIO DA SELEÇÃO</span><h2>${escapar(selecao.codigo)}</h2><div class="mimo-report-date">${escapar(data)}</div></div><button type="button" class="mimo-report-close" aria-label="Fechar relatório">×</button></div><span class="mimo-report-status">${escapar(status.toUpperCase())}</span><div>${linhas||'<p>Esta seleção não contém itens.</p>'}</div><div class="mimo-report-total"><span>${Number(selecao.quantidade)||itens.length} peças • Total</span><strong>${dinheiro(selecao.total)}</strong></div></section>`;
+  overlay.addEventListener('click',e=>{if(e.target===overlay||e.target.closest('.mimo-report-close'))fechar()});
+  document.body.appendChild(overlay);document.body.classList.add('mimo-modal-open');
+  overlay.querySelector('.mimo-report-close').focus();
+ }
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')fechar()});
+ lista.addEventListener('click',e=>{
+  if(e.target.closest('button,a,input,select'))return;
+  const cartao=e.target.closest('[data-selecao-id]');if(!cartao)return;
+  const selecao=selecoesCarregadas.find(s=>String(s.id)===cartao.dataset.selecaoId);
+  if(selecao)abrir(selecao);
+ });
+})();
+
 </script>
 </body>
 </html>
