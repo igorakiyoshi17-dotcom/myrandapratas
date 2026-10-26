@@ -321,7 +321,7 @@ body.admin-logado{background:#f8f1ec!important}
 
 
 <style>
-/* MYRANDA ADMIN — MOBILE REFINEMENT */
+/* MYRANDA ADMIN — MOBILE REFINEMENT MERGED */
 @media (max-width: 600px){
 
   body.admin-logado{
@@ -332,7 +332,6 @@ body.admin-logado{background:#f8f1ec!important}
     padding:12px 12px 96px!important;
   }
 
-  /* Cabeçalho mais compacto */
   #painelAdmin>div:first-child>div:first-child{
     padding:16px!important;
     margin-bottom:18px!important;
@@ -355,7 +354,6 @@ body.admin-logado{background:#f8f1ec!important}
     font-size:12px!important;
   }
 
-  /* Home */
   .admin-title{
     font-size:32px!important;
     line-height:1.02!important;
@@ -385,7 +383,6 @@ body.admin-logado{background:#f8f1ec!important}
     font-size:23px!important;
   }
 
-  /* Estoque baixo ocupa a linha inteira */
   .admin-stat.alerta{
     grid-column:1 / -1!important;
     min-height:auto!important;
@@ -395,7 +392,6 @@ body.admin-logado{background:#f8f1ec!important}
     margin-top:5px!important;
   }
 
-  /* Acesso rápido mais enxuto */
   .admin-quick{
     padding:16px!important;
     border-radius:18px!important;
@@ -420,7 +416,6 @@ body.admin-logado{background:#f8f1ec!important}
     font-size:11px!important;
   }
 
-  /* Produtos */
   #adminProdutos .admin-title,
   #adminSelecoes .admin-title{
     font-size:34px!important;
@@ -455,7 +450,6 @@ body.admin-logado{background:#f8f1ec!important}
     padding:11px 12px!important;
   }
 
-  /* Seleções */
   #adminSelecoes > h2,
   #adminSelecoes > p{
     display:none!important;
@@ -494,7 +488,6 @@ body.admin-logado{background:#f8f1ec!important}
     border-radius:10px!important;
   }
 
-  /* Barra inferior um pouco menor */
   .admin-nav{
     padding-top:6px!important;
   }
@@ -2038,8 +2031,13 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   const data=selecao.created_at?new Date(selecao.created_at).toLocaleString('pt-BR'):'Data não informada';
   const status=selecao.status||'aguardando';
   const linhas=itens.map(item=>{
-    const produto=produtos.find(p=>String(p.codigo||'').trim().toUpperCase()===String(item.codigo||'').trim().toUpperCase());
-    const foto=produto?.imagem_url||'';
+    const normalizar=(v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const codigoItem=normalizar(item.codigo);
+    const nomeItem=normalizar(item.nome);
+    const produto=
+      produtos.find(p=>normalizar(p.codigo)===codigoItem) ||
+      produtos.find(p=>normalizar(p.nome)===nomeItem);
+    const foto=item.imagem_url || produto?.imagem_url || '';
     const imagem=foto&&/^https:\/\//i.test(foto)?`<img src="${escapar(foto)}" alt="${escapar(item.nome||'Joia')}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'mimo-report-noimage',textContent:'Foto indisponível'}))">`:'<div class="mimo-report-noimage">Sem foto</div>';
     const quantidade=Number(item.quantidade)||1;
     return `<div class="mimo-report-item">${imagem}<div class="mimo-report-item-info"><strong>${escapar(item.nome||produto?.nome||'Produto')}</strong><small>${escapar(item.codigo||'')} • ${quantidade} ${quantidade===1?'unidade':'unidades'}</small><b>${dinheiro(item.preco)} / un.</b></div></div>`;
@@ -2122,11 +2120,17 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
       galeria.className='admin-selection-gallery';
 
       itens.slice(0,3).forEach(item=>{
-        const produto=produtoPorCodigo(item.codigo);
-        if(produto?.imagem_url){
+        const normalizarNome=(v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+        const produto=
+          produtoPorCodigo(item.codigo) ||
+          (typeof produtosCarregados!=='undefined'
+            ? produtosCarregados.find(p=>normalizarNome(p.nome)===normalizarNome(item.nome))
+            : null);
+        const fotoItem=item.imagem_url || produto?.imagem_url || null;
+        if(fotoItem){
           const img=document.createElement('img');
           img.className='admin-selection-thumb';
-          img.src=produto.imagem_url;
+          img.src=fotoItem;
           img.alt=item.nome||produto.nome||'Joia';
           img.loading='lazy';
           img.onerror=()=>img.replaceWith(Object.assign(document.createElement('div'),{
