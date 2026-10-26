@@ -1662,3 +1662,17 @@ body:has(.hero-myranda) {
     font-size: 18px !important;
   }
 }
+
+
+/* FOTO REAL DA JOIA NA MINHA SELEÇÃO */
+.selected-thumb {
+  overflow: hidden !important;
+}
+
+.selected-product-photo {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}
