@@ -319,6 +319,198 @@ body.admin-logado{background:#f8f1ec!important}
 }
 </style>
 
+
+<style>
+/* MYRANDA ADMIN — MOBILE REFINEMENT */
+@media (max-width: 600px){
+
+  body.admin-logado{
+    padding:0!important;
+  }
+
+  #painelAdmin{
+    padding:12px 12px 96px!important;
+  }
+
+  /* Cabeçalho mais compacto */
+  #painelAdmin>div:first-child>div:first-child{
+    padding:16px!important;
+    margin-bottom:18px!important;
+    border-radius:18px!important;
+  }
+
+  #painelAdmin>div:first-child>div:first-child h2{
+    font-size:30px!important;
+    line-height:1!important;
+    margin-top:4px!important;
+  }
+
+  #painelAdmin>div:first-child>div:first-child p{
+    font-size:13px!important;
+    margin-top:7px!important;
+  }
+
+  #btnSair{
+    padding:9px 16px!important;
+    font-size:12px!important;
+  }
+
+  /* Home */
+  .admin-title{
+    font-size:32px!important;
+    line-height:1.02!important;
+  }
+
+  .admin-subtitle{
+    font-size:13px!important;
+    margin-bottom:15px!important;
+  }
+
+  .admin-stats{
+    gap:9px!important;
+  }
+
+  .admin-stat{
+    border-radius:16px!important;
+    padding:14px 12px!important;
+    min-height:125px!important;
+  }
+
+  .admin-stat .admin-stat-icon{
+    font-size:19px!important;
+    margin-bottom:9px!important;
+  }
+
+  .admin-stat strong{
+    font-size:23px!important;
+  }
+
+  /* Estoque baixo ocupa a linha inteira */
+  .admin-stat.alerta{
+    grid-column:1 / -1!important;
+    min-height:auto!important;
+  }
+
+  .admin-stat.alerta strong{
+    margin-top:5px!important;
+  }
+
+  /* Acesso rápido mais enxuto */
+  .admin-quick{
+    padding:16px!important;
+    border-radius:18px!important;
+  }
+
+  .admin-quick h3{
+    font-size:18px!important;
+  }
+
+  .admin-quick-actions{
+    gap:8px!important;
+  }
+
+  .admin-quick-actions button{
+    min-height:46px!important;
+    padding:11px 8px!important;
+    font-size:13px!important;
+  }
+
+  .admin-tip{
+    padding:12px 14px!important;
+    font-size:11px!important;
+  }
+
+  /* Produtos */
+  #adminProdutos .admin-title,
+  #adminSelecoes .admin-title{
+    font-size:34px!important;
+  }
+
+  .admin-product-tools{
+    gap:8px!important;
+  }
+
+  #btnNovoProduto{
+    padding:11px 15px!important;
+    font-size:12px!important;
+  }
+
+  #formNovoProduto{
+    border-radius:18px!important;
+    padding:16px!important;
+  }
+
+  #formNovoProduto h3{
+    font-size:22px!important;
+  }
+
+  #formNovoProduto label{
+    margin-top:14px!important;
+  }
+
+  #formNovoProduto input,
+  #formNovoProduto select{
+    min-height:44px!important;
+    font-size:15px!important;
+    padding:11px 12px!important;
+  }
+
+  /* Seleções */
+  #adminSelecoes > h2,
+  #adminSelecoes > p{
+    display:none!important;
+  }
+
+  #adminSelecoes #areaSelecoes > h2,
+  #adminSelecoes #areaSelecoes > p{
+    display:none!important;
+  }
+
+  #filtrosSelecoes{
+    margin-top:6px!important;
+    gap:7px!important;
+  }
+
+  #filtrosSelecoes button{
+    min-height:38px!important;
+    padding:8px 11px!important;
+    font-size:11px!important;
+  }
+
+  #buscaSelecao{
+    min-height:46px!important;
+    font-size:15px!important;
+  }
+
+  #listaSelecoes>div{
+    padding:14px!important;
+    border-radius:17px!important;
+  }
+
+  .admin-selection-thumb,
+  .admin-selection-thumb-empty{
+    width:48px!important;
+    height:48px!important;
+    border-radius:10px!important;
+  }
+
+  /* Barra inferior um pouco menor */
+  .admin-nav{
+    padding-top:6px!important;
+  }
+
+  .admin-nav button{
+    min-height:46px!important;
+    font-size:10px!important;
+    gap:2px!important;
+  }
+
+  .admin-nav button span{
+    font-size:18px!important;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -1846,13 +2038,8 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   const data=selecao.created_at?new Date(selecao.created_at).toLocaleString('pt-BR'):'Data não informada';
   const status=selecao.status||'aguardando';
   const linhas=itens.map(item=>{
-    const normalizar=(v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    const codigoItem=normalizar(item.codigo);
-    const nomeItem=normalizar(item.nome);
-    const produto=
-      produtos.find(p=>normalizar(p.codigo)===codigoItem) ||
-      produtos.find(p=>normalizar(p.nome)===nomeItem);
-    const foto=item.imagem_url || produto?.imagem_url || '';
+    const produto=produtos.find(p=>String(p.codigo||'').trim().toUpperCase()===String(item.codigo||'').trim().toUpperCase());
+    const foto=produto?.imagem_url||'';
     const imagem=foto&&/^https:\/\//i.test(foto)?`<img src="${escapar(foto)}" alt="${escapar(item.nome||'Joia')}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'mimo-report-noimage',textContent:'Foto indisponível'}))">`:'<div class="mimo-report-noimage">Sem foto</div>';
     const quantidade=Number(item.quantidade)||1;
     return `<div class="mimo-report-item">${imagem}<div class="mimo-report-item-info"><strong>${escapar(item.nome||produto?.nome||'Produto')}</strong><small>${escapar(item.codigo||'')} • ${quantidade} ${quantidade===1?'unidade':'unidades'}</small><b>${dinheiro(item.preco)} / un.</b></div></div>`;
@@ -1935,17 +2122,11 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
       galeria.className='admin-selection-gallery';
 
       itens.slice(0,3).forEach(item=>{
-        const normalizarNome=(v)=>String(v||'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-        const produto=
-          produtoPorCodigo(item.codigo) ||
-          (typeof produtosCarregados!=='undefined'
-            ? produtosCarregados.find(p=>normalizarNome(p.nome)===normalizarNome(item.nome))
-            : null);
-        const fotoItem=item.imagem_url || produto?.imagem_url || null;
-        if(fotoItem){
+        const produto=produtoPorCodigo(item.codigo);
+        if(produto?.imagem_url){
           const img=document.createElement('img');
           img.className='admin-selection-thumb';
-          img.src=fotoItem;
+          img.src=produto.imagem_url;
           img.alt=item.nome||produto.nome||'Joia';
           img.loading='lazy';
           img.onerror=()=>img.replaceWith(Object.assign(document.createElement('div'),{

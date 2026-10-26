@@ -1,16 +1,12 @@
-MYRANDA PRATAS — MOBILE POLISH
+MYRANDA PRATAS — ADMIN MOBILE REFINADO
 
-Substitua somente style.css no GitHub.
+Substitua somente admin.html.
 
-Melhorias:
-- Hero mais compacto no celular.
-- Categorias em rolagem horizontal.
-- Filtros com rolagem horizontal.
-- Produtos em 2 colunas mais limpas.
-- Imagens maiores e cards mais legíveis.
-- Página individual da joia mais confortável.
-- Produtos relacionados melhor dimensionados.
-- Barra inferior ajustada para telas pequenas.
-- Rodapé e modais refinados.
-
-Nenhuma lógica JavaScript foi alterada.
+Ajustes:
+- Cabeçalho mais compacto no celular.
+- Removido título duplicado de Seleções.
+- Card de estoque baixo ocupa a largura inteira.
+- Cards e atalhos mais compactos.
+- Formulário de produto reduzido no mobile.
+- Filtros, busca e barra inferior refinados.
+- Nenhuma função do Supabase foi alterada.
