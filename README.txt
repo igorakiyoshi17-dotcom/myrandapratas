@@ -1,13 +1,19 @@
-MYRANDA PRATAS — PÁGINA DA JOIA NO CELULAR
+MYRANDA PRATAS — SELEÇÃO + FAVORITOS POLISH
 
 Substitua somente style.css.
 
-Ajustes:
-- Foto maior e mais elegante.
-- Nome e preço com melhor hierarquia.
-- Status de disponibilidade em pill discreta.
-- Compartilhar e favoritar mais delicados.
-- Adicionar à seleção mais destacado.
-- Voltar ao catálogo menor.
-- Produtos relacionados mais organizados.
-- Nenhuma lógica foi alterada.
+Alterações apenas visuais:
+- Minha seleção mais elegante.
+- Favoritos no mesmo padrão visual.
+- Fotos e cards refinados.
+- Controle de quantidade mais delicado.
+- Total com melhor hierarquia.
+- Modais em formato bottom-sheet no celular.
+- Estados vazios mais bonitos.
+- Tela de sucesso refinada.
+
+IMPORTANTE:
+- WhatsApp NÃO foi alterado.
+- script.js NÃO foi alterado.
+- Supabase NÃO foi alterado.
+- Nenhuma lógica de compra foi alterada.

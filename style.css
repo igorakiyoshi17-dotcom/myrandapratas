@@ -2171,3 +2171,280 @@ body:has(.hero-myranda) {
     height: 160px !important;
   }
 }
+
+
+/* =========================================================
+   MYRANDA PRATAS — SELECTION & FAVORITES POLISH
+   Apenas visual. Não altera WhatsApp, Supabase ou lógica.
+   ========================================================= */
+
+/* Modal base */
+.selection-modal,
+.favorites-modal,
+.success-modal {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.selection-modal-content,
+.favorites-modal-content,
+.success-modal-content,
+.modal-card {
+  background: #fffaf7 !important;
+  border: 1px solid #eadbd3 !important;
+  box-shadow: 0 24px 70px rgba(45, 23, 18, .18) !important;
+}
+
+/* Títulos */
+.selection-modal h2,
+.favorites-modal h2,
+.success-modal h2,
+.modal-card h2 {
+  font-family: "Cormorant Garamond", Georgia, serif !important;
+  color: #2d1712 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+}
+
+/* Lista da seleção */
+.selection-list,
+.favorites-list {
+  display: grid;
+  gap: 10px;
+}
+
+.selected-item,
+.favorite-item {
+  background: #fff !important;
+  border: 1px solid #eadbd3 !important;
+  border-radius: 16px !important;
+  padding: 11px !important;
+  box-shadow: 0 5px 16px rgba(74, 43, 34, .04) !important;
+}
+
+.selected-thumb,
+.favorite-thumb {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background: #f4ebe6 !important;
+  border: 1px solid #eadbd3 !important;
+}
+
+.selected-product-photo,
+.favorite-thumb img,
+.selected-thumb img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Nome / código / preço */
+.selected-item strong,
+.favorite-item strong {
+  color: #2d1712 !important;
+}
+
+.selected-item small,
+.favorite-item small,
+.selected-item .code,
+.favorite-item .code {
+  color: #9a7d70 !important;
+}
+
+.selected-item .price,
+.favorite-item .price {
+  color: #4a2b22 !important;
+  font-weight: 700 !important;
+}
+
+/* Quantidade */
+.qty-controls,
+.quantity-controls {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 3px !important;
+  background: #f3e7e1 !important;
+  border-radius: 999px !important;
+}
+
+.qty-controls button,
+.quantity-controls button {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: #fffaf7 !important;
+  color: #4a2b22 !important;
+  border: 1px solid #dfccc3 !important;
+  box-shadow: none !important;
+}
+
+.qty-controls span,
+.quantity-controls span {
+  min-width: 24px !important;
+  text-align: center !important;
+  color: #2d1712 !important;
+  font-weight: 700 !important;
+}
+
+/* Remover item */
+.remove-item,
+.remove-favorite,
+.btn-remove {
+  background: transparent !important;
+  color: #9a5d59 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Resumo / total */
+.selection-summary,
+.selection-total,
+.modal-total {
+  margin-top: 14px !important;
+  padding: 16px !important;
+  border-radius: 16px !important;
+  background: #f3e7e1 !important;
+  border: 1px solid #eadbd3 !important;
+}
+
+.selection-summary strong,
+.selection-total strong,
+.modal-total strong {
+  color: #2d1712 !important;
+  font-size: 20px !important;
+}
+
+/* Botão principal da seleção */
+#confirmSelection,
+.selection-modal .primary-btn,
+.favorites-modal .primary-btn {
+  border-radius: 14px !important;
+  background: #4a2b22 !important;
+  color: #fffaf7 !important;
+  min-height: 48px !important;
+  box-shadow: 0 8px 20px rgba(74,43,34,.13) !important;
+  font-weight: 800 !important;
+}
+
+/* Botões secundários */
+.selection-modal .secondary-btn,
+.favorites-modal .secondary-btn,
+.success-modal .secondary-btn {
+  background: #fffaf7 !important;
+  color: #4a2b22 !important;
+  border: 1px solid #d8c5bc !important;
+  border-radius: 14px !important;
+}
+
+/* Estado vazio */
+.empty-state,
+.empty-favorites,
+.empty-selection,
+.no-products {
+  text-align: center !important;
+  padding: 34px 18px !important;
+  color: #88736a !important;
+  background: #fffaf7 !important;
+  border: 1px dashed #d9c5bc !important;
+  border-radius: 18px !important;
+}
+
+.empty-state::before,
+.empty-favorites::before,
+.empty-selection::before {
+  content: "♡";
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 34px;
+  line-height: 1;
+  color: #b49386;
+  margin-bottom: 10px;
+}
+
+/* Tela de sucesso */
+.success-modal-content,
+.success-card {
+  text-align: center !important;
+}
+
+.success-modal .success-icon,
+.success-icon {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  margin: 0 auto 14px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #e8f0e9 !important;
+  color: #4f7757 !important;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+  .selection-modal,
+  .favorites-modal,
+  .success-modal {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .selection-modal-content,
+  .favorites-modal-content,
+  .success-modal-content,
+  .modal-card {
+    width: 100% !important;
+    max-width: none !important;
+    max-height: 88dvh !important;
+    overflow-y: auto !important;
+    border-radius: 24px 24px 0 0 !important;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .selection-modal h2,
+  .favorites-modal h2,
+  .success-modal h2 {
+    font-size: 30px !important;
+    line-height: 1 !important;
+  }
+
+  .selected-item,
+  .favorite-item {
+    border-radius: 14px !important;
+    padding: 10px !important;
+  }
+
+  .selected-thumb,
+  .favorite-thumb {
+    width: 68px !important;
+    height: 68px !important;
+    min-width: 68px !important;
+  }
+
+  .selected-item strong,
+  .favorite-item strong {
+    font-size: 14px !important;
+  }
+
+  .selection-summary,
+  .selection-total,
+  .modal-total {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    box-shadow: 0 -5px 18px rgba(74,43,34,.05);
+  }
+
+  #confirmSelection,
+  .selection-modal .primary-btn,
+  .favorites-modal .primary-btn {
+    min-height: 50px !important;
+    font-size: 11px !important;
+    letter-spacing: .05em !important;
+  }
+}
