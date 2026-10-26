@@ -1,11 +1,13 @@
-MYRANDA PRATAS — ADMIN MOBILE + FOTOS MERGED
+MYRANDA PRATAS — CARDS PREMIUM MOBILE
 
-Inclui:
-- Correção das fotos nas seleções
-- Fallback por imagem salva, código e nome
-- Refinamento mobile
-- Estoque baixo destacado
-- Cards, filtros e barra inferior refinados
-- Nenhuma lógica funcional removida
+Substitua somente style.css.
 
-Substitua somente admin.html.
+Ajustes:
+- Cards mais premium e delicados.
+- Fotos maiores.
+- Nome da joia com tipografia serifada.
+- Preço e código melhor hierarquizados.
+- Coração menor e mais elegante.
+- Feedback de toque no celular.
+- Bordas e sombras mais suaves.
+- Nenhuma lógica foi alterada.
