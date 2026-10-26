@@ -16,6 +16,32 @@ let products = [
 const SUPABASE_URL = "https://rrzsymawplobtgiefqed.supabase.co";
 const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
 
+
+function normalizeCategory(value) {
+  const raw = String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+  const aliases = {
+    "anel": "Anéis",
+    "aneis": "Anéis",
+    "brinco": "Brincos",
+    "brincos": "Brincos",
+    "colar": "Colares",
+    "colares": "Colares",
+    "pulseira": "Pulseiras",
+    "pulseiras": "Pulseiras",
+    "conjunto": "Conjuntos",
+    "conjuntos": "Conjuntos",
+    "novidade": "Novidades",
+    "novidades": "Novidades"
+  };
+
+  return aliases[raw] || String(value || "").trim();
+}
+
 async function carregarProdutosSupabase() {
   try {
     const resposta = await fetch(
@@ -39,7 +65,7 @@ products = dados
   .map(produto => ({        id: produto.codigo,
         dbId: Number(produto.id),
         name: produto.nome,
-        category: produto.categoria,
+        category: normalizeCategory(produto.categoria),
         price: Number(produto.preco),
                     stock: Number(produto.estoque),
         available: produto.disponivel && produto.estoque > 0,

@@ -30,3 +30,10 @@ CORREÇÃO 26/10/2026:
 - Corrigido botão 'Ver todas'.
 - Neutralizados estilos antigos conflitantes das categorias.
 - script.js validado com node --check.
+
+
+ATUALIZAÇÃO DE CATEGORIAS:
+- Categorias agora aceitam singular/plural e variações com/sem acento.
+- Ex.: anel, aneis, Anel e Anéis passam a abrir em "Anéis".
+- Ajustado botão Voltar ao catálogo.
+- Ajustado tamanho dos produtos relacionados.
