@@ -12,6 +12,11 @@
   <meta name="apple-mobile-web-app-title" content="Myranda Admin">
 <link rel="apple-touch-icon" href="/icon-512.png">
 
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
   
     * {
@@ -113,31 +118,343 @@
     }
   </style>
 
+
 <style>
-/* MYRANDA PRATAS — painel alinhado à identidade Scarlet / Chrome */
-:root{--mp-red:#D7193F;--mp-ink:#171719;--mp-paper:#F3F2EF;--mp-line:#D9D9DE}
-body{background:var(--mp-paper)!important;color:#202024!important;font-family:'Manrope',Arial,sans-serif!important;align-items:flex-start!important}
-body:before{content:'MYRANDA / 925';position:fixed;right:24px;bottom:12px;font-size:10px;font-weight:800;letter-spacing:.18em;color:#171719;opacity:.35;pointer-events:none}
-.login,#painelAdmin>div{background:#fff!important;border:1px solid var(--mp-line)!important;border-radius:3px!important;box-shadow:8px 8px 0 var(--mp-ink)!important}
-.login{border-top:6px solid var(--mp-red)!important}
-.marca small{font-weight:800!important;letter-spacing:.28em!important;color:var(--mp-red)!important}
-.marca h1{font-family:'Space Grotesk',Arial,sans-serif!important;font-weight:700!important;letter-spacing:-.07em!important;color:var(--mp-ink)!important}
-.marca p{color:#6C6C73!important}
-label{color:#29292f!important;font-weight:800!important}
-input,select{border:1px solid #d0d0d5!important;border-radius:2px!important;background:#fafafa!important;color:#171719!important}
-input:focus,select:focus{border-color:var(--mp-red)!important;box-shadow:0 0 0 3px #D7193F18!important}
-button{border-radius:2px!important;background:var(--mp-red)!important;color:#fff!important;box-shadow:none!important;font-family:'Manrope',Arial,sans-serif!important;letter-spacing:.02em!important}
-button:hover{background:var(--mp-ink)!important}
-#formNovoProduto{background:#f3f2ef!important;border:1px solid var(--mp-line)!important;border-radius:3px!important}
-#listaProdutos>div{border-radius:2px!important;border-color:var(--mp-line)!important;background:#fff!important}
-#areaSelecoes{border-top-color:var(--mp-line)!important}
-#areaSelecoes [style*="background:#fffaf5"],#areaSelecoes [style*="background: #fffaf5"]{background:#f3f2ef!important;border-radius:2px!important;border-color:var(--mp-line)!important}
-#areaSelecoes [style*="border-radius:16px"]{border-radius:2px!important}
-#areaSelecoes [style*="border-radius:12px"]{border-radius:2px!important}
-#painelAdmin h2,#painelAdmin h3{font-family:'Space Grotesk',Arial,sans-serif!important;letter-spacing:-.045em!important;color:#171719!important}
-#painelAdmin p[style*="color:#806f66"],.seguranca{color:#6C6C73!important}
-@media(max-width:600px){body{padding:14px!important}.login{padding:32px 22px!important}#painelAdmin>div{padding:18px!important}}
+/* MYRANDA PRATAS — ADMIN no estilo delicado da Mimo, com identidade Myranda */
+:root{
+  --mp-coffee:#4a2b22;
+  --mp-coffee-dark:#2d1712;
+  --mp-wine:#5d3028;
+  --mp-cream:#f8f1ec;
+  --mp-cream-2:#efe2db;
+  --mp-paper:#fffaf7;
+  --mp-text:#3b2924;
+  --mp-muted:#88736a;
+  --mp-line:#e5d5cd;
+  --mp-success:#4f7757;
+  --mp-danger:#8b4545;
+  --mp-warning:#916d38;
+  --mp-shadow:0 18px 50px rgba(60,32,24,.10);
+}
+
+html{
+  background:var(--mp-cream);
+}
+
+body{
+  background:
+    radial-gradient(circle at 12% 0%, rgba(93,48,40,.08), transparent 34%),
+    linear-gradient(180deg,#fbf6f2 0%,var(--mp-cream) 100%) !important;
+  color:var(--mp-text)!important;
+  font-family:"DM Sans",Arial,sans-serif!important;
+  align-items:flex-start!important;
+  padding:28px!important;
+}
+
+body:before{
+  content:"MYRANDA PRATAS · 925";
+  position:fixed;
+  right:24px;
+  bottom:14px;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.22em;
+  color:var(--mp-coffee);
+  opacity:.28;
+  pointer-events:none;
+}
+
+.login{
+  margin:8vh auto 0!important;
+  max-width:440px!important;
+  background:rgba(255,250,247,.96)!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:26px!important;
+  box-shadow:var(--mp-shadow)!important;
+  padding:44px 34px!important;
+}
+
+.marca{
+  margin-bottom:32px!important;
+}
+
+.marca small{
+  color:var(--mp-wine)!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  letter-spacing:.34em!important;
+}
+
+.marca h1{
+  font-family:"Cormorant Garamond",serif!important;
+  font-size:46px!important;
+  font-weight:600!important;
+  letter-spacing:.03em!important;
+  color:var(--mp-coffee-dark)!important;
+  line-height:.95!important;
+}
+
+.marca p{
+  color:var(--mp-muted)!important;
+  font-size:13px!important;
+}
+
+label{
+  color:var(--mp-text)!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+
+input,
+select{
+  border:1px solid var(--mp-line)!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  color:var(--mp-text)!important;
+  font-family:"DM Sans",sans-serif!important;
+  box-shadow:none!important;
+}
+
+input:focus,
+select:focus{
+  border-color:#b99a8d!important;
+  box-shadow:0 0 0 3px rgba(93,48,40,.08)!important;
+}
+
+button{
+  border-radius:999px!important;
+  background:var(--mp-coffee)!important;
+  color:#fff9f5!important;
+  box-shadow:none!important;
+  font-family:"DM Sans",Arial,sans-serif!important;
+  letter-spacing:.01em!important;
+  transition:.2s ease!important;
+}
+
+button:hover{
+  background:var(--mp-coffee-dark)!important;
+  transform:translateY(-1px);
+}
+
+button:disabled{
+  opacity:.55!important;
+  cursor:not-allowed!important;
+  transform:none!important;
+}
+
+.seguranca{
+  color:var(--mp-muted)!important;
+}
+
+#painelAdmin{
+  margin:0 auto!important;
+  width:100%!important;
+  max-width:1180px!important;
+}
+
+#painelAdmin>div{
+  background:rgba(255,250,247,.97)!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:28px!important;
+  box-shadow:var(--mp-shadow)!important;
+  padding:34px!important;
+}
+
+#painelAdmin small{
+  color:var(--mp-wine)!important;
+  font-weight:700!important;
+}
+
+#painelAdmin h2,
+#painelAdmin h3{
+  font-family:"Cormorant Garamond",serif!important;
+  color:var(--mp-coffee-dark)!important;
+  letter-spacing:0!important;
+}
+
+#painelAdmin h2{
+  font-size:34px!important;
+  font-weight:600!important;
+}
+
+#painelAdmin h3{
+  font-size:25px!important;
+  font-weight:600!important;
+}
+
+#painelAdmin p[style*="color:#806f66"],
+#painelAdmin p[style*="color: #806f66"]{
+  color:var(--mp-muted)!important;
+}
+
+#formNovoProduto{
+  background:#f8f0eb!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:20px!important;
+  padding:24px!important;
+}
+
+#formNovoProduto select{
+  margin-top:7px!important;
+}
+
+#listaProdutos>div{
+  background:#fff!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:18px!important;
+  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
+  padding:16px!important;
+}
+
+#listaProdutos img{
+  border-radius:14px!important;
+  border:1px solid var(--mp-line)!important;
+}
+
+#listaProdutos strong{
+  color:var(--mp-coffee-dark)!important;
+}
+
+#listaProdutos [style*="color:#806f66"],
+#listaProdutos [style*="color: #806f66"]{
+  color:var(--mp-muted)!important;
+}
+
+/* Produtos: botões de ação */
+.btnEditarProduto{
+  background:#7b5547!important;
+}
+
+.btnDiminuirEstoque,
+.btnAumentarEstoque{
+  min-width:44px!important;
+  background:#eadbd4!important;
+  color:var(--mp-coffee-dark)!important;
+}
+
+.btnExcluirProduto{
+  background:var(--mp-danger)!important;
+}
+
+#areaSelecoes{
+  border-top:1px solid var(--mp-line)!important;
+}
+
+#areaSelecoes>div:first-child > div{
+  gap:14px!important;
+}
+
+/* Cards do resumo */
+#areaSelecoes [style*="background:#fffaf5"],
+#areaSelecoes [style*="background: #fffaf5"]{
+  background:#fff!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:18px!important;
+  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
+}
+
+#vendasHoje,
+#pecasVendidasHoje,
+#faturamentoHoje{
+  color:var(--mp-coffee-dark)!important;
+  font-family:"Cormorant Garamond",serif!important;
+  font-size:30px!important;
+}
+
+/* Filtros de seleções */
+.btnFiltroSelecao{
+  background:#efe2db!important;
+  color:var(--mp-coffee)!important;
+  border:1px solid var(--mp-line)!important;
+}
+
+.btnFiltroSelecao[data-ativo="true"]{
+  background:var(--mp-coffee)!important;
+  color:#fff!important;
+  border-color:var(--mp-coffee)!important;
+}
+
+#buscaSelecao{
+  background:#fff!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:999px!important;
+}
+
+/* Cards das seleções recebidas */
+#listaSelecoes>div{
+  background:#fff!important;
+  border:1px solid var(--mp-line)!important;
+  border-radius:18px!important;
+  box-shadow:0 6px 18px rgba(60,32,24,.04)!important;
+}
+
+#listaSelecoes [style*="color:#806f66"],
+#listaSelecoes [style*="color: #806f66"]{
+  color:var(--mp-muted)!important;
+}
+
+.btnFinalizarSelecao{
+  background:var(--mp-success)!important;
+}
+
+.btnCancelarSelecao{
+  background:var(--mp-danger)!important;
+}
+
+#btnCancelarProduto{
+  background:#8b746a!important;
+}
+
+#btnSair{
+  background:transparent!important;
+  color:var(--mp-coffee)!important;
+  border:1px solid #bfa79c!important;
+}
+
+#btnSair:hover{
+  background:var(--mp-coffee)!important;
+  color:#fff!important;
+}
+
+@media(max-width:760px){
+  body{
+    padding:12px!important;
+  }
+
+  .login{
+    margin:4vh auto 0!important;
+    padding:34px 22px!important;
+    border-radius:22px!important;
+  }
+
+  #painelAdmin>div{
+    padding:20px!important;
+    border-radius:22px!important;
+  }
+
+  #painelAdmin h2{
+    font-size:29px!important;
+  }
+
+  #formNovoProduto{
+    padding:18px!important;
+  }
+
+  #listaProdutos>div{
+    align-items:flex-start!important;
+  }
+
+  #listaProdutos>div>div:last-child{
+    width:100%!important;
+  }
+
+  #listaProdutos button{
+    margin-left:0!important;
+    margin-right:6px!important;
+  }
+}
 </style>
+
 
 </head>
 
@@ -421,6 +738,7 @@ button:hover{background:var(--mp-ink)!important}
     type="button"
     class="btnFiltroSelecao"
     data-status="todas"
+    data-ativo="true"
     style="width:auto; margin:0; padding:8px 12px; font-size:12px;"
   >
     Todas

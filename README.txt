@@ -1,39 +1,26 @@
-MYRANDA PRATAS — pacote com funcionalidades da Mimo integradas
+MYRANDA PRATAS — ADMIN ESTILO MIMO
 
-Arquivos:
-- index.html
-- style.css
-- script.js
-
-Incluído nesta versão:
-- Clique na joia abre página individual.
-- Favoritos funcionais e persistentes no navegador.
-- Tela de favoritos.
-- Zoom da foto.
-- Compartilhar joia por link.
-- Link direto com ?joia=CODIGO.
-- Produtos relacionados na página individual.
-- WhatsApp com resumo detalhado da seleção.
+Substitua apenas o arquivo admin.html no GitHub.
 
 Preservado:
-- Supabase da Myranda.
-- WhatsApp da Myranda.
-- Visual atual da Myranda.
-- Categorias, seleção e estoque já existentes.
+- Supabase da Myranda
+- Login via Supabase Auth
+- Cadastro e edição de produtos
+- Upload de fotos
+- Estoque +1 / -1
+- Exclusão de produtos
+- Seleções recebidas
+- Finalizar/cancelar seleção
+- Baixa automática de estoque
+- Resumo de vendas
+- Filtros e busca
 
-IMPORTANTE:
-A confirmação da seleção ainda depende das permissões da tabela selecoes no Supabase da Myranda.
+Alterado:
+- Removido visual Scarlet / Chrome vermelho
+- Nova identidade marrom/vinho/creme
+- Tipografia Cormorant Garamond + DM Sans
+- Cards, formulários, botões e painel reorganizados visualmente
+- Responsividade melhorada
 
-
-CORREÇÃO 26/10/2026:
-- Corrigido erro de sintaxe no script.js que impedia categorias e produtos de aparecerem.
-- Corrigido botão 'Ver todas'.
-- Neutralizados estilos antigos conflitantes das categorias.
-- script.js validado com node --check.
-
-
-ATUALIZAÇÃO DE CATEGORIAS:
-- Categorias agora aceitam singular/plural e variações com/sem acento.
-- Ex.: anel, aneis, Anel e Anéis passam a abrir em "Anéis".
-- Ajustado botão Voltar ao catálogo.
-- Ajustado tamanho dos produtos relacionados.
+Observação:
+Este arquivo mantém a lógica do admin atual da Myranda; a mudança é visual.
