@@ -1,14 +1,16 @@
-MYRANDA PRATAS — ACABAMENTO DO ADMIN
+MYRANDA PRATAS — FOTOS NAS SELEÇÕES
 
-Mantém toda a lógica já funcional.
+Substitua no GitHub:
+- admin.html
+- script.js
 
-Novidades visuais:
-- Miniaturas das joias diretamente nos cartões das seleções.
-- Relatório detalhado continua abrindo ao tocar na seleção.
-- Produtos com estoque <= 2 ficam destacados.
-- Produto zerado recebe aviso específico.
-- Novo indicador de estoque baixo no painel inicial.
-- Atalho para Seleções no painel inicial.
-- Ajustes extras para celular.
+Correções:
+- Novas seleções passam a salvar imagem_url de cada joia.
+- Relatório do admin tenta foto nesta ordem:
+  1. imagem salva na própria seleção
+  2. produto com mesmo código
+  3. produto com mesmo nome
+- Miniaturas da lista de seleções usam o mesmo fallback.
+- Isso também recupera a foto de muitas seleções antigas mesmo se o código do produto mudou.
 
-Substitua apenas admin.html no GitHub.
+Não altere index.html ou style.css.

@@ -731,7 +731,8 @@ const items = Object.entries(selected)
     codigo: p.id,
     nome: p.name,
     preco: p.price,
-    quantidade: p.quantidade
+    quantidade: p.quantidade,
+    imagem_url: p.image || null
   }));
 
   try {
