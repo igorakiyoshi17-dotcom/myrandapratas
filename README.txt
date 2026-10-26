@@ -23,3 +23,10 @@ Preservado:
 
 IMPORTANTE:
 A confirmação da seleção ainda depende das permissões da tabela selecoes no Supabase da Myranda.
+
+
+CORREÇÃO 26/10/2026:
+- Corrigido erro de sintaxe no script.js que impedia categorias e produtos de aparecerem.
+- Corrigido botão 'Ver todas'.
+- Neutralizados estilos antigos conflitantes das categorias.
+- script.js validado com node --check.

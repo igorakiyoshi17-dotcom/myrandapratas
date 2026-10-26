@@ -1555,3 +1555,51 @@ body:has(.hero-myranda) {
     justify-content: flex-end;
   }
 }
+
+
+/* AJUSTES FINAIS — 26/10/2026 */
+.catalog-heading .text-btn,
+#showAll {
+  background: #4a2b22 !important;
+  color: #fff8f2 !important;
+  border: 1px solid #4a2b22 !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.catalog-heading .text-btn:hover,
+#showAll:hover {
+  background: #3b2119 !important;
+  color: #fff8f2 !important;
+}
+
+.category-card,
+.category-card:nth-child(even) {
+  background: #fffaf7 !important;
+  border: 1px solid #e4d4cd !important;
+  box-shadow: none !important;
+}
+
+.category-card span,
+.category-card:nth-child(even) span {
+  color: #3b2119 !important;
+}
+
+.category-card:hover,
+.category-card.selected,
+.category-card:nth-child(even):hover,
+.category-card:nth-child(even).selected {
+  background: #4a2b22 !important;
+  border-color: #4a2b22 !important;
+}
+
+.category-card:hover span,
+.category-card.selected span,
+.category-card:nth-child(even):hover span,
+.category-card:nth-child(even).selected span {
+  color: #fff8f2 !important;
+}

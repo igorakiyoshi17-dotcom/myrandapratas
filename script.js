@@ -782,9 +782,7 @@ Quantidade: ${p.quantidade}
 Valor unitário: ${money(p.price)}
 Subtotal: ${money(p.price * p.quantidade)}
     `.trim())
-    .join("
-
-");
+    .join("\n\n");
 
   const mensagem = `Olá! Gostaria de finalizar meu pedido na Myranda Pratas.
 
