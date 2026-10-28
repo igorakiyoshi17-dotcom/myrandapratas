@@ -407,19 +407,22 @@ $("#sendWhatsApp").onclick=()=>{
 
   const listaProdutos = items
   .map(p =>
-    `• ${p.quantidade}x ${p.id} — ${p.name} — ${money(p.price)} cada — ${money(p.price * p.quantidade)}`
+    `• ${p.quantidade}x ${p.name} — ${money(p.price)} cada\nSubtotal: ${money(p.price * p.quantidade)}`
   )
-  .join("\n");
+  .join("\n\n");
 
-  const mensagem = `Olá! Quero finalizar minha seleção na Myrandapratas 🤎
+  const mensagem = `Olá! ✨
+
+Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.
 
 Código da seleção: ${code}
 
+Minha seleção:
 ${listaProdutos}
 
 Total: ${money(total)}
 
-Gostaria de finalizar minha compra.`;
+Podemos seguir com a finalização? 🤎`;
 
   const numeroWhatsApp = "5561995970024";
   const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
