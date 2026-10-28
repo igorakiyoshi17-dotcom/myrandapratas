@@ -411,7 +411,7 @@ $("#sendWhatsApp").onclick=()=>{
   )
   .join("\n\n");
 
-  const mensagem = `Olá! ✨
+const mensagem = `Olá! \u2728
 
 Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.
 
@@ -422,8 +422,8 @@ ${listaProdutos}
 
 Total: ${money(total)}
 
-Podemos seguir com a finalização? 🤎`;
-
+Podemos seguir com a finalização? \uD83E\uDD0E`;
+  
   const numeroWhatsApp = "5561995970024";
   const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
 
