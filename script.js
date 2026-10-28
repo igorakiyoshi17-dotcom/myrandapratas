@@ -411,19 +411,21 @@ $("#sendWhatsApp").onclick=()=>{
   )
   .join("\n\n");
 
-const mensagem = `Olá! \u2728
+  const mensagem = [
+    "Olá! \u2728",
+    "",
+    "Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.",
+    "",
+    `Código da seleção: ${code}`,
+    "",
+    "Minha seleção:",
+    listaProdutos,
+    "",
+    `Total: ${money(total)}`,
+    "",
+    "Podemos seguir com a finalização? \uD83E\uDD0E"
+  ].join("\n");
 
-Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.
-
-Código da seleção: ${code}
-
-Minha seleção:
-${listaProdutos}
-
-Total: ${money(total)}
-
-Podemos seguir com a finalização? \uD83E\uDD0E`;
-  
   const numeroWhatsApp = "5561995970024";
   const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
 
