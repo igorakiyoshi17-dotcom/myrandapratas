@@ -412,7 +412,7 @@ $("#sendWhatsApp").onclick=()=>{
   .join("\n\n");
 
   const mensagem = [
-    "Olá! \u2728",
+    "Olá!",
     "",
     "Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.",
     "",
@@ -423,7 +423,7 @@ $("#sendWhatsApp").onclick=()=>{
     "",
     `Total: ${money(total)}`,
     "",
-    "Podemos seguir com a finalização? \uD83E\uDD0E"
+    "Podemos seguir com a finalização?"
   ].join("\n");
 
   const numeroWhatsApp = "5561995970024";
