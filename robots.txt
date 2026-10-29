@@ -1,3 +1,7 @@
+User-agent: Applebot
+Allow: /
+Disallow: /admin.html
+
 User-agent: *
 Allow: /
 Disallow: /admin.html
