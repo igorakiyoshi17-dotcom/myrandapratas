@@ -104,6 +104,34 @@
   }
 </style>
 
+
+<style id="hero-size-tweak">
+  @media (max-width: 600px) {
+    .hero-content h1{
+      font-size: 4.3rem !important;
+      line-height: 0.98 !important;
+      letter-spacing: -0.03em !important;
+      max-width: 320px !important;
+    }
+    .hero-content h1 em{
+      font-size: 0.9em !important;
+    }
+    .hero-copy{
+      max-width: 310px !important;
+    }
+  }
+</style>
+
+
+<style id="hero-second-line-offset">
+  @media (max-width: 600px) {
+    .hero-content h1 .hero-second-line{
+      display: inline-block !important;
+      margin-left: 1.15rem !important;
+    }
+  }
+</style>
+
 </head>
 <body>
   <div class="app-shell">
@@ -131,7 +159,7 @@
   <div class="hero-content">
     <p class="eyebrow">MYRANDA PRATAS · PRATA 925</p>
 
-    <h1>Do seu jeito.<br><em>Em cada escolha</em></h1>
+    <h1>Do seu jeito.<br><em class="hero-second-line">Em cada detalhe</em></h1>
 
     <p class="hero-copy">
       Seu estilo começa nos detalhes.<br>
