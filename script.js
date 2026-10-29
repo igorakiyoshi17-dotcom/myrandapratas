@@ -233,7 +233,7 @@ function renderSelectionList(items){
   }
   $("#selectionList").innerHTML=items.map(p=>`
     <div class="selected-item">
-      <div class="selected-thumb">${jewel(p.type,true)}</div>
+      <div class="selected-thumb">${p.image ? `<img src="${p.image}" alt="${p.name}" class="selected-product-photo">` : jewel(p.type,true)}</div>
       <div class="selected-details"><strong>${p.name}</strong><span>${p.id} • ${p.category}</span></div>
       <div class="quantity-control">
   <button type="button" data-minus="${p.id}">−</button>
@@ -328,7 +328,8 @@ const items = Object.entries(selected)
     codigo: p.id,
     nome: p.name,
     preco: p.price,
-    quantidade: p.quantidade
+    quantidade: p.quantidade,
+    imagem_url: p.image || null
   }));
 
   try {

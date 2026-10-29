@@ -2448,3 +2448,16 @@ body:has(.hero-myranda) {
     letter-spacing: .05em !important;
   }
 }
+
+
+/* FOTO REAL NA SELEÇÃO — 29/10/2026 */
+.selected-thumb {
+  overflow: hidden !important;
+}
+.selected-product-photo {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+}

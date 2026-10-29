@@ -847,12 +847,21 @@ const SUPABASE_KEY = "sb_publishable_zlv5ZXiuoUFR80E_zeHfwg_8oAMLkVV";
   
   const loginForm = document.getElementById("loginForm");
   const botaoEntrar = loginForm.querySelector("button");
+  const campoEmail = document.getElementById("email");
+
+  const emailAdminSalvo = localStorage.getItem("myranda_admin_email");
+  if (emailAdminSalvo) {
+    campoEmail.value = emailAdminSalvo;
+    document.getElementById("senha").focus();
+  }
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
+
+    localStorage.setItem("myranda_admin_email", email);
 
     botaoEntrar.disabled = true;
     botaoEntrar.textContent = "Entrando...";
