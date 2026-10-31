@@ -257,6 +257,61 @@ body.mimo-modal-open{overflow:hidden}
   .admin-category-tabs{margin-left:-2px;margin-right:-2px}
 }
 
+
+/* Remoção individual de fotos no cadastro */
+.admin-current-photos{align-items:flex-start}
+.admin-photo-item{
+  position:relative;
+  width:68px;
+  min-width:68px;
+  height:68px;
+  border-radius:11px;
+  overflow:visible;
+}
+.admin-photo-item img{
+  width:68px!important;
+  height:68px!important;
+  display:block;
+  border-radius:11px!important;
+  object-fit:cover;
+}
+.admin-photo-remove{
+  position:absolute!important;
+  top:-7px!important;
+  right:-7px!important;
+  width:23px!important;
+  height:23px!important;
+  min-height:23px!important;
+  margin:0!important;
+  padding:0!important;
+  border:2px solid #fff!important;
+  border-radius:50%!important;
+  background:#6f3128!important;
+  color:#fff!important;
+  font-size:15px!important;
+  line-height:19px!important;
+  font-weight:800!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  box-shadow:0 2px 7px rgba(45,24,18,.22);
+  z-index:2;
+}
+.admin-photo-item.is-new::after{
+  content:"nova";
+  position:absolute;
+  left:4px;
+  bottom:4px;
+  padding:2px 5px;
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  color:#754333;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
 </style>
 
 <style>
@@ -970,6 +1025,9 @@ document.getElementById("btnSair").addEventListener("click", () => {
 let produtosCarregados = [];
   let selecoesCarregadas = [];
 let produtoEmEdicaoId = null;
+window.fotosExistentesEdicao = [];
+window.fotosRemovidasEdicao = [];
+window.novasFotosSelecionadas = [];
   async function carregarProdutos() {
   const lista = document.getElementById("listaProdutos");
 
@@ -1817,7 +1875,7 @@ await carregarSelecoes();
   const descricao = document.getElementById("produtoDescricao").value.trim();
   const tamanhos = document.getElementById("produtoTamanhos").value.trim();
   const categoria = document.getElementById("produtoCategoria").value;
-  const fotos = Array.from(document.getElementById("produtoFoto").files || []);
+  const fotos = [...(window.novasFotosSelecionadas || [])];
   const estoque = Number(document.getElementById("produtoEstoque").value);
   const destaque = document.getElementById("produtoDestaque").checked;
 
@@ -1834,9 +1892,9 @@ const token = localStorage.getItem("myranda_access_token");
   ? produtosCarregados.find(item => String(item.id) === String(produtoEmEdicaoId))
   : null;
 
-let imagensUrls = Array.isArray(produtoAtual?.imagens)
-  ? [...produtoAtual.imagens]
-  : (produtoAtual?.imagem_url ? [produtoAtual.imagem_url] : []);
+let imagensUrls = produtoEmEdicaoId
+  ? [...(window.fotosExistentesEdicao || [])]
+  : [];
 
 for (let indice = 0; indice < fotos.length; indice++) {
   const foto = fotos[indice];
@@ -1951,6 +2009,39 @@ const imagemUrl = imagensUrls[0] || null;
       const detalhe = await respostaCusto.text();
       console.error("Erro ao registrar preço de compra:", detalhe);
       throw new Error("O produto foi salvo, mas não foi possível registrar o preço de compra.");
+    }
+
+    // Remove do Storage as fotos que a administradora retirou do produto.
+    for (const fotoUrlRemovida of (window.fotosRemovidasEdicao || [])) {
+      try {
+        const marcador = "/storage/v1/object/public/produtos/";
+        const posicao = String(fotoUrlRemovida).indexOf(marcador);
+        if (posicao === -1) continue;
+
+        const nomeArquivo = decodeURIComponent(
+          String(fotoUrlRemovida).substring(posicao + marcador.length)
+        );
+
+        const respostaExcluirFoto = await fetch(
+          `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
+          {
+            method: "DELETE",
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${token}`
+            }
+          }
+        );
+
+        if (!respostaExcluirFoto.ok) {
+          console.warn(
+            "A foto saiu do produto, mas não foi possível apagar o arquivo antigo do Storage:",
+            await respostaExcluirFoto.text()
+          );
+        }
+      } catch (erroFoto) {
+        console.warn("Erro ao apagar foto antiga do Storage:", erroFoto);
+      }
     }
 
   alert(produtoEmEdicaoId ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
@@ -2187,6 +2278,9 @@ const token = localStorage.getItem("myranda_access_token");
 
 document.getElementById("btnNovoProduto").addEventListener("click", () => {
   produtoEmEdicaoId = null;
+  window.fotosExistentesEdicao = [];
+  window.fotosRemovidasEdicao = [];
+  window.novasFotosSelecionadas = [];
 document.getElementById("novoProdutoForm").reset();
 formNovoProduto.querySelector("h3").textContent = "Novo produto";
 document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar produto";
@@ -2288,24 +2382,103 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
  const foto=document.getElementById('produtoFoto');
  const fotosAtuais=document.getElementById('produtoFotosAtuais');
 
- window.renderizarFotosAtuais=function(produto){
+ function escaparAtributoFoto(valor){
+   return String(valor??'')
+     .replace(/&/g,'&amp;')
+     .replace(/"/g,'&quot;')
+     .replace(/</g,'&lt;')
+     .replace(/>/g,'&gt;');
+ }
+
+ function renderizarGerenciadorFotos(){
    if(!fotosAtuais) return;
+
+   const existentes=(window.fotosExistentesEdicao||[]).map(url=>`
+     <div class="admin-photo-item">
+       <img src="${escaparAtributoFoto(url)}" alt="Foto cadastrada">
+       <button
+         type="button"
+         class="admin-photo-remove"
+         data-remove-existing="${escaparAtributoFoto(url)}"
+         aria-label="Remover esta foto"
+         title="Remover foto"
+       >×</button>
+     </div>
+   `);
+
+   const novas=(window.novasFotosSelecionadas||[]).map((file,index)=>`
+     <div class="admin-photo-item is-new">
+       <img src="${URL.createObjectURL(file)}" alt="Nova foto">
+       <button
+         type="button"
+         class="admin-photo-remove"
+         data-remove-new="${index}"
+         aria-label="Remover esta nova foto"
+         title="Remover foto"
+       >×</button>
+     </div>
+   `);
+
+   fotosAtuais.innerHTML=[...existentes,...novas].join('');
+ }
+
+ window.renderizarFotosAtuais=function(produto){
    const urls=Array.from(new Set([
      produto?.imagem_url,
      ...(Array.isArray(produto?.imagens)?produto.imagens:[])
    ].filter(Boolean)));
-   fotosAtuais.innerHTML=urls.length
-     ? urls.map(url=>`<img src="${url}" alt="Foto cadastrada">`).join('')
-     : '';
+
+   window.fotosExistentesEdicao=urls;
+   window.fotosRemovidasEdicao=[];
+   window.novasFotosSelecionadas=[];
+   if(foto) foto.value='';
+   renderizarGerenciadorFotos();
  };
 
  foto.addEventListener('change',()=>{
    const files=Array.from(foto.files||[]);
    if(!files.length) return;
-   fotosAtuais.innerHTML=files.map(file=>`<img src="${URL.createObjectURL(file)}" alt="Nova foto">`).join('');
+
+   window.novasFotosSelecionadas=[
+     ...(window.novasFotosSelecionadas||[]),
+     ...files
+   ];
+
+   // Limpa o input para permitir selecionar outras fotos depois.
+   foto.value='';
+   renderizarGerenciadorFotos();
+ });
+
+ fotosAtuais.addEventListener('click',event=>{
+   const removerExistente=event.target.closest('[data-remove-existing]');
+   if(removerExistente){
+     const url=removerExistente.dataset.removeExisting;
+     window.fotosExistentesEdicao=(window.fotosExistentesEdicao||[])
+       .filter(item=>item!==url);
+
+     if(!(window.fotosRemovidasEdicao||[]).includes(url)){
+       window.fotosRemovidasEdicao.push(url);
+     }
+
+     renderizarGerenciadorFotos();
+     return;
+   }
+
+   const removerNova=event.target.closest('[data-remove-new]');
+   if(removerNova){
+     const indice=Number(removerNova.dataset.removeNew);
+     if(Number.isInteger(indice)){
+       window.novasFotosSelecionadas.splice(indice,1);
+       renderizarGerenciadorFotos();
+     }
+   }
  });
 
  document.getElementById('novoProdutoForm').addEventListener('reset',()=>{
+   window.fotosExistentesEdicao=[];
+   window.fotosRemovidasEdicao=[];
+   window.novasFotosSelecionadas=[];
+   if(foto) foto.value='';
    if(fotosAtuais) fotosAtuais.innerHTML='';
  });
 
