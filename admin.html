@@ -223,6 +223,40 @@ body.mimo-modal-open{overflow:hidden}
 @media(min-width:720px){.admin-finance-grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:520px){.admin-price-grid{grid-template-columns:1fr}.admin-profit-triplet{grid-template-columns:1fr}}
 
+
+/* MYRANDA ADMIN — categorias dos produtos */
+.admin-category-tabs{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:2px 0 12px;
+  margin:-2px 0 12px;
+  scrollbar-width:none;
+}
+.admin-category-tabs::-webkit-scrollbar{display:none}
+.admin-category-tabs button{
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-height:38px!important;
+  margin:0!important;
+  padding:8px 13px!important;
+  border-radius:999px!important;
+  border:1px solid var(--mimo-line)!important;
+  background:#fffdfa!important;
+  color:#754333!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  white-space:nowrap;
+}
+.admin-category-tabs button.active{
+  background:#754333!important;
+  color:#fff!important;
+  border-color:#754333!important;
+}
+@media(max-width:520px){
+  .admin-category-tabs{margin-left:-2px;margin-right:-2px}
+}
+
 </style>
 
 <style>
@@ -942,21 +976,42 @@ let produtoEmEdicaoId = null;
   lista.innerHTML = "<p>Carregando produtos...</p>";
 
   try {
-    const resposta = await fetch(
-      `${SUPABASE_URL}/rest/v1/produtos?select=*&order=estoque.asc,id.asc`,
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-   "Authorization": `Bearer ${localStorage.getItem("myranda_access_token")}`
+    const tokenProdutos = localStorage.getItem("myranda_access_token");
+
+    const [resposta, respostaCustos] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/rest/v1/produtos?select=*&order=estoque.asc,id.asc`,
+        {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${tokenProdutos}`
+          }
         }
-      }
-    );
+      ),
+      fetch(
+        `${SUPABASE_URL}/rest/v1/produto_custos?select=produto_id,preco_compra`,
+        {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${tokenProdutos}`
+          }
+        }
+      )
+    ]);
 
     if (!resposta.ok) {
       throw new Error("Não foi possível carregar os produtos.");
     }
 
     const produtos = await resposta.json();
+    const custos = respostaCustos.ok ? await respostaCustos.json() : [];
+    const custosPorProduto = new Map(
+      custos.map(item => [String(item.produto_id), Number(item.preco_compra) || 0])
+    );
+
+    produtos.forEach(produto => {
+      produto.preco_compra = custosPorProduto.get(String(produto.id)) || 0;
+    });
     // Menor estoque primeiro; em empate, manter ordem pelo ID.
     produtos.sort((a, b) => (Number(a.estoque) || 0) - (Number(b.estoque) || 0) || Number(a.id) - Number(b.id));
     produtosCarregados = produtos;
@@ -967,7 +1022,7 @@ let produtoEmEdicaoId = null;
     }
 
     lista.innerHTML = produtos.map(produto => `
-      <div style="
+      <div data-produto-categoria="${produto.categoria || ""}" style="
         border:1px solid #e6d9ca;
         border-radius:16px;
         padding:16px;
@@ -1828,7 +1883,6 @@ const imagemUrl = imagensUrls[0] || null;
         body: JSON.stringify({
           codigo: codigo,
           nome: nome,
-          preco_compra: precoCompra,
           preco: preco,
           descricao: descricao || null,
           tamanhos: categoria === "Anéis" ? (tamanhos || null) : null,
@@ -1847,6 +1901,35 @@ const imagemUrl = imagensUrls[0] || null;
     if (!resposta.ok) {
       console.error(dados);
       throw new Error(dados.message || "Não foi possível cadastrar o produto.");
+    }
+
+    const idProdutoSalvo = produtoEmEdicaoId || dados?.[0]?.id;
+
+    if (!idProdutoSalvo) {
+      throw new Error("O produto foi salvo, mas não foi possível identificar o ID para registrar o preço de compra.");
+    }
+
+    const respostaCusto = await fetch(
+      `${SUPABASE_URL}/rest/v1/produto_custos?on_conflict=produto_id`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "resolution=merge-duplicates,return=minimal"
+        },
+        body: JSON.stringify({
+          produto_id: Number(idProdutoSalvo),
+          preco_compra: precoCompra,
+          updated_at: new Date().toISOString()
+        })
+      }
+    );
+
+    if (!respostaCusto.ok) {
+      console.error(await respostaCusto.text());
+      throw new Error("O produto foi salvo, mas não foi possível registrar o preço de compra.");
     }
 
   alert(produtoEmEdicaoId ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
@@ -2116,7 +2199,7 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   <div class="admin-profit-mini"><small>Lucro no mês</small><strong id="lucroMesInicio">R$ 0,00</strong></div>
 </div><div class="admin-quick"><h3>Acesso rápido</h3><div class="admin-quick-actions"><button type="button" id="atalhoNovo">＋ Nova joia</button><button type="button" id="atalhoProdutos">◈ Ver produtos</button></div></div>`;
  const produtos=document.createElement('div');produtos.id='adminProdutos';
- produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div>';
+ produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div><div class="admin-category-tabs" id="filtrosCategoriasProdutos" aria-label="Filtrar produtos por categoria"><button type="button" class="active" data-categoria-produto="todos">Todos</button><button type="button" data-categoria-produto="aneis">Anéis</button><button type="button" data-categoria-produto="brincos">Brincos</button><button type="button" data-categoria-produto="colares">Colares</button><button type="button" data-categoria-produto="pulseiras">Pulseiras</button><button type="button" data-categoria-produto="conjuntos">Conjuntos</button><button type="button" data-categoria-produto="novidades">Novidades</button></div>';
  produtos.append(secaoProdutos,form,lista);
  const selecoes=document.createElement('div');selecoes.id='adminSelecoes';
  selecoes.innerHTML='<small class="admin-eyebrow">PEDIDOS</small><h2 class="admin-title">Seleções recebidas</h2><p class="admin-subtitle">Acompanhe os pedidos das clientes.</p>';
@@ -2131,8 +2214,45 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
  document.getElementById('atalhoNovo').addEventListener('click',()=>{aba('adminProdutos');document.getElementById('btnNovoProduto').click();form.scrollIntoView({behavior:'smooth',block:'start'})});
  document.getElementById('btnNovoProduto').addEventListener('click',()=>{aba('adminProdutos');setTimeout(()=>form.scrollIntoView({behavior:'smooth',block:'start'}),60)});
  const busca=document.getElementById('buscaProdutos');
- function filtrar(){const q=busca.value.trim().toLocaleLowerCase('pt-BR');Array.from(lista.children).forEach(card=>{if(card.tagName==='DIV')card.style.display=card.textContent.toLocaleLowerCase('pt-BR').includes(q)?'':'none'})}
+ const filtrosCategorias=document.getElementById('filtrosCategoriasProdutos');
+ let categoriaProdutoAtiva='todos';
+
+ function normalizarCategoriaProduto(valor){
+   return String(valor||'')
+     .trim()
+     .toLocaleLowerCase('pt-BR')
+     .normalize('NFD')
+     .replace(/[\u0300-\u036f]/g,'');
+ }
+
+ function filtrar(){
+   const q=busca.value.trim().toLocaleLowerCase('pt-BR');
+   Array.from(lista.children).forEach(card=>{
+     if(card.tagName!=='DIV') return;
+
+     const correspondeBusca=
+       q==='' || card.textContent.toLocaleLowerCase('pt-BR').includes(q);
+
+     const categoriaCard=normalizarCategoriaProduto(card.dataset.produtoCategoria);
+     const correspondeCategoria=
+       categoriaProdutoAtiva==='todos' || categoriaCard===categoriaProdutoAtiva;
+
+     card.style.display=correspondeBusca && correspondeCategoria ? '' : 'none';
+   });
+ }
+
  busca.addEventListener('input',filtrar);
+
+ filtrosCategorias.addEventListener('click',event=>{
+   const botao=event.target.closest('[data-categoria-produto]');
+   if(!botao) return;
+
+   categoriaProdutoAtiva=botao.dataset.categoriaProduto;
+   filtrosCategorias.querySelectorAll('[data-categoria-produto]').forEach(item=>{
+     item.classList.toggle('active',item===botao);
+   });
+   filtrar();
+ });
  const obs=new MutationObserver(()=>{filtrar();atualizarResumo()});obs.observe(lista,{childList:true});
  const obsSel=new MutationObserver(atualizarResumo);obsSel.observe(document.getElementById('listaSelecoes'),{childList:true});
  function atualizarResumo(){
