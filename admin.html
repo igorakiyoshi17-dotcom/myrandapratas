@@ -553,7 +553,7 @@ body.admin-logado{background:#f8f1ec!important}
       <input
         id="email"
         type="email"
-        value="myranda@gmail.com"
+        value="myrandapratas@gmail.com"
         placeholder="Digite seu e-mail"
         autocomplete="username"
         required
@@ -957,26 +957,6 @@ let produtoEmEdicaoId = null;
     }
 
     const produtos = await resposta.json();
-
-    const respostaCustos = await fetch(
-      `${SUPABASE_URL}/rest/v1/produto_custos?select=produto_id,preco_compra`,
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${localStorage.getItem("myranda_access_token")}`
-        }
-      }
-    );
-
-    const custos = respostaCustos.ok ? await respostaCustos.json() : [];
-    const custosPorProduto = new Map(
-      (Array.isArray(custos) ? custos : []).map(item => [String(item.produto_id), Number(item.preco_compra) || 0])
-    );
-
-    produtos.forEach(produto => {
-      produto.preco_compra = custosPorProduto.get(String(produto.id)) || 0;
-    });
-
     // Menor estoque primeiro; em empate, manter ordem pelo ID.
     produtos.sort((a, b) => (Number(a.estoque) || 0) - (Number(b.estoque) || 0) || Number(a.id) - Number(b.id));
     produtosCarregados = produtos;
@@ -1848,6 +1828,7 @@ const imagemUrl = imagensUrls[0] || null;
         body: JSON.stringify({
           codigo: codigo,
           nome: nome,
+          preco_compra: precoCompra,
           preco: preco,
           descricao: descricao || null,
           tamanhos: categoria === "Anéis" ? (tamanhos || null) : null,
@@ -1866,36 +1847,6 @@ const imagemUrl = imagensUrls[0] || null;
     if (!resposta.ok) {
       console.error(dados);
       throw new Error(dados.message || "Não foi possível cadastrar o produto.");
-    }
-
-    const produtoSalvo = Array.isArray(dados) ? dados[0] : dados;
-    const idProdutoSalvo = produtoSalvo?.id || produtoEmEdicaoId;
-
-    if (!idProdutoSalvo) {
-      throw new Error("O produto foi salvo, mas não foi possível identificar o ID para registrar o preço de compra.");
-    }
-
-    const respostaCusto = await fetch(
-      `${SUPABASE_URL}/rest/v1/produto_custos?on_conflict=produto_id`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${token}`,
-          "Prefer": "resolution=merge-duplicates,return=representation"
-        },
-        body: JSON.stringify({
-          produto_id: Number(idProdutoSalvo),
-          preco_compra: precoCompra
-        })
-      }
-    );
-
-    if (!respostaCusto.ok) {
-      const erroCusto = await respostaCusto.text();
-      console.error("Erro ao salvar custo:", erroCusto);
-      throw new Error("Produto salvo, mas não foi possível registrar o preço de compra.");
     }
 
   alert(produtoEmEdicaoId ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
