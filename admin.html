@@ -1909,26 +1909,47 @@ const imagemUrl = imagensUrls[0] || null;
       throw new Error("O produto foi salvo, mas não foi possível identificar o ID para registrar o preço de compra.");
     }
 
+    const cabecalhosCusto = {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_KEY,
+      "Authorization": `Bearer ${token}`
+    };
+
+    const consultaCusto = await fetch(
+      `${SUPABASE_URL}/rest/v1/produto_custos?produto_id=eq.${encodeURIComponent(idProdutoSalvo)}&select=produto_id`,
+      { headers: cabecalhosCusto }
+    );
+
+    if (!consultaCusto.ok) {
+      const detalhe = await consultaCusto.text();
+      console.error("Erro ao consultar preço de compra:", detalhe);
+      throw new Error("O produto foi salvo, mas não foi possível consultar o preço de compra.");
+    }
+
+    const custoExistente = await consultaCusto.json();
+    const payloadCusto = {
+      produto_id: Number(idProdutoSalvo),
+      preco_compra: precoCompra,
+      updated_at: new Date().toISOString()
+    };
+
     const respostaCusto = await fetch(
-      `${SUPABASE_URL}/rest/v1/produto_custos?on_conflict=produto_id`,
+      custoExistente.length
+        ? `${SUPABASE_URL}/rest/v1/produto_custos?produto_id=eq.${encodeURIComponent(idProdutoSalvo)}`
+        : `${SUPABASE_URL}/rest/v1/produto_custos`,
       {
-        method: "POST",
+        method: custoExistente.length ? "PATCH" : "POST",
         headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${token}`,
-          "Prefer": "resolution=merge-duplicates,return=minimal"
+          ...cabecalhosCusto,
+          "Prefer": "return=minimal"
         },
-        body: JSON.stringify({
-          produto_id: Number(idProdutoSalvo),
-          preco_compra: precoCompra,
-          updated_at: new Date().toISOString()
-        })
+        body: JSON.stringify(payloadCusto)
       }
     );
 
     if (!respostaCusto.ok) {
-      console.error(await respostaCusto.text());
+      const detalhe = await respostaCusto.text();
+      console.error("Erro ao registrar preço de compra:", detalhe);
       throw new Error("O produto foi salvo, mas não foi possível registrar o preço de compra.");
     }
 
