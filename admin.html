@@ -192,6 +192,37 @@ body.admin-logado{display:block;padding:0;background:#f8f2ea;min-height:100dvh}
 .mimo-report-total strong{font-size:20px}
 body.mimo-modal-open{overflow:hidden}
 @media(min-width:700px){.mimo-report-overlay{align-items:center;padding:20px}.mimo-report{border-radius:24px;max-height:90dvh}}
+
+/* MYRANDA V2 — financeiro + cadastro completo */
+#painelAdmin textarea{width:100%;padding:14px;border:1px solid #d9cabc;border-radius:12px;background:white;font-size:16px;outline:none;resize:vertical;font-family:inherit}
+#painelAdmin textarea:focus{border-color:#5a3a2e}
+.admin-price-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.admin-field-help{display:block;color:#8b746c;font-size:11px;line-height:1.5;margin-top:6px}
+.admin-margin-preview{margin-top:10px;padding:11px 13px;border-radius:12px;background:#eef5ea;color:#48764f;font-size:12px;font-weight:700}
+.admin-current-photos{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:3px}
+.admin-current-photos img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid #eadbd4;background:#fff}
+.admin-finance-panel{background:#fffdfa;border:1px solid var(--mimo-line);border-radius:20px;padding:18px;margin-bottom:24px}
+.admin-finance-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.admin-finance-head h2{margin:0 0 5px;font-size:20px}
+.admin-finance-head p{margin:0;color:#806f66;font-size:12px}
+.admin-period-filter{display:flex;gap:6px;padding:4px;background:#f3e7dd;border-radius:999px;overflow-x:auto}
+.admin-period-filter button{width:auto!important;margin:0!important;padding:8px 12px!important;min-height:auto!important;border-radius:999px!important;background:transparent!important;color:#754333!important;font-size:11px!important;white-space:nowrap}
+.admin-period-filter button.active{background:#754333!important;color:white!important}
+.admin-finance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.admin-finance-card{border:1px solid #eadbd4;border-radius:15px;padding:14px;background:#fffaf5}
+.admin-finance-card small{display:block;color:#806f66;font-size:11px}
+.admin-finance-card strong{display:block;margin-top:7px;font-size:21px;color:#4b3026}
+.admin-finance-card.lucro{background:#f1f7ed;border-color:#d8e7d2}
+.admin-finance-card.lucro strong{color:#48764f}
+.admin-product-finance{margin-top:7px;font-size:12px;line-height:1.55;color:#806f66}
+.admin-product-finance b{color:#48764f}
+.admin-profit-triplet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0}
+.admin-profit-mini{background:#f1f7ed;border:1px solid #d8e7d2;border-radius:16px;padding:13px 10px}
+.admin-profit-mini small{display:block;color:#68845e;font-size:10px;line-height:1.3}
+.admin-profit-mini strong{display:block;color:#48764f;font-size:16px;margin-top:7px;overflow-wrap:anywhere}
+@media(min-width:720px){.admin-finance-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:520px){.admin-price-grid{grid-template-columns:1fr}.admin-profit-triplet{grid-template-columns:1fr}}
+
 </style>
 
 <style>
@@ -627,8 +658,24 @@ body.admin-logado{background:#f8f1ec!important}
     <label for="produtoNome">Nome</label>
     <input id="produtoNome" type="text" placeholder="Ex: Anel Coração" required>
 
-    <label for="produtoPreco">Preço</label>
-    <input id="produtoPreco" type="number" step="0.01" min="0" placeholder="49.90" required>
+    <div class="admin-price-grid">
+      <div>
+        <label for="produtoPrecoCompra">Preço de compra</label>
+        <input id="produtoPrecoCompra" type="number" step="0.01" min="0" placeholder="Ex: 24.90" required>
+      </div>
+      <div>
+        <label for="produtoPreco">Preço de venda</label>
+        <input id="produtoPreco" type="number" step="0.01" min="0" placeholder="Ex: 59.90" required>
+      </div>
+    </div>
+    <div id="produtoMargemPreview" class="admin-margin-preview">Lucro estimado por unidade: R$ 0,00</div>
+
+    <label for="produtoDescricao">Descrição do produto</label>
+    <textarea id="produtoDescricao" rows="4" placeholder="Descreva a joia, acabamento, estilo e detalhes importantes."></textarea>
+
+    <label for="produtoTamanhos">Tamanhos do anel</label>
+    <input id="produtoTamanhos" type="text" placeholder="Ex: 12, 14, 16, 18">
+    <small class="admin-field-help">Preencha apenas para anéis. Separe os tamanhos por vírgula.</small>
 
     <label for="produtoCategoria">Categoria</label>
  <select id="produtoCategoria" required style="
@@ -647,12 +694,15 @@ body.admin-logado{background:#f8f1ec!important}
       <option value="Pulseiras">Pulseiras</option>
       <option value="Conjuntos">Conjuntos</option>
     </select>
-    <label for="produtoFoto">Foto do produto</label>
+    <label for="produtoFoto">Fotos do produto</label>
 <input
   id="produtoFoto"
   type="file"
   accept="image/jpeg,image/png,image/webp"
+  multiple
 >
+<small class="admin-field-help">Você pode selecionar várias fotos de uma vez. A primeira será usada como capa.</small>
+<div id="produtoFotosAtuais" class="admin-current-photos"></div>
     <label for="produtoEstoque">Estoque</label>
     <input id="produtoEstoque" type="number" min="0" value="1" required>
 
@@ -699,73 +749,40 @@ body.admin-logado{background:#f8f1ec!important}
   "
 >
 
-  <div style="margin-bottom:28px;">
-  <h2 style="margin-bottom:6px;">
-    Resumo de vendas
-  </h2>
-
-  <p style="color:#806f66; margin-top:0; margin-bottom:18px;">
-    Acompanhe o desempenho das vendas de hoje.
-  </p>
-
-  <div style="
-    display:grid;
-    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
-    gap:12px;
-  ">
-    <div style="
-      border:1px solid #e6d9ca;
-      border-radius:16px;
-      padding:16px;
-      background:#fffaf5;
-    ">
-      <div style="font-size:12px; color:#806f66;">
-        Vendas de hoje
-      </div>
-      <strong
-        id="vendasHoje"
-        style="display:block; font-size:24px; margin-top:6px;"
-      >
-        0
-      </strong>
+  <div class="admin-finance-panel">
+  <div class="admin-finance-head">
+    <div>
+      <h2>Resumo de vendas</h2>
+      <p id="financePeriodoTexto">Acompanhe o desempenho das vendas de hoje.</p>
     </div>
-
-    <div style="
-      border:1px solid #e6d9ca;
-      border-radius:16px;
-      padding:16px;
-      background:#fffaf5;
-    ">
-      <div style="font-size:12px; color:#806f66;">
-        Peças vendidas
-      </div>
-      <strong
-        id="pecasVendidasHoje"
-        style="display:block; font-size:24px; margin-top:6px;"
-      >
-        0
-      </strong>
+    <div class="admin-period-filter" id="financePeriodoFilter">
+      <button type="button" data-periodo="dia" class="active">Hoje</button>
+      <button type="button" data-periodo="semana">Semana</button>
+      <button type="button" data-periodo="mes">Mês</button>
     </div>
+  </div>
 
-    <div style="
-      border:1px solid #e6d9ca;
-      border-radius:16px;
-      padding:16px;
-      background:#fffaf5;
-    ">
-      <div style="font-size:12px; color:#806f66;">
-        Faturamento de hoje
-      </div>
-      <strong
-        id="faturamentoHoje"
-        style="display:block; font-size:24px; margin-top:6px;"
-      >
-        R$ 0,00
-      </strong>
+  <div class="admin-finance-grid">
+    <div class="admin-finance-card">
+      <small>Vendas</small>
+      <strong id="vendasHoje">0</strong>
+    </div>
+    <div class="admin-finance-card">
+      <small>Peças vendidas</small>
+      <strong id="pecasVendidasHoje">0</strong>
+    </div>
+    <div class="admin-finance-card">
+      <small>Faturamento</small>
+      <strong id="faturamentoHoje">R$ 0,00</strong>
+    </div>
+    <div class="admin-finance-card lucro">
+      <small>Lucro bruto</small>
+      <strong id="lucroPeriodo">R$ 0,00</strong>
     </div>
   </div>
 </div>
-  <h2 style="margin-bottom:6px;">
+
+<h2 style="margin-bottom:6px;">
   Seleções recebidas
 </h2>
 
@@ -940,6 +957,26 @@ let produtoEmEdicaoId = null;
     }
 
     const produtos = await resposta.json();
+
+    const respostaCustos = await fetch(
+      `${SUPABASE_URL}/rest/v1/produto_custos?select=produto_id,preco_compra`,
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${localStorage.getItem("myranda_access_token")}`
+        }
+      }
+    );
+
+    const custos = respostaCustos.ok ? await respostaCustos.json() : [];
+    const custosPorProduto = new Map(
+      (Array.isArray(custos) ? custos : []).map(item => [String(item.produto_id), Number(item.preco_compra) || 0])
+    );
+
+    produtos.forEach(produto => {
+      produto.preco_compra = custosPorProduto.get(String(produto.id)) || 0;
+    });
+
     // Menor estoque primeiro; em empate, manter ordem pelo ID.
     produtos.sort((a, b) => (Number(a.estoque) || 0) - (Number(b.estoque) || 0) || Number(a.id) - Number(b.id));
     produtosCarregados = produtos;
@@ -997,8 +1034,13 @@ let produtoEmEdicaoId = null;
             </div>
 
             <div style="margin-top:6px;">
-              R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}
+              Venda: R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}
               • Estoque: ${produto.estoque}
+            </div>
+            <div class="admin-product-finance">
+              Compra: R$ ${Number(produto.preco_compra || 0).toFixed(2).replace(".", ",")}
+              • <b>Lucro/un.: R$ ${Math.max(0, Number(produto.preco || 0) - Number(produto.preco_compra || 0)).toFixed(2).replace(".", ",")}</b>
+              • Fotos: ${Array.isArray(produto.imagens) && produto.imagens.length ? produto.imagens.length : (produto.imagem_url ? 1 : 0)}
             </div>
           </div>
 
@@ -1234,6 +1276,103 @@ function aplicarFiltroSelecoes(status) {
   }).join("");
 }
   
+
+let periodoFinanceiroAtual = "dia";
+
+function dinheiroAdmin(valor){
+  return Number(valor || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+}
+
+function inicioPeriodo(periodo, referencia = new Date()){
+  const data = new Date(referencia);
+  if(periodo === "mes"){
+    return new Date(data.getFullYear(), data.getMonth(), 1, 0, 0, 0, 0);
+  }
+  if(periodo === "semana"){
+    const dia = data.getDay();
+    const ajuste = dia === 0 ? -6 : 1 - dia;
+    const inicio = new Date(data);
+    inicio.setDate(data.getDate() + ajuste);
+    inicio.setHours(0,0,0,0);
+    return inicio;
+  }
+  return new Date(data.getFullYear(), data.getMonth(), data.getDate(), 0, 0, 0, 0);
+}
+
+function produtoDaSelecao(item){
+  const normalizar = v => String(v || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  return produtosCarregados.find(p => normalizar(p.codigo) === normalizar(item.codigo))
+    || produtosCarregados.find(p => normalizar(p.nome) === normalizar(item.nome));
+}
+
+function custoDaSelecao(selecao){
+  if(selecao.custo_total !== null && selecao.custo_total !== undefined){
+    return Number(selecao.custo_total) || 0;
+  }
+  const itens = Array.isArray(selecao.itens) ? selecao.itens : [];
+  return itens.reduce((total,item)=>{
+    const produto = produtoDaSelecao(item);
+    const custoUnit = Number(item.preco_compra ?? produto?.preco_compra ?? 0);
+    return total + custoUnit * (Number(item.quantidade) || 1);
+  },0);
+}
+
+function metricasPeriodo(periodo){
+  const inicio = inicioPeriodo(periodo);
+  const finalizadas = selecoesCarregadas.filter(selecao => {
+    if((selecao.status || "aguardando") !== "finalizada" || !selecao.finalizada_em) return false;
+    return new Date(selecao.finalizada_em) >= inicio;
+  });
+
+  const vendas = finalizadas.length;
+  const pecas = finalizadas.reduce((t,s)=>t + (Number(s.quantidade)||0),0);
+  const faturamento = finalizadas.reduce((t,s)=>t + (Number(s.total)||0),0);
+  const custo = finalizadas.reduce((t,s)=>t + custoDaSelecao(s),0);
+  const lucro = finalizadas.reduce((t,s)=>{
+    if(s.lucro_total !== null && s.lucro_total !== undefined) return t + (Number(s.lucro_total)||0);
+    return t + ((Number(s.total)||0) - custoDaSelecao(s));
+  },0);
+
+  return {vendas,pecas,faturamento,custo,lucro};
+}
+
+function atualizarFinanceiroAdmin(periodo = periodoFinanceiroAtual){
+  periodoFinanceiroAtual = periodo;
+  const m = metricasPeriodo(periodo);
+
+  const vendasEl = document.getElementById("vendasHoje");
+  const pecasEl = document.getElementById("pecasVendidasHoje");
+  const fatEl = document.getElementById("faturamentoHoje");
+  const lucroEl = document.getElementById("lucroPeriodo");
+
+  if(vendasEl) vendasEl.textContent = m.vendas;
+  if(pecasEl) pecasEl.textContent = m.pecas;
+  if(fatEl) fatEl.textContent = dinheiroAdmin(m.faturamento);
+  if(lucroEl) lucroEl.textContent = dinheiroAdmin(m.lucro);
+
+  const textos = {
+    dia:"Acompanhe o desempenho das vendas de hoje.",
+    semana:"Acompanhe o desempenho desta semana.",
+    mes:"Acompanhe o desempenho deste mês."
+  };
+  const texto = document.getElementById("financePeriodoTexto");
+  if(texto) texto.textContent = textos[periodo] || textos.dia;
+
+  document.querySelectorAll("#financePeriodoFilter [data-periodo]").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.periodo === periodo);
+  });
+
+  const d = metricasPeriodo("dia");
+  const s = metricasPeriodo("semana");
+  const mm = metricasPeriodo("mes");
+  const ld = document.getElementById("lucroHojeInicio");
+  const ls = document.getElementById("lucroSemanaInicio");
+  const lm = document.getElementById("lucroMesInicio");
+  if(ld) ld.textContent = dinheiroAdmin(d.lucro);
+  if(ls) ls.textContent = dinheiroAdmin(s.lucro);
+  if(lm) lm.textContent = dinheiroAdmin(mm.lucro);
+}
+
   async function carregarSelecoes() {
   const lista = document.getElementById("listaSelecoes");
 
@@ -1265,50 +1404,8 @@ const token = localStorage.getItem("myranda_access_token");
 
     const selecoes = await resposta.json();
     selecoesCarregadas = selecoes;
-    const agora = new Date();
-
-const vendasHoje = selecoes.filter(selecao => {
-  if (
-    (selecao.status || "aguardando") !== "finalizada" ||
-    !selecao.finalizada_em
-  ) {
-    return false;
-  }
-
-  const dataFinalizacao = new Date(selecao.finalizada_em);
-
-  return (
-    dataFinalizacao.getFullYear() === agora.getFullYear() &&
-    dataFinalizacao.getMonth() === agora.getMonth() &&
-    dataFinalizacao.getDate() === agora.getDate()
-  );
-});
-
-const quantidadeVendasHoje = vendasHoje.length;
-
-const pecasVendidasHoje = vendasHoje.reduce(
-  (total, selecao) => total + (Number(selecao.quantidade) || 0),
-  0
-);
-
-const faturamentoHoje = vendasHoje.reduce(
-  (total, selecao) => total + (Number(selecao.total) || 0),
-  0
-);
-
-document.getElementById("vendasHoje").textContent =
-  quantidadeVendasHoje;
-
-document.getElementById("pecasVendidasHoje").textContent =
-  pecasVendidasHoje;
-
-document.getElementById("faturamentoHoje").textContent =
-  faturamentoHoje.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  });
-
-    if (selecoes.length === 0) {
+    atualizarFinanceiroAdmin(periodoFinanceiroAtual);
+if (selecoes.length === 0) {
       lista.innerHTML = "<p>Nenhuma seleção recebida ainda.</p>";
       return;
     }
@@ -1443,6 +1540,12 @@ lista.innerHTML = selecoesCarregadas.map(selecao => {
   }
 }
 
+  document.getElementById("financePeriodoFilter").addEventListener("click", (event) => {
+  const botao = event.target.closest("[data-periodo]");
+  if (!botao) return;
+  atualizarFinanceiroAdmin(botao.dataset.periodo);
+});
+
   document.getElementById("filtrosSelecoes").addEventListener("click", (event) => {
   const botao = event.target.closest(".btnFiltroSelecao");
 
@@ -1553,10 +1656,32 @@ const token = localStorage.getItem("myranda_access_token");
 
   try {
     botao.disabled = true;
+let itensComCusto = null;
+let custoTotalVenda = null;
+let lucroTotalVenda = null;
+
 if (novoStatus === "finalizada") {
   const selecao = selecoesCarregadas.find(
     item => Number(item.id) === idSelecao
   );
+
+  itensComCusto = (Array.isArray(selecao.itens) ? selecao.itens : []).map(item => {
+    const produto = produtosCarregados.find(
+      produto =>
+        String(produto.codigo).toUpperCase() ===
+        String(item.codigo).toUpperCase()
+    );
+    return {
+      ...item,
+      preco_compra: Number(produto?.preco_compra || 0)
+    };
+  });
+
+  custoTotalVenda = itensComCusto.reduce(
+    (total, item) => total + (Number(item.preco_compra) || 0) * (Number(item.quantidade) || 1),
+    0
+  );
+  lucroTotalVenda = (Number(selecao.total) || 0) - custoTotalVenda;
 
   for (const item of selecao.itens) {
     const produto = produtosCarregados.find(
@@ -1622,7 +1747,10 @@ if (produtosAtualizados.length === 0) {
   finalizada_em:
     novoStatus === "finalizada"
       ? new Date().toISOString()
-      : null
+      : null,
+  itens: novoStatus === "finalizada" ? itensComCusto : selecaoAtual.itens,
+  custo_total: novoStatus === "finalizada" ? custoTotalVenda : selecaoAtual.custo_total,
+  lucro_total: novoStatus === "finalizada" ? lucroTotalVenda : selecaoAtual.lucro_total
 })
       }
     );
@@ -1649,9 +1777,12 @@ await carregarSelecoes();
 
   const codigo = document.getElementById("produtoCodigo").value.trim();
   const nome = document.getElementById("produtoNome").value.trim();
+  const precoCompra = Number(document.getElementById("produtoPrecoCompra").value);
   const preco = Number(document.getElementById("produtoPreco").value);
+  const descricao = document.getElementById("produtoDescricao").value.trim();
+  const tamanhos = document.getElementById("produtoTamanhos").value.trim();
   const categoria = document.getElementById("produtoCategoria").value;
-  const foto = document.getElementById("produtoFoto").files[0];
+  const fotos = Array.from(document.getElementById("produtoFoto").files || []);
   const estoque = Number(document.getElementById("produtoEstoque").value);
   const destaque = document.getElementById("produtoDestaque").checked;
 
@@ -1664,13 +1795,18 @@ const token = localStorage.getItem("myranda_access_token");
     if (!token) {
       throw new Error("Sua sessão expirou. Saia do painel e entre novamente.");
     }
-   let imagemUrl = produtoEmEdicaoId
-  ? produtosCarregados.find(item => String(item.id) === String(produtoEmEdicaoId))?.imagem_url || null
+   const produtoAtual = produtoEmEdicaoId
+  ? produtosCarregados.find(item => String(item.id) === String(produtoEmEdicaoId))
   : null;
 
-if (foto) {
+let imagensUrls = Array.isArray(produtoAtual?.imagens)
+  ? [...produtoAtual.imagens]
+  : (produtoAtual?.imagem_url ? [produtoAtual.imagem_url] : []);
+
+for (let indice = 0; indice < fotos.length; indice++) {
+  const foto = fotos[indice];
   const extensao = foto.name.split(".").pop().toLowerCase();
-  const nomeArquivo = `${Date.now()}-${codigo}.${extensao}`;
+  const nomeArquivo = `${Date.now()}-${indice}-${codigo}.${extensao}`;
 
   const respostaUpload = await fetch(
     `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
@@ -1688,11 +1824,14 @@ if (foto) {
   if (!respostaUpload.ok) {
     const erroUpload = await respostaUpload.text();
     console.error(erroUpload);
-    throw new Error("Não foi possível enviar a foto do produto.");
+    throw new Error("Não foi possível enviar uma das fotos do produto.");
   }
 
-  imagemUrl = `${SUPABASE_URL}/storage/v1/object/public/produtos/${nomeArquivo}`;
+  imagensUrls.push(`${SUPABASE_URL}/storage/v1/object/public/produtos/${nomeArquivo}`);
 }
+
+imagensUrls = Array.from(new Set(imagensUrls.filter(Boolean)));
+const imagemUrl = imagensUrls[0] || null;
 
     const resposta = await fetch(
      produtoEmEdicaoId
@@ -1710,11 +1849,14 @@ if (foto) {
           codigo: codigo,
           nome: nome,
           preco: preco,
+          descricao: descricao || null,
+          tamanhos: categoria === "Anéis" ? (tamanhos || null) : null,
           categoria: categoria,
           estoque: estoque,
-disponivel: estoque > 0,    
+          disponivel: estoque > 0,
           destaque: destaque,
-          imagem_url: imagemUrl
+          imagem_url: imagemUrl,
+          imagens: imagensUrls
         })
       }
     );
@@ -1724,6 +1866,36 @@ disponivel: estoque > 0,
     if (!resposta.ok) {
       console.error(dados);
       throw new Error(dados.message || "Não foi possível cadastrar o produto.");
+    }
+
+    const produtoSalvo = Array.isArray(dados) ? dados[0] : dados;
+    const idProdutoSalvo = produtoSalvo?.id || produtoEmEdicaoId;
+
+    if (!idProdutoSalvo) {
+      throw new Error("O produto foi salvo, mas não foi possível identificar o ID para registrar o preço de compra.");
+    }
+
+    const respostaCusto = await fetch(
+      `${SUPABASE_URL}/rest/v1/produto_custos?on_conflict=produto_id`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Prefer": "resolution=merge-duplicates,return=representation"
+        },
+        body: JSON.stringify({
+          produto_id: Number(idProdutoSalvo),
+          preco_compra: precoCompra
+        })
+      }
+    );
+
+    if (!respostaCusto.ok) {
+      const erroCusto = await respostaCusto.text();
+      console.error("Erro ao salvar custo:", erroCusto);
+      throw new Error("Produto salvo, mas não foi possível registrar o preço de compra.");
     }
 
   alert(produtoEmEdicaoId ? "Produto atualizado com sucesso!" : "Produto cadastrado com sucesso!");
@@ -1765,10 +1937,14 @@ formNovoProduto.querySelector("h3").textContent = "Novo produto";
 
   document.getElementById("produtoCodigo").value = produto.codigo || "";
   document.getElementById("produtoNome").value = produto.nome || "";
+  document.getElementById("produtoPrecoCompra").value = produto.preco_compra ?? "";
   document.getElementById("produtoPreco").value = produto.preco || "";
+  document.getElementById("produtoDescricao").value = produto.descricao || "";
+  document.getElementById("produtoTamanhos").value = produto.tamanhos || "";
   document.getElementById("produtoCategoria").value = produto.categoria || "";
   document.getElementById("produtoEstoque").value = produto.estoque ?? 0;
   document.getElementById("produtoDestaque").checked = produto.destaque;
+  renderizarFotosAtuais(produto);
 
   formNovoProduto.querySelector("h3").textContent = "Editar produto";
   document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "Salvar alterações";
@@ -1897,34 +2073,36 @@ const token = localStorage.getItem("myranda_access_token");
     botaoExcluir.textContent = "Excluindo...";
 
   
-    if (produto.imagem_url) {
-  const marcador = "/storage/v1/object/public/produtos/";
-  const posicao = produto.imagem_url.indexOf(marcador);
+    const fotosParaExcluir = Array.from(new Set([
+      produto.imagem_url,
+      ...(Array.isArray(produto.imagens) ? produto.imagens : [])
+    ].filter(Boolean)));
 
-  if (posicao !== -1) {
-    const nomeArquivo = decodeURIComponent(
-      produto.imagem_url.substring(posicao + marcador.length)
-    );
+    for (const fotoUrl of fotosParaExcluir) {
+      const marcador = "/storage/v1/object/public/produtos/";
+      const posicao = fotoUrl.indexOf(marcador);
+      if (posicao === -1) continue;
 
+      const nomeArquivo = decodeURIComponent(
+        fotoUrl.substring(posicao + marcador.length)
+      );
 
-    const respostaImagem = await fetch(
-      `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
-      {
-        method: "DELETE",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${token}`
+      const respostaImagem = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/produtos/${nomeArquivo}`,
+        {
+          method: "DELETE",
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${token}`
+          }
         }
-      }
-    );
+      );
 
-    if (!respostaImagem.ok) {
-      const erroImagem = await respostaImagem.text();
-      console.error("Erro ao excluir imagem:", erroImagem);
-      throw new Error("Não foi possível excluir a foto do produto.");
+      if (!respostaImagem.ok) {
+        console.warn("Não foi possível excluir uma foto antiga:", await respostaImagem.text());
+      }
     }
-  }
-}
+
     const resposta = await fetch(
       `${SUPABASE_URL}/rest/v1/produtos?id=eq.${encodeURIComponent(idProduto)}`,
       {
@@ -1981,7 +2159,11 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
  const areaSelecoes=document.getElementById('areaSelecoes');
  const resumo=areaSelecoes.firstElementChild;
  const inicio=document.createElement('div');inicio.id='adminInicio';
- inicio.innerHTML=`<small class="admin-eyebrow">MYRANDA PRATAS • ADMIN</small><h2 class="admin-title">Sua loja, em detalhes ♡</h2><p class="admin-subtitle">Tudo o que você precisa acompanhar hoje.</p><div class="admin-stats"><div class="admin-stat"><span class="admin-stat-icon">🛍️</span><small>Vendas de hoje</small><strong id="inicioVendas">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">💰</span><small>Faturamento de hoje</small><strong id="inicioFaturamento">R$ 0,00</strong></div><div class="admin-stat"><span class="admin-stat-icon">💎</span><small>Peças em estoque</small><strong id="inicioEstoque">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">📋</span><small>Seleções pendentes</small><strong id="inicioPendentes">0</strong></div></div><div class="admin-quick"><h3>Acesso rápido</h3><div class="admin-quick-actions"><button type="button" id="atalhoNovo">＋ Nova joia</button><button type="button" id="atalhoProdutos">◈ Ver produtos</button></div></div>`;
+ inicio.innerHTML=`<small class="admin-eyebrow">MYRANDA PRATAS • ADMIN</small><h2 class="admin-title">Sua loja, em detalhes ♡</h2><p class="admin-subtitle">Tudo o que você precisa acompanhar hoje.</p><div class="admin-stats"><div class="admin-stat"><span class="admin-stat-icon">🛍️</span><small>Vendas de hoje</small><strong id="inicioVendas">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">💰</span><small>Faturamento de hoje</small><strong id="inicioFaturamento">R$ 0,00</strong></div><div class="admin-stat"><span class="admin-stat-icon">💎</span><small>Peças em estoque</small><strong id="inicioEstoque">0</strong></div><div class="admin-stat"><span class="admin-stat-icon">📋</span><small>Seleções pendentes</small><strong id="inicioPendentes">0</strong></div></div><div class="admin-profit-triplet">
+  <div class="admin-profit-mini"><small>Lucro hoje</small><strong id="lucroHojeInicio">R$ 0,00</strong></div>
+  <div class="admin-profit-mini"><small>Lucro na semana</small><strong id="lucroSemanaInicio">R$ 0,00</strong></div>
+  <div class="admin-profit-mini"><small>Lucro no mês</small><strong id="lucroMesInicio">R$ 0,00</strong></div>
+</div><div class="admin-quick"><h3>Acesso rápido</h3><div class="admin-quick-actions"><button type="button" id="atalhoNovo">＋ Nova joia</button><button type="button" id="atalhoProdutos">◈ Ver produtos</button></div></div>`;
  const produtos=document.createElement('div');produtos.id='adminProdutos';
  produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div>';
  produtos.append(secaoProdutos,form,lista);
@@ -2009,11 +2191,55 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   document.getElementById('inicioPendentes').textContent=sels.filter(s=>(s.status||'aguardando')==='aguardando').length;
   document.getElementById('inicioVendas').textContent=document.getElementById('vendasHoje').textContent;
   document.getElementById('inicioFaturamento').textContent=document.getElementById('faturamentoHoje').textContent;
+  if(typeof atualizarFinanceiroAdmin === 'function') atualizarFinanceiroAdmin(periodoFinanceiroAtual);
  }
- const foto=document.getElementById('produtoFoto');const preview=document.createElement('img');preview.className='admin-photo-preview';preview.alt='Prévia da foto escolhida';foto.after(preview);let urlPreview=null;
- foto.addEventListener('change',()=>{if(urlPreview)URL.revokeObjectURL(urlPreview);const f=foto.files&&foto.files[0];urlPreview=f?URL.createObjectURL(f):null;preview.style.display=f?'block':'none';if(f)preview.src=urlPreview;else preview.removeAttribute('src')});
- document.getElementById('btnCancelarProduto').addEventListener('click',()=>{preview.style.display='none'});
- document.getElementById('novoProdutoForm').addEventListener('reset',()=>{preview.style.display='none'});
+ const foto=document.getElementById('produtoFoto');
+ const fotosAtuais=document.getElementById('produtoFotosAtuais');
+
+ window.renderizarFotosAtuais=function(produto){
+   if(!fotosAtuais) return;
+   const urls=Array.from(new Set([
+     produto?.imagem_url,
+     ...(Array.isArray(produto?.imagens)?produto.imagens:[])
+   ].filter(Boolean)));
+   fotosAtuais.innerHTML=urls.length
+     ? urls.map(url=>`<img src="${url}" alt="Foto cadastrada">`).join('')
+     : '';
+ };
+
+ foto.addEventListener('change',()=>{
+   const files=Array.from(foto.files||[]);
+   if(!files.length) return;
+   fotosAtuais.innerHTML=files.map(file=>`<img src="${URL.createObjectURL(file)}" alt="Nova foto">`).join('');
+ });
+
+ document.getElementById('novoProdutoForm').addEventListener('reset',()=>{
+   if(fotosAtuais) fotosAtuais.innerHTML='';
+ });
+
+ const precoCompraInput=document.getElementById('produtoPrecoCompra');
+ const precoVendaInput=document.getElementById('produtoPreco');
+ const margemPreview=document.getElementById('produtoMargemPreview');
+ const categoriaInput=document.getElementById('produtoCategoria');
+ const tamanhosInput=document.getElementById('produtoTamanhos');
+
+ function atualizarMargemProduto(){
+   const compra=Number(precoCompraInput?.value||0);
+   const venda=Number(precoVendaInput?.value||0);
+   const lucro=venda-compra;
+   const margem=venda>0?(lucro/venda)*100:0;
+   if(margemPreview){
+     margemPreview.textContent=`Lucro estimado por unidade: ${dinheiroAdmin(lucro)} • Margem: ${margem.toFixed(1).replace('.',',')}%`;
+     margemPreview.style.color=lucro>=0?'#48764f':'#9b4b45';
+   }
+ }
+ [precoCompraInput,precoVendaInput].forEach(el=>el?.addEventListener('input',atualizarMargemProduto));
+ categoriaInput?.addEventListener('change',()=>{
+   const eAnel=categoriaInput.value==='Anéis';
+   if(tamanhosInput) tamanhosInput.closest('label')?.classList.toggle('hidden',!eAnel);
+ });
+ atualizarMargemProduto();
+
  document.getElementById('listaProdutos').addEventListener('click',e=>{if(e.target.closest('.btnEditarProduto')){aba('adminProdutos');setTimeout(()=>form.scrollIntoView({behavior:'smooth',block:'start'}),80)}});
  document.getElementById('btnSair').addEventListener('click',()=>aba('adminInicio'));
  aba('adminInicio');

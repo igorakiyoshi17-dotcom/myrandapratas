@@ -2461,3 +2461,21 @@ body:has(.hero-myranda) {
   object-fit: cover !important;
   object-position: center !important;
 }
+
+
+/* MYRANDA V2 — descrição, tamanhos e galeria de fotos */
+.product-gallery{min-width:0}
+.product-gallery-thumbs{display:flex;gap:9px;overflow-x:auto;padding:10px 2px 3px;scrollbar-width:none}
+.product-gallery-thumbs::-webkit-scrollbar{display:none}
+.product-gallery-thumb{width:68px;height:68px;min-width:68px;margin:0;padding:0;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line);opacity:.72}
+.product-gallery-thumb.active{opacity:1;border:2px solid var(--coffee)}
+.product-gallery-thumb img{width:100%;height:100%;display:block;object-fit:cover}
+.product-description,.ring-sizes{margin:18px 0;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,253,253,.72)}
+.product-description>span,.ring-sizes>span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--coffee);margin-bottom:8px}
+.product-description p,.ring-sizes p{margin:0!important;color:var(--muted)!important;font-size:13px!important;line-height:1.65!important}
+.ring-size-list{display:flex;gap:8px;flex-wrap:wrap}
+.ring-size-list b{min-width:38px;height:38px;padding:0 10px;border-radius:999px;border:1px solid var(--gold-light);background:#fff;display:inline-flex;align-items:center;justify-content:center;color:var(--coffee);font-size:12px}
+@media(max-width:700px){
+  .product-gallery-thumb{width:58px;height:58px;min-width:58px}
+  .product-description,.ring-sizes{margin:14px 0;padding:13px 14px}
+}
