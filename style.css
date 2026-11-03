@@ -2501,3 +2501,11 @@ body:has(.hero-myranda) {
 .selection-name-field small{
   display:block;margin-top:6px;color:var(--muted);font-size:10px;line-height:1.45
 }
+
+/* MYRANDA — sete categorias na vitrine (somente layout das categorias) */
+@media (min-width: 1100px) {
+  .category-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+@media (min-width: 851px) and (max-width: 1099px) {
+  .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

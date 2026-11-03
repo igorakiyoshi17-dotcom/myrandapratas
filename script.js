@@ -29,6 +29,8 @@ function normalizeCategory(value) {
     "aneis": "Anéis",
     "brinco": "Brincos",
     "brincos": "Brincos",
+    "argola": "Argolas",
+    "argolas": "Argolas",
     "colar": "Colares",
     "colares": "Colares",
     "pulseira": "Pulseiras",
@@ -88,6 +90,7 @@ products = dados
 const categories = [
   {name:"Anéis"},
   {name:"Brincos"},
+  {name:"Argolas"},
   {name:"Colares"},
   {name:"Pulseiras"},
   {name:"Conjuntos"},
@@ -143,8 +146,18 @@ function renderFilters(){
 
 function visibleProducts(){
   let list = [...products];
-if(activeCategory === "Novidades") list = list.filter(p => p.featured);
-else if(activeCategory !== "Todos") list = list.filter(p=>p.category===activeCategory);
+  if (activeCategory === "Novidades") {
+    list = list.filter(p => p.featured);
+  } else if (activeCategory === "Argolas") {
+    // Categoria especial: reconhece argolas já cadastradas como Brincos.
+    list = list.filter(p =>
+      p.category === "Argolas" ||
+      (p.category === "Brincos" &&
+        String(p.name || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes("argol"))
+    );
+  } else if (activeCategory !== "Todos") {
+    list = list.filter(p => p.category === activeCategory);
+  }
   return list;
 }
 
