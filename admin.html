@@ -312,6 +312,69 @@ body.mimo-modal-open{overflow:hidden}
   letter-spacing:.05em;
 }
 
+
+/* MYRANDA — desconto na finalização */
+.admin-discount-overlay{
+  position:fixed;inset:0;z-index:12000;background:#281b17aa;
+  display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.admin-discount-modal{
+  width:min(100%,440px);background:#fbf6f0;color:#4b3026;
+  border-radius:22px;padding:22px;box-shadow:0 18px 60px #0004;
+}
+.admin-discount-modal h3{
+  margin:0 0 5px;font-family:Georgia,serif;font-size:25px;
+}
+.admin-discount-modal p{
+  margin:0 0 18px;color:#806f66;font-size:12px;line-height:1.5;
+}
+.admin-discount-summary{
+  background:#fffdfa;border:1px solid #eadbd4;border-radius:15px;
+  padding:14px;margin-bottom:15px;
+}
+.admin-discount-line{
+  display:flex;justify-content:space-between;gap:14px;
+  padding:5px 0;font-size:13px;
+}
+.admin-discount-line.final{
+  margin-top:7px;padding-top:11px;border-top:1px solid #eadbd4;
+  font-size:15px;font-weight:800;color:#48764f;
+}
+.admin-discount-modal label{
+  display:block;margin:0 0 7px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+.admin-discount-modal input{
+  width:100%;box-sizing:border-box;padding:13px 14px;
+  border:1px solid #d9cabc;border-radius:12px;background:white;
+  color:#4b3026;font:inherit;font-size:16px;outline:none;
+}
+.admin-discount-modal input:focus{
+  border-color:#754333;box-shadow:0 0 0 3px rgba(117,67,51,.08);
+}
+.admin-discount-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px;
+}
+.admin-discount-actions button{margin:0!important}
+.admin-discount-cancel{background:#e8ddd5!important;color:#6f5045!important}
+.admin-discount-confirm{background:#48764f!important}
+.admin-discount-note{
+  margin-top:8px!important;color:#9b4b45!important;min-height:16px;
+}
+.mimo-report-finance{
+  margin-top:14px;background:#fffdfa;border:1px solid #eadbd4;
+  border-radius:15px;padding:13px 15px;
+}
+.mimo-report-finance-row{
+  display:flex;justify-content:space-between;gap:12px;padding:4px 0;
+  font-size:13px;color:#806f66;
+}
+.mimo-report-finance-row.discount strong{color:#9b4b45}
+.mimo-report-finance-row.final{
+  border-top:1px solid #eadbd4;margin-top:6px;padding-top:10px;
+  color:#4b3026;font-weight:800;
+}
+
 </style>
 
 <style>
@@ -1327,6 +1390,7 @@ function aplicarFiltroSelecoes(status) {
         ">
           ${selecao.quantidade} ${Number(selecao.quantidade) === 1 ? "peça" : "peças"}
           • Total: R$ ${Number(selecao.total).toFixed(2).replace(".", ",")}
+          ${Number(selecao.desconto || 0) > 0 ? ` • Desconto: R$ ${Number(selecao.desconto).toFixed(2).replace(".", ",")}` : ""}
         </div>
 
         ${(selecao.status || "aguardando") === "aguardando" ? `
@@ -1373,6 +1437,88 @@ function aplicarFiltroSelecoes(status) {
   }).join("");
 }
   
+
+
+function solicitarDescontoFinalizacao(selecao){
+  return new Promise(resolve=>{
+    const totalOriginal = Number(selecao.total_original ?? selecao.total ?? 0);
+
+    const overlay = document.createElement("div");
+    overlay.className = "admin-discount-overlay";
+    overlay.innerHTML = `
+      <section class="admin-discount-modal" role="dialog" aria-modal="true" aria-label="Aplicar desconto">
+        <h3>Finalizar venda</h3>
+        <p>Informe o desconto, se houver. O faturamento e o lucro usarão o valor final pago.</p>
+
+        <div class="admin-discount-summary">
+          <div class="admin-discount-line">
+            <span>Total original</span>
+            <strong id="discountOriginal">${dinheiroAdmin(totalOriginal)}</strong>
+          </div>
+          <div class="admin-discount-line">
+            <span>Desconto</span>
+            <strong id="discountValue">${dinheiroAdmin(0)}</strong>
+          </div>
+          <div class="admin-discount-line final">
+            <span>Total final</span>
+            <strong id="discountFinal">${dinheiroAdmin(totalOriginal)}</strong>
+          </div>
+        </div>
+
+        <label for="adminDiscountInput">Desconto em R$</label>
+        <input id="adminDiscountInput" type="number" min="0" step="0.01" value="0" inputmode="decimal">
+        <p class="admin-discount-note" id="adminDiscountNote"></p>
+
+        <div class="admin-discount-actions">
+          <button type="button" class="admin-discount-cancel">Cancelar</button>
+          <button type="button" class="admin-discount-confirm">Finalizar venda</button>
+        </div>
+      </section>
+    `;
+
+    document.body.appendChild(overlay);
+    document.body.classList.add("mimo-modal-open");
+
+    const input = overlay.querySelector("#adminDiscountInput");
+    const valorDesconto = overlay.querySelector("#discountValue");
+    const valorFinal = overlay.querySelector("#discountFinal");
+    const aviso = overlay.querySelector("#adminDiscountNote");
+
+    function valorAtual(){
+      const desconto = Math.max(0, Number(input.value || 0));
+      return Math.round(desconto * 100) / 100;
+    }
+
+    function atualizar(){
+      const desconto = valorAtual();
+      const invalido = desconto > totalOriginal;
+      aviso.textContent = invalido ? "O desconto não pode ser maior que o total da venda." : "";
+      valorDesconto.textContent = dinheiroAdmin(desconto);
+      valorFinal.textContent = dinheiroAdmin(Math.max(0, totalOriginal - desconto));
+      overlay.querySelector(".admin-discount-confirm").disabled = invalido;
+    }
+
+    function fechar(resultado){
+      overlay.remove();
+      document.body.classList.remove("mimo-modal-open");
+      resolve(resultado);
+    }
+
+    input.addEventListener("input", atualizar);
+    overlay.querySelector(".admin-discount-cancel").onclick = ()=>fechar(null);
+    overlay.querySelector(".admin-discount-confirm").onclick = ()=>{
+      const desconto = valorAtual();
+      if(desconto > totalOriginal) return;
+      fechar(desconto);
+    };
+    overlay.addEventListener("click", e=>{
+      if(e.target === overlay) fechar(null);
+    });
+
+    atualizar();
+    setTimeout(()=>input.select(),50);
+  });
+}
 
 let periodoFinanceiroAtual = "dia";
 
@@ -1698,6 +1844,11 @@ if ((selecaoAtual.status || "aguardando") !== "aguardando") {
   const novoStatus = botao.classList.contains("btnFinalizarSelecao")
     ? "finalizada"
     : "cancelada";
+
+  let descontoAplicado = 0;
+  let totalOriginalVenda = Number(selecaoAtual.total_original ?? selecaoAtual.total ?? 0);
+  let totalFinalVenda = totalOriginalVenda;
+
     if (novoStatus === "finalizada") {
   const selecao = selecoesCarregadas.find(
     item => Number(item.id) === idSelecao
@@ -1734,14 +1885,15 @@ if ((selecaoAtual.status || "aguardando") !== "aguardando") {
   }
 }
 
-  const confirmar = confirm(
-    novoStatus === "finalizada"
-      ? "Deseja marcar esta seleção como finalizada?"
-      : "Deseja marcar esta seleção como cancelada?"
-  );
+  if (novoStatus === "finalizada") {
+    const descontoEscolhido = await solicitarDescontoFinalizacao(selecaoAtual);
+    if (descontoEscolhido === null) return;
 
-  if (!confirmar) {
-    return;
+    descontoAplicado = Number(descontoEscolhido) || 0;
+    totalFinalVenda = Math.max(0, totalOriginalVenda - descontoAplicado);
+  } else {
+    const confirmar = confirm("Deseja marcar esta seleção como cancelada?");
+    if (!confirmar) return;
   }
 
 const token = localStorage.getItem("myranda_access_token");
@@ -1778,7 +1930,7 @@ if (novoStatus === "finalizada") {
     (total, item) => total + (Number(item.preco_compra) || 0) * (Number(item.quantidade) || 1),
     0
   );
-  lucroTotalVenda = (Number(selecao.total) || 0) - custoTotalVenda;
+  lucroTotalVenda = totalFinalVenda - custoTotalVenda;
 
   for (const item of selecao.itens) {
     const produto = produtosCarregados.find(
@@ -1847,7 +1999,10 @@ if (produtosAtualizados.length === 0) {
       : null,
   itens: novoStatus === "finalizada" ? itensComCusto : selecaoAtual.itens,
   custo_total: novoStatus === "finalizada" ? custoTotalVenda : selecaoAtual.custo_total,
-  lucro_total: novoStatus === "finalizada" ? lucroTotalVenda : selecaoAtual.lucro_total
+  lucro_total: novoStatus === "finalizada" ? lucroTotalVenda : selecaoAtual.lucro_total,
+  total_original: novoStatus === "finalizada" ? totalOriginalVenda : selecaoAtual.total_original,
+  desconto: novoStatus === "finalizada" ? descontoAplicado : (selecaoAtual.desconto || 0),
+  total: novoStatus === "finalizada" ? totalFinalVenda : selecaoAtual.total
 })
       }
     );
@@ -2541,7 +2696,14 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
     return `<div class="mimo-report-item">${imagem}<div class="mimo-report-item-info"><strong>${escapar(item.nome||produto?.nome||'Produto')}</strong><small>${escapar(item.codigo||'')} • ${quantidade} ${quantidade===1?'unidade':'unidades'}</small><b>${dinheiro(item.preco)} / un.</b></div></div>`;
   }).join('');
   overlay=document.createElement('div');overlay.className='mimo-report-overlay';
-  overlay.innerHTML=`<section class="mimo-report" role="dialog" aria-modal="true" aria-label="Relatório da seleção de ${escapar(selecao.cliente_nome||selecao.codigo)}"><div class="mimo-report-head"><div><span class="mimo-report-kicker">RELATÓRIO DA SELEÇÃO</span><h2>${escapar(selecao.cliente_nome||selecao.codigo)}</h2><div class="mimo-report-date">${escapar(data)}</div></div><button type="button" class="mimo-report-close" aria-label="Fechar relatório">×</button></div><span class="mimo-report-status">${escapar(status.toUpperCase())}</span><div>${linhas||'<p>Esta seleção não contém itens.</p>'}</div><div class="mimo-report-total"><span>${Number(selecao.quantidade)||itens.length} peças • Total</span><strong>${dinheiro(selecao.total)}</strong></div></section>`;
+  overlay.innerHTML=`<section class="mimo-report" role="dialog" aria-modal="true" aria-label="Relatório da seleção de ${escapar(selecao.cliente_nome||selecao.codigo)}"><div class="mimo-report-head"><div><span class="mimo-report-kicker">RELATÓRIO DA SELEÇÃO</span><h2>${escapar(selecao.cliente_nome||selecao.codigo)}</h2><div class="mimo-report-date">${escapar(data)}</div></div><button type="button" class="mimo-report-close" aria-label="Fechar relatório">×</button></div><span class="mimo-report-status">${escapar(status.toUpperCase())}</span><div>${linhas||'<p>Esta seleção não contém itens.</p>'}</div>${Number(selecao.desconto||0)>0 ? `
+    <div class="mimo-report-finance">
+      <div class="mimo-report-finance-row"><span>Total original</span><strong>${dinheiro(selecao.total_original ?? (Number(selecao.total)+Number(selecao.desconto||0)))}</strong></div>
+      <div class="mimo-report-finance-row discount"><span>Desconto</span><strong>- ${dinheiro(selecao.desconto)}</strong></div>
+      <div class="mimo-report-finance-row final"><span>Total pago</span><strong>${dinheiro(selecao.total)}</strong></div>
+    </div>
+  ` : ""}
+  <div class="mimo-report-total"><span>${Number(selecao.quantidade)||itens.length} peças • ${Number(selecao.desconto||0)>0?"Total pago":"Total"}</span><strong>${dinheiro(selecao.total)}</strong></div></section>`;
   overlay.addEventListener('click',e=>{if(e.target===overlay||e.target.closest('.mimo-report-close'))fechar()});
   document.body.appendChild(overlay);document.body.classList.add('mimo-modal-open');
   overlay.querySelector('.mimo-report-close').focus();
