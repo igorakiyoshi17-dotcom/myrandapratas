@@ -796,8 +796,6 @@ $("#confirmSelection").onclick=async()=>{
   }
 
   campoNome?.classList.remove("input-error");
-  const code = "#" + Math.random().toString(36).slice(2,7).toUpperCase();
-
 const items = Object.entries(selected)
   .map(([id, quantidade]) => {
     const produto = products.find(p => p.id === id);
@@ -834,8 +832,7 @@ const items = Object.entries(selected)
           "apikey": SUPABASE_KEY
         },
         body: JSON.stringify({
-          codigo: code,
-          cliente_nome: nomeCliente,
+          codigo: nomeCliente,
           itens: itensParaSalvar,
           total: total,
           quantidade: items.reduce(
