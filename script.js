@@ -875,56 +875,61 @@ $("#sendWhatsApp").onclick=()=>{
   const nomeCliente = confirmedCustomerName || String($("#customerName")?.value || "").trim();
 
   const items = Object.entries(selected)
-    .map(([id, quantidade]) => {
-      const produto = products.find(p => p.id === id);
-      if (!produto) return null;
-      return { ...produto, quantidade };
-    })
-    .filter(Boolean);
+  .map(([id, quantidade]) => {
+    const produto = products.find(p => p.id === id);
+
+    if (!produto) return null;
+
+    return {
+      ...produto,
+      quantidade
+    };
+  })
+  .filter(Boolean);
 
   if (!items.length) {
     showToast("Sua seleção está vazia.");
     return;
   }
 
-  const total = items.reduce((s, p) => s + (p.price * p.quantidade), 0);
+  const total = items.reduce(
+    (s, p) => s + (p.price * p.quantidade),
+    0
+  );
 
   const listaProdutos = items
-    .map(p => [
-      `💎 *${String(p.name || "").toUpperCase()}*`,
-      "",
-      `Código: ${p.id}`,
-      "",
-      `Quantidade: ${p.quantidade}`,
-      "",
-      `Valor unitário: ${money(p.price)}`,
-      "",
-      `Subtotal: ${money(p.price * p.quantidade)}`,
-      "",
-      "━━━━━━━━━━━━"
-    ].join("\n"))
+    .map(p => `
+💎 *${p.name}*
+Código: ${p.id}
+Quantidade: ${p.quantidade}
+Valor unitário: ${money(p.price)}
+Subtotal: ${money(p.price * p.quantidade)}
+    `.trim())
     .join("\n\n");
 
-  const mensagem = [
-    "Olá! Gostaria de finalizar meu pedido na Myranda Pratas. 🤎💍",
-    "",
-    `Cliente: ${nomeCliente}`,
-    "",
-    "✨ *MINHA SELEÇÃO*",
-    "",
-    "💎 *JOIAS ESCOLHIDAS*",
-    "",
-    listaProdutos,
-    "",
-    `💰 *TOTAL: ${money(total)}*`,
-    "",
-    "━━━━━━━━━━━━",
-    "",
-    "Gostaria de confirmar a disponibilidade e combinar o pagamento e a entrega. 🤎"
-  ].join("\n");
+  const mensagem = `Olá! Gostaria de finalizar meu pedido na Myranda Pratas. 🤎💍
+
+Cliente: ${nomeCliente}
+
+✨ *MINHA SELEÇÃO*
+
+💎 *JOIAS ESCOLHIDAS*
+
+${listaProdutos}
+
+━━━━━━━━━━━━
+💰 *TOTAL: ${money(total)}*
+━━━━━━━━━━━━
+
+Gostaria de confirmar a disponibilidade e combinar o pagamento e a entrega. 🤎`;
 
   const numeroWhatsApp = "5561995970024";
-  const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  const linkWhatsApp = isMobile
+    ? `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`
+    : `https://web.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
 
   window.open(linkWhatsApp, "_blank");
 };
