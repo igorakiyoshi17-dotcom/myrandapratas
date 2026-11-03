@@ -256,6 +256,18 @@
       </div>
       <div class="selection-list" id="selectionList"></div>
       <div class="selection-footer">
+        <div class="selection-name-field">
+          <label for="customerName">Seu nome</label>
+          <input
+            id="customerName"
+            type="text"
+            maxlength="80"
+            autocomplete="name"
+            placeholder="Digite seu nome"
+            aria-describedby="customerNameHelp"
+          >
+          <small id="customerNameHelp">Usaremos seu nome para identificar sua seleção.</small>
+        </div>
         <div class="total-line"><span>Total</span><strong id="modalTotal">R$ 0,00</strong></div>
         <button class="primary-btn confirm-btn" id="confirmSelection">Confirmar seleção <span>→</span></button>
         <p class="microcopy">Sem pagamento online. Esta seleção serve para separar e organizar suas peças.</p>
@@ -268,8 +280,8 @@
       <div class="success-mark">✓</div>
       <span class="eyebrow">SELEÇÃO CRIADA</span>
       <h2>Prontinho! ✨</h2>
-      <p>Sua seleção foi registrada como:</p>
-      <div class="selection-code" id="selectionCode">#A4821</div>
+      <p>Sua seleção foi registrada em nome de:</p>
+      <div class="selection-code" id="selectionCustomerName">Cliente</div>
       <div class="success-summary" id="successSummary"></div>
       <button class="primary-btn" id="sendWhatsApp" style="margin-bottom:10px;">
   Enviar seleção pelo WhatsApp <span>→</span>

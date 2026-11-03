@@ -1230,12 +1230,16 @@ function aplicarFiltroSelecoes(status) {
     status === "todas" ||
     (selecao.status || "aguardando") === status;
 
-  const codigo = String(selecao.codigo || "")
+  const nomeCliente = String(selecao.cliente_nome || "")
+    .toUpperCase();
+  const codigoAntigo = String(selecao.codigo || "")
     .replace("#", "")
     .toUpperCase();
 
   const correspondeBusca =
-    busca === "" || codigo.includes(busca);
+    busca === "" ||
+    nomeCliente.includes(busca) ||
+    (!selecao.cliente_nome && codigoAntigo.includes(busca));
 
   return correspondeStatus && correspondeBusca;
 });
@@ -1277,7 +1281,7 @@ function aplicarFiltroSelecoes(status) {
           gap:12px;
           flex-wrap:wrap;
         ">
-          <strong>${selecao.codigo}</strong>
+          <strong>${selecao.cliente_nome || selecao.codigo}</strong>
 
           <span style="
             font-size:12px;
@@ -1535,7 +1539,7 @@ lista.innerHTML = selecoesCarregadas.map(selecao => {
             gap:12px;
             flex-wrap:wrap;
           ">
-            <strong>${selecao.codigo}</strong>
+            <strong>${selecao.cliente_nome || selecao.codigo}</strong>
 <span style="
   font-size:12px;
   font-weight:bold;
@@ -2537,7 +2541,7 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
     return `<div class="mimo-report-item">${imagem}<div class="mimo-report-item-info"><strong>${escapar(item.nome||produto?.nome||'Produto')}</strong><small>${escapar(item.codigo||'')} • ${quantidade} ${quantidade===1?'unidade':'unidades'}</small><b>${dinheiro(item.preco)} / un.</b></div></div>`;
   }).join('');
   overlay=document.createElement('div');overlay.className='mimo-report-overlay';
-  overlay.innerHTML=`<section class="mimo-report" role="dialog" aria-modal="true" aria-label="Relatório da seleção ${escapar(selecao.codigo)}"><div class="mimo-report-head"><div><span class="mimo-report-kicker">RELATÓRIO DA SELEÇÃO</span><h2>${escapar(selecao.codigo)}</h2><div class="mimo-report-date">${escapar(data)}</div></div><button type="button" class="mimo-report-close" aria-label="Fechar relatório">×</button></div><span class="mimo-report-status">${escapar(status.toUpperCase())}</span><div>${linhas||'<p>Esta seleção não contém itens.</p>'}</div><div class="mimo-report-total"><span>${Number(selecao.quantidade)||itens.length} peças • Total</span><strong>${dinheiro(selecao.total)}</strong></div></section>`;
+  overlay.innerHTML=`<section class="mimo-report" role="dialog" aria-modal="true" aria-label="Relatório da seleção de ${escapar(selecao.cliente_nome||selecao.codigo)}"><div class="mimo-report-head"><div><span class="mimo-report-kicker">RELATÓRIO DA SELEÇÃO</span><h2>${escapar(selecao.cliente_nome||selecao.codigo)}</h2><div class="mimo-report-date">${escapar(data)}</div></div><button type="button" class="mimo-report-close" aria-label="Fechar relatório">×</button></div><span class="mimo-report-status">${escapar(status.toUpperCase())}</span><div>${linhas||'<p>Esta seleção não contém itens.</p>'}</div><div class="mimo-report-total"><span>${Number(selecao.quantidade)||itens.length} peças • Total</span><strong>${dinheiro(selecao.total)}</strong></div></section>`;
   overlay.addEventListener('click',e=>{if(e.target===overlay||e.target.closest('.mimo-report-close'))fechar()});
   document.body.appendChild(overlay);document.body.classList.add('mimo-modal-open');
   overlay.querySelector('.mimo-report-close').focus();

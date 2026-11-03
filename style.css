@@ -2479,3 +2479,25 @@ body:has(.hero-myranda) {
   .product-gallery-thumb{width:58px;height:58px;min-width:58px}
   .product-description,.ring-sizes{margin:14px 0;padding:13px 14px}
 }
+
+
+/* Nome da cliente na confirmação da seleção */
+.selection-name-field{margin:0 0 16px;text-align:left}
+.selection-name-field label{
+  display:block;margin-bottom:7px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--coffee)
+}
+.selection-name-field input{
+  width:100%;box-sizing:border-box;padding:13px 14px;
+  border:1px solid var(--line);border-radius:12px;background:#fff;
+  color:var(--coffee);font:inherit;font-size:15px;outline:none
+}
+.selection-name-field input:focus{
+  border-color:var(--coffee);box-shadow:0 0 0 3px rgba(90,58,46,.08)
+}
+.selection-name-field input.input-error{
+  border-color:#9b4b45;box-shadow:0 0 0 3px rgba(155,75,69,.08)
+}
+.selection-name-field small{
+  display:block;margin-top:6px;color:var(--muted);font-size:10px;line-height:1.45
+}

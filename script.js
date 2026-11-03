@@ -100,6 +100,7 @@ let activeCategory = "Todos";
 
 const money = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const $ = s => document.querySelector(s);
+let confirmedCustomerName = "";
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -769,12 +770,32 @@ document.addEventListener("keydown", e => {
 });
 
 
+const customerNameInput = $("#customerName");
+if (customerNameInput) {
+  customerNameInput.addEventListener("input", () => {
+    customerNameInput.classList.remove("input-error");
+  });
+}
+
 $("#confirmSelection").onclick=async()=>{
   if(Object.keys(selected).length === 0){
     showToast("Adicione pelo menos uma peça.");
     return;
   }
 
+  const campoNome = $("#customerName");
+  const nomeCliente = String(campoNome?.value || "")
+    .trim()
+    .replace(/\s+/g, " ");
+
+  if (nomeCliente.length < 2) {
+    campoNome?.classList.add("input-error");
+    campoNome?.focus();
+    showToast("Digite seu nome para confirmar a seleção.");
+    return;
+  }
+
+  campoNome?.classList.remove("input-error");
   const code = "#" + Math.random().toString(36).slice(2,7).toUpperCase();
 
 const items = Object.entries(selected)
@@ -814,6 +835,7 @@ const items = Object.entries(selected)
         },
         body: JSON.stringify({
           codigo: code,
+          cliente_nome: nomeCliente,
           itens: itensParaSalvar,
           total: total,
           quantidade: items.reduce(
@@ -830,7 +852,8 @@ const items = Object.entries(selected)
       throw new Error("Não foi possível registrar sua seleção.");
     }
 
-    $("#selectionCode").textContent = code;
+    confirmedCustomerName = nomeCliente;
+    $("#selectionCustomerName").textContent = nomeCliente;
 
     
     const quantidadeTotal = items.reduce(
@@ -839,7 +862,7 @@ const items = Object.entries(selected)
 );
 
 $("#successSummary").innerHTML =
-  `${quantidadeTotal} ${quantidadeTotal === 1 ? "peça selecionada" : "peças selecionadas"} • Total ${money(total)}<br>Guarde este código para consultar sua seleção.`;
+  `${quantidadeTotal} ${quantidadeTotal === 1 ? "peça selecionada" : "peças selecionadas"} • Total ${money(total)}<br>Sua seleção foi registrada com sucesso.`;
     
 
     closeModal("#selectionModal");
@@ -852,7 +875,7 @@ $("#successSummary").innerHTML =
 };
 
 $("#sendWhatsApp").onclick=()=>{
-  const code = $("#selectionCode").textContent;
+  const nomeCliente = confirmedCustomerName || String($("#customerName")?.value || "").trim();
 
   const items = Object.entries(selected)
     .map(([id, quantidade]) => {
@@ -881,7 +904,7 @@ $("#sendWhatsApp").onclick=()=>{
     "",
     "Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.",
     "",
-    `Código da seleção: ${code}`,
+    `Nome: ${nomeCliente}`,
     "",
     "Minha seleção:",
     listaProdutos,
