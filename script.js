@@ -891,24 +891,36 @@ $("#sendWhatsApp").onclick=()=>{
 
   const listaProdutos = items
     .map(p => [
-      `• ${p.quantidade}x ${p.name} — ${money(p.price)} cada`,
-      `Subtotal: ${money(p.price * p.quantidade)}`
+      `💎 *${String(p.name || "").toUpperCase()}*`,
+      "",
+      `Código: ${p.id}`,
+      "",
+      `Quantidade: ${p.quantidade}`,
+      "",
+      `Valor unitário: ${money(p.price)}`,
+      "",
+      `Subtotal: ${money(p.price * p.quantidade)}`,
+      "",
+      "━━━━━━━━━━━━"
     ].join("\n"))
     .join("\n\n");
 
   const mensagem = [
-    "Olá! ✦",
+    "Olá! Gostaria de finalizar meu pedido na Myranda Pratas. 🤎💍",
     "",
-    "Separei algumas peças na Myranda Pratas e gostaria de finalizar minha compra.",
+    `Cliente: ${nomeCliente}`,
     "",
-    `Nome: ${nomeCliente}`,
+    "✨ *MINHA SELEÇÃO*",
     "",
-    "Minha seleção:",
+    "💎 *JOIAS ESCOLHIDAS*",
+    "",
     listaProdutos,
     "",
-    `Total: ${money(total)}`,
+    `💰 *TOTAL: ${money(total)}*`,
     "",
-    "Podemos seguir com a finalização? ♡"
+    "━━━━━━━━━━━━",
+    "",
+    "Gostaria de confirmar a disponibilidade e combinar o pagamento e a entrega. 🤎"
   ].join("\n");
 
   const numeroWhatsApp = "5561995970024";
