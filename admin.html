@@ -842,6 +842,7 @@ body.admin-logado{background:#f8f1ec!important}
       <option value="">Selecione uma categoria</option>
       <option value="Anéis">Anéis</option>
       <option value="Brincos">Brincos</option>
+      <option value="Argolas">Argolas</option>
       <option value="Colares">Colares</option>
       <option value="Pulseiras">Pulseiras</option>
       <option value="Conjuntos">Conjuntos</option>
@@ -1143,7 +1144,12 @@ window.novasFotosSelecionadas = [];
     }
 
     lista.innerHTML = produtos.map(produto => `
-      <div data-produto-categoria="${produto.categoria || ""}" style="
+      <div data-produto-categoria="${produto.categoria || ""}"
+           data-produto-argola="${
+             String(produto.categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === "argolas" ||
+             (String(produto.categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() === "brincos" &&
+              String(produto.nome || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes("argol"))
+           }" style="
         border:1px solid #e6d9ca;
         border-radius:16px;
         padding:16px;
@@ -2496,7 +2502,7 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
   <div class="admin-profit-mini"><small>Lucro no mês</small><strong id="lucroMesInicio">R$ 0,00</strong></div>
 </div><div class="admin-quick"><h3>Acesso rápido</h3><div class="admin-quick-actions"><button type="button" id="atalhoNovo">＋ Nova joia</button><button type="button" id="atalhoProdutos">◈ Ver produtos</button></div></div>`;
  const produtos=document.createElement('div');produtos.id='adminProdutos';
- produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div><div class="admin-category-tabs" id="filtrosCategoriasProdutos" aria-label="Filtrar produtos por categoria"><button type="button" class="active" data-categoria-produto="todos">Todos</button><button type="button" data-categoria-produto="aneis">Anéis</button><button type="button" data-categoria-produto="brincos">Brincos</button><button type="button" data-categoria-produto="colares">Colares</button><button type="button" data-categoria-produto="pulseiras">Pulseiras</button><button type="button" data-categoria-produto="conjuntos">Conjuntos</button><button type="button" data-categoria-produto="novidades">Novidades</button></div>';
+ produtos.innerHTML='<small class="admin-eyebrow">CATÁLOGO</small><h2 class="admin-title">Minhas joias</h2><p class="admin-subtitle">Cadastre, edite e controle seu estoque.</p><div class="admin-product-tools"><input type="search" id="buscaProdutos" placeholder="Buscar por nome ou código..." aria-label="Buscar produtos"></div><div class="admin-category-tabs" id="filtrosCategoriasProdutos" aria-label="Filtrar produtos por categoria"><button type="button" class="active" data-categoria-produto="todos">Todos</button><button type="button" data-categoria-produto="aneis">Anéis</button><button type="button" data-categoria-produto="brincos">Brincos</button><button type="button" data-categoria-produto="argolas">Argolas</button><button type="button" data-categoria-produto="colares">Colares</button><button type="button" data-categoria-produto="pulseiras">Pulseiras</button><button type="button" data-categoria-produto="conjuntos">Conjuntos</button><button type="button" data-categoria-produto="novidades">Novidades</button></div>';
  produtos.append(secaoProdutos,form,lista);
  const selecoes=document.createElement('div');selecoes.id='adminSelecoes';
  selecoes.innerHTML='<small class="admin-eyebrow">PEDIDOS</small><h2 class="admin-title">Seleções recebidas</h2><p class="admin-subtitle">Acompanhe os pedidos das clientes.</p>';
@@ -2532,7 +2538,9 @@ document.querySelector('#novoProdutoForm button[type="submit"]').textContent = "
 
      const categoriaCard=normalizarCategoriaProduto(card.dataset.produtoCategoria);
      const correspondeCategoria=
-       categoriaProdutoAtiva==='todos' || categoriaCard===categoriaProdutoAtiva;
+       categoriaProdutoAtiva==='todos' ||
+       categoriaCard===categoriaProdutoAtiva ||
+       (categoriaProdutoAtiva==='argolas' && card.dataset.produtoArgola==='true');
 
      card.style.display=correspondeBusca && correspondeCategoria ? '' : 'none';
    });
