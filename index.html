@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#2B0D0C">
+  <meta name="theme-color" content="#64223d">
   <meta name="google-site-verification" content="fYG1hCP8jU2A4NxeU1qpyG-1FW6G8xIMDSJrLlhMIgE">
   <title>Myranda Pratas | Joias em Prata 925</title>
   <meta name="description" content="Descubra joias em Prata 925 na Myranda Pratas. Anéis, brincos, colares, pulseiras e conjuntos delicados para todos os momentos.">
@@ -69,6 +69,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="myranda-premium.css">
 <link rel="manifest" href="manifest.json">
 
 <style>
@@ -138,73 +139,97 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
 </head>
-<body>
+<body class="premium-boutique">
   <div class="app-shell">
-    <header class="topbar">
-      <a class="brand-mini" href="#inicio" aria-label="Myrandapratas">
-        <span>MYRANDA</span>
-        <strong>PRATAS</strong>
-      </a>
-      <button class="selection-top favorites-top" id="openFavoritesTop" aria-label="Abrir favoritos">♥</button>
-      <button class="selection-top" id="openSelectionTop" aria-label="Abrir minha seleção">
-        <span class="bag-icon">♡</span>
-        <span class="top-count" id="topCount">0</span>
-      </button>
+    <div class="premium-announcement">PRATA 925 · JOIAS SELECIONADAS · MYRANDA PRATAS</div>
+    <header class="topbar" id="topo">
+      <div class="premium-header-inner">
+        <a class="brand-mini premium-brand" href="#inicio" aria-label="Myranda Pratas — início">
+          <svg class="premium-bow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 54 54" fill="none" aria-hidden="true">
+            <path d="M26 24C16 7 3 12 5 23c2 8 14 7 21 3M28 24c10-17 23-13 21-1-1 8-14 8-21 3M25 25l-6 19 9-6 8 6-7-19" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M25 24c3-2 5-2 7 1-2 5-5 5-7-1Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 44v7m-4-3.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <span class="premium-brand-text">Myranda Pratas<small>PRATA 925</small></span>
+        </a>
+        <nav class="premium-header-nav" aria-label="Menu da loja">
+          <a href="#catalogo">Coleção</a>
+          <a href="#como-comprar">Como comprar</a>
+          <a href="#contato">Contato</a>
+        </nav>
+        <div class="premium-header-actions">
+          <button class="selection-top favorites-top premium-favorite" id="openFavoritesTop" aria-label="Abrir favoritos" type="button">♡</button>
+          <a href="#catalogo" class="premium-header-link">Ver catálogo</a>
+          <button class="selection-top premium-header-selection" id="openSelectionTop" aria-label="Abrir minha seleção" type="button">
+            <span class="bag-icon">♡ Minha seleção</span>
+            <span class="top-count" id="topCount">0</span>
+          </button>
+        </div>
+      </div>
     </header>
-
     <main>
      
 
 
 
-<section class="hero hero-myranda" id="inicio">
-  <div class="hero-image" aria-hidden="true"></div>
-  <div class="hero-overlay" aria-hidden="true"></div>
-
-  <div class="hero-content">
-    <p class="eyebrow">MYRANDA PRATAS · PRATA 925</p>
-
-    <h1><span class="hero-first-line">Do seu jeito.</span><br><em class="hero-second-line">Em cada escolha</em></h1>
-
-    <p class="hero-copy">
-      Seu estilo começa nos detalhes.<br>
-      <em><strong>Prata 925</strong> para quem faz da presença uma assinatura.</em>
-    </p>
-
-    <button class="primary-btn hero-btn" id="goCatalog">
-      Ver catálogo <span>→</span>
-    </button>
-
-    <div class="hero-signature">
-      <span></span>
-      MYRANDA PRATAS · PRATA 925
+<section class="hero hero-myranda premium-hero" id="inicio">
+  <div class="premium-hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow premium-rule">MYRANDA PRATAS · PRATA 925</p>
+      <h1><span class="hero-first-line">Do seu jeito.</span><br><em class="hero-second-line">Em cada escolha</em></h1>
+      <p class="hero-copy">Seu estilo começa nos detalhes.<br><em><strong>Prata 925</strong> para quem faz da presença uma assinatura.</em></p>
+      <div class="premium-hero-actions">
+        <button class="primary-btn hero-btn" id="goCatalog">Explorar coleção</button>
+        <a href="#como-comprar" class="premium-outline-btn">Como comprar</a>
+      </div>
+    </div>
+    <div class="premium-hero-photos" aria-label="Joias em prata 925 da Myranda">
+      <figure class="premium-photo premium-photo-first">
+        <img id="premiumHeroPhotoA" src="icon-512.png" alt="Joia da coleção Myranda Pratas" loading="eager" decoding="async">
+      </figure>
+      <figure class="premium-photo premium-photo-second">
+        <img id="premiumHeroPhotoB" src="icon-512.png" alt="Outra joia da coleção Myranda Pratas" loading="eager" decoding="async">
+      </figure>
+      <span class="premium-jewel-glimmer" aria-hidden="true">✧</span>
     </div>
   </div>
 </section>
+<div class="premium-message-strip">♡ Seu estilo começa nos detalhes. <span>·</span> Prata 925 para quem faz da presença uma assinatura.</div>
 
 
       
-      <section class="section categories-section" id="categorias">
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">EXPLORE</span>
-            <h2>Categorias</h2>
-          </div>
-        </div>
+      <!-- Estrutura mantida para compatibilidade com o JS de categorias existente. -->
+      <section class="section categories-section premium-category-hook" id="categorias" aria-label="Categorias">
         <div class="category-grid" id="categoryGrid"></div>
       </section>
 
-      <section class="section" id="catalogo">
+      <section class="section premium-catalog" id="catalogo">
         <div class="section-heading catalog-heading">
           <div>
-            <span class="eyebrow">SELEÇÃO MYRANDA</span>
-            <h2>Peças em destaque</h2>
+            <span class="eyebrow premium-rule">CATÁLOGO</span>
+            <h2>Escolha seus favoritos</h2>
+            <p class="premium-catalog-desc">Explore as joias, encontre suas preferidas e monte sua seleção com calma.</p>
           </div>
           <button class="text-btn" id="showAll">Ver todas</button>
         </div>
-
+        <p class="premium-filter-label">Escolha uma categoria:</p>
         <div class="filter-row" id="filterRow"></div>
+        <div class="premium-catalog-intro">
+          <div>
+            <h3 id="premiumCategoryTitle">Todos os modelos</h3>
+            <p>Joias selecionadas em Prata 925.</p>
+          </div>
+        </div>
+        <div class="premium-search-line">
+          <label class="premium-search-wrap" for="premiumSearch">
+            <span aria-hidden="true">⌕</span>
+            <input id="premiumSearch" type="search" placeholder="Busque por nome ou código..." autocomplete="off" aria-label="Buscar joias por nome ou código">
+          </label>
+          <span id="premiumProductCount" class="premium-product-count" aria-live="polite"></span>
+        </div>
         <div class="product-grid" id="productGrid"></div>
+        <div class="premium-more-wrap"><button type="button" id="premiumMoreProducts" class="premium-more-btn" hidden>Ver mais joias</button></div>
+        <div class="premium-catalog-note">Este catálogo apresenta joias disponíveis para seleção. A disponibilidade é confirmada na finalização pelo WhatsApp.</div>
       </section>
 
       <section id="productDetails" class="product-details" hidden>
@@ -213,6 +238,17 @@
         </button>
         <div id="productDetailsContent"></div>
       </section>
+    <section id="como-comprar" class="premium-steps">
+      <div class="premium-wide-inner">
+        <span class="eyebrow premium-rule">SIMPLES E PRÁTICO</span>
+        <h2>Como comprar</h2>
+        <div class="premium-step-grid">
+          <article class="premium-step"><span class="premium-step-num">01</span><h3>Explore a coleção</h3><p>Veja as joias disponíveis e escolha as peças que mais combinam com você.</p></article>
+          <article class="premium-step"><span class="premium-step-num">02</span><h3>Monte sua seleção</h3><p>Adicione suas favoritas, confira os valores e confirme com seu nome.</p></article>
+          <article class="premium-step"><span class="premium-step-num">03</span><h3>Fale com a Myranda</h3><p>Envie sua seleção pelo WhatsApp para combinar o pagamento e a entrega.</p></article>
+        </div>
+      </div>
+    </section>
     </main>
 
     <div class="selection-bar" id="selectionBar" hidden>
@@ -316,30 +352,92 @@
   </p>
 </section>
 
-<footer class="myranda-footer">
-  <div class="footer-content">
-    <h2>Myranda Pratas</h2>
-
-    <p class="footer-text">
-      Delicadeza, brilho e elegância em cada detalhe.
-    </p>
-
-    <div class="footer-contacts">
-      <a href="https://wa.me/5561995970024" target="_blank" rel="noopener">
-        WhatsApp: (61) 99597-0024
-      </a>
-
-      <a href="https://instagram.com/myrandapratas" target="_blank" rel="noopener">
-        Instagram: @myrandapratas
-      </a>
+<footer class="myranda-footer" id="contato">
+  <div class="footer-content premium-footer-inner">
+    <div>
+      <h2>Myranda Pratas<small>PRATA 925</small></h2>
+      <p class="footer-text">Seu estilo começa nos detalhes.<br>Joias para valorizar a sua presença.</p>
     </div>
-
-    <p class="footer-copy">
-      © 2026 Myranda Pratas · Prata 925
-    </p>
+    <div class="premium-footer-contact">
+      <h3>Vamos conversar?</h3>
+      <p>Escolha suas peças favoritas e conclua sua seleção pelo WhatsApp.</p>
+      <div class="footer-contacts">
+        <a href="https://wa.me/5561995970024" target="_blank" rel="noopener">Falar no WhatsApp</a>
+        <a href="https://www.instagram.com/myrandapratas/" target="_blank" rel="noopener">Instagram · @myrandapratas</a>
+      </div>
+    </div>
   </div>
+  <p class="footer-copy">© 2026 Myranda Pratas · Joias em Prata 925 · Seu estilo começa nos detalhes.</p>
 </footer>
 
 <script src="script.js"></script>
+<script>
+/* Visual boutique: fotos do próprio catálogo, busca e paginação; não altera pedidos nem Supabase. */
+(function(){
+  const grade=document.getElementById('productGrid');
+  const filtros=document.getElementById('filterRow');
+  const busca=document.getElementById('premiumSearch');
+  const mais=document.getElementById('premiumMoreProducts');
+  const contador=document.getElementById('premiumProductCount');
+  const titulo=document.getElementById('premiumCategoryTitle');
+  let quantidadeVisivel=24;
+  let fotosPreenchidas=false;
+  let debounce=false;
+
+  function obterProdutos(){
+    try { return typeof products !== 'undefined' && Array.isArray(products) ? products : []; }
+    catch(_){ return []; }
+  }
+  function normalizar(txt){return String(txt||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
+  function escolherFotos(){
+    if(fotosPreenchidas) return;
+    const lista=obterProdutos().filter(p=>p.image);
+    if(!lista.length) return;
+    const primeiro=lista.find(p=>/colar|corrente|pingente/i.test(p.category+' '+p.name))||lista[0];
+    const segundo=lista.find(p=>p.id!==primeiro.id && /anel|alianca/i.test(p.category+' '+p.name))||lista.find(p=>p.id!==primeiro.id);
+    const a=document.getElementById('premiumHeroPhotoA');
+    const b=document.getElementById('premiumHeroPhotoB');
+    if(a){a.src=primeiro.image;a.alt='Joia '+primeiro.name;}
+    if(b&&segundo){b.src=segundo.image;b.alt='Joia '+segundo.name;}
+    fotosPreenchidas=true;
+  }
+  function atualizarContagens(){
+    const lista=obterProdutos();
+    if(!lista.length||!filtros) return;
+    filtros.querySelectorAll('button[data-filter]').forEach(botao=>{
+      if(botao.querySelector('.premium-filter-count')) return;
+      const nome=botao.dataset.filter;
+      const qtd=nome==='Todos'?lista.length:nome==='Novidades'?lista.filter(p=>p.featured).length:nome==='Argolas'?lista.filter(p=>p.category==='Argolas'||(p.category==='Brincos'&&normalizar(p.name).includes('argol'))).length:lista.filter(p=>p.category===nome).length;
+      const numero=document.createElement('span');
+      numero.className='premium-filter-count';
+      numero.textContent=qtd.toLocaleString('pt-BR');
+      botao.appendChild(numero);
+    });
+  }
+  function aplicarVitrine(){
+    if(!grade) return;
+    escolherFotos();atualizarContagens();
+    const itens=[...grade.querySelectorAll('.product-card')];
+    const pesquisa=normalizar(busca?.value.trim());
+    const encontrados=itens.filter(el=>!pesquisa||normalizar(el.textContent).includes(pesquisa));
+    const selecionado=filtros?.querySelector('.filter.active')?.dataset.filter || 'Todos';
+    if(titulo) titulo.textContent=selecionado==='Todos'?'Todos os modelos':selecionado==='Novidades'?'Novidades da coleção':'Joias · '+selecionado;
+    itens.forEach(el=>el.classList.add('premium-hidden'));
+    encontrados.slice(0,quantidadeVisivel).forEach(el=>el.classList.remove('premium-hidden'));
+    if(contador) contador.textContent=`${Math.min(encontrados.length,quantidadeVisivel).toLocaleString('pt-BR')} de ${encontrados.length.toLocaleString('pt-BR')} ${encontrados.length===1?'joia':'joias'}`;
+    if(mais){mais.hidden=encontrados.length<=quantidadeVisivel;mais.textContent=`Ver mais joias (${Math.min(24,encontrados.length-quantidadeVisivel)} próximas)`;}
+  }
+  function agendar(){if(debounce) return;debounce=true;requestAnimationFrame(()=>{debounce=false;aplicarVitrine();});}
+  if(grade) new MutationObserver(()=>{quantidadeVisivel=24;agendar();}).observe(grade,{childList:true});
+  if(filtros) new MutationObserver(agendar).observe(filtros,{childList:true});
+  if(busca) busca.addEventListener('input',()=>{quantidadeVisivel=24;if(busca.value.trim()){
+    const todos=filtros?.querySelector('[data-filter="Todos"]');
+    if(todos&&!todos.classList.contains('active')) todos.click();
+  }agendar();});
+  if(mais) mais.addEventListener('click',()=>{quantidadeVisivel+=24;agendar();});
+  document.getElementById('showAll')?.addEventListener('click',()=>{quantidadeVisivel=24;agendar();});
+  aplicarVitrine();
+})();
+</script>
 </body>
 </html>
