@@ -576,3 +576,50 @@ body.premium-boutique .ring-sizes{background:#fffdfa!important;border-color:#e9d
   body.premium-boutique #productGrid .product-name{font-size:17px!important}
   body.premium-boutique .premium-product-count{font-size:8px}
 }
+
+
+/* MYRANDA — categorias em linha única, com rolagem horizontal (desktop e celular) */
+/* Ajuste exclusivamente visual. Não modifica os filtros nem o catálogo. */
+body.premium-boutique #filterRow {
+  display: flex !important;
+  flex-flow: row nowrap !important;
+  align-items: stretch !important;
+  gap: 9px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  box-sizing: border-box !important;
+  padding: 2px 1px 12px !important;
+  margin: 0 0 24px !important;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: #dccbd0 transparent;
+}
+body.premium-boutique #filterRow .filter {
+  flex: 0 0 130px !important;
+  width: 130px !important;
+  min-width: 130px !important;
+  max-width: 130px !important;
+  min-height: 52px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  scroll-snap-align: start;
+}
+@media (max-width: 800px) {
+  body.premium-boutique #filterRow {
+    gap: 8px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 22px !important;
+  }
+  body.premium-boutique #filterRow .filter {
+    flex: 0 0 135px !important;
+    width: 135px !important;
+    min-width: 135px !important;
+    max-width: 135px !important;
+    min-height: 49px !important;
+  }
+}
